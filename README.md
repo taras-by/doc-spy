@@ -20,6 +20,7 @@
     $ docker-compose up -d
     ```
 
+
 ## Installation Project
 1. Clone the project to parent directory
 
@@ -38,5 +39,14 @@
 
     ```bash
     $ sudo chmod -R 777 var/cache var/logs var/sessions
+    ```
+        
+4. Create database and tables if not exist
+
+    ```bash
+    $ cd ../doc-spy-docker/
+    $ docker-compose exec php bash
+    $ sf3 doctrine:database:create
+    $ sf3 doctrine:schema:update --force
     ```
     
