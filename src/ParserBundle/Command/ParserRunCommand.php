@@ -25,9 +25,10 @@ class ParserRunCommand extends ContainerAwareCommand
 
         $feedIo = $this->getContainer()->get('feedio');
         $feed = $feedIo->read($url)->getFeed();
-        
         foreach ($feed as $item) {
-            $output->writeln($item->getTitle());
+            $output->writeln("\n".$item->getTitle());
+            $output->writeln('<info>'.trim(strip_tags($item->getDescription())).'</info>');
+            $output->writeln('<info>----------</info>');
         }
     }
 }
