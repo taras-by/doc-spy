@@ -1,0 +1,4 @@
+services:
+#    parser.example:
+#        class: ParserBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
