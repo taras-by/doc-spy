@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+
+  app:
+    container_name: sf.app
+    build: docker/php
+    volumes:
+      - .:/app
+
+  nginx:
+    container_name: sf.nginx
+    build: docker/nginx
+    volumes_from:
+      - app
+    ports:
+      - "81:80"
+
+  db:
+      container_name: sf.mysql
+      image: mysql
+      volumes:
+          - "./docker/.db:/var/lib/mysql"
