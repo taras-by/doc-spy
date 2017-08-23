@@ -24,7 +24,7 @@ class ParserRunCommand extends ContainerAwareCommand
     {
         $url = $input->getArgument('url');
 
-        $items = $this->getContainer()->get('doctrine')->getRepository(Item::class)->deleteAll();
+        $this->getContainer()->get('doctrine')->getRepository(Item::class)->deleteAll();
 
         $feedIo = $this->getContainer()->get('feedio');
         $feed = $feedIo->read($url)->getFeed();
