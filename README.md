@@ -1,26 +1,3 @@
-## Installation Docker Symfony
-1. Clone Docker Symfony to preferred directory
-
-    ```bash
-    $ git clone git@github.com:maxpou/docker-symfony.git doc-spy-docker
-    ```
-
-2. Create a `.env` from the `.env.dist` file. Change `SYMFONY_APP_PATH` to `../doc-spy`  
-
-    ```bash
-    $ cd doc-spy-docker
-    $ cp .env.dist .env
-    $ nano .env
-    ```
-
-3. Build/run containers with (with and without detached mode)
-
-    ```bash
-    $ docker-compose build
-    $ docker-compose up -d
-    ```
-
-
 ## Installation Project
 1. Clone the project to parent directory
 
@@ -41,12 +18,17 @@
     $ sudo chmod -R 777 var/cache var/logs var/sessions
     ```
         
-4. Create database and tables if not exist
+4. Build/run containers with (with and without detached mode)
 
     ```bash
-    $ cd ../doc-spy-docker/
-    $ docker-compose exec php bash
-    $ sf3 doctrine:database:create
-    $ sf3 doctrine:schema:update --force
+    $ docker-compose build
+    $ docker-compose up -d     
+        
+5. Create database and tables if not exist
+
+    ```bash
+    $ docker-compose exec app bash
+    $ php bin/console doctrine:database:create
+    $ php bin/console doctrine:schema:update --force
     ```
     
