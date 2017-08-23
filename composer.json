@@ -5,7 +5,7 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle",
+            "CoreBundle\\": "src/CoreBundle",
             "ParserBundle\\": "src/ParserBundle",
             "ApiBundle\\": "src/ApiBundle"
         },
