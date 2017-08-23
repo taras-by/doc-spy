@@ -2,6 +2,8 @@
 
 namespace CoreBundle\Repository;
 
+use CoreBundle\Entity\Item;
+
 /**
  * ItemRepository
  *
@@ -10,4 +12,10 @@ namespace CoreBundle\Repository;
  */
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function deleteAll()
+    {
+        $queryBuilder = $this->createQueryBuilder(Item::class)
+            ->delete();
+        return $queryBuilder->getQuery()->execute();
+    }
 }

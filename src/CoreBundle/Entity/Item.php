@@ -52,10 +52,18 @@ class Item
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apdated_at", type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
-    private $apdatedAt;
+    private $updatedAt;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * Get id
@@ -170,9 +178,9 @@ class Item
      *
      * @return Item
      */
-    public function setApdatedAt($apdatedAt)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->apdatedAt = $apdatedAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -182,9 +190,9 @@ class Item
      *
      * @return \DateTime
      */
-    public function getApdatedAt()
+    public function getUpdatedAt()
     {
-        return $this->apdatedAt;
+        return $this->updatedAt;
     }
 }
 
