@@ -3,6 +3,7 @@
 namespace ParserBundle\Command;
 
 use CoreBundle\Entity\Item;
+use ParserBundle\Entity\Source;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,32 +17,38 @@ class ParserRunCommand extends ContainerAwareCommand
         $this
             ->setName('parser:run')
             ->setDescription('Parse document')
-            ->addArgument('url', InputArgument::REQUIRED, 'Document URL')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = $input->getArgument('url');
 
-        $this->getContainer()->get('doctrine')->getRepository(Item::class)->deleteAll();
+        $sourceRepository = $this->getContainer()->get('doctrine')->getRepository(Source::class);
+        $itemRepository = $this->getContainer()->get('doctrine')->getRepository(Item::class);
+
+        $source = $sourceRepository->findNextSource();
 
         $feedIo = $this->getContainer()->get('feedio');
-        $feed = $feedIo->read($url)->getFeed();
-        foreach ($feed as $item) {
+        $feed = $feedIo->read($source->getUrl())->getFeed();
 
-            $product = new Item;
-            $product->setTitle($item->getTitle());
-            $product->setDescription($item->getDescription());
+        $em = $this->getContainer()->get('doctrine')->getManager();
 
-            $em = $this->getContainer()->get('doctrine')->getManager();
+        foreach ($feed as $feedItem) {
+            if (!$itemRepository->findByLink($feedItem->getLink())) {
 
-            $em->persist($product);
-            $em->flush();
+                $product = new Item;
+                $product->setTitle($feedItem->getTitle());
+                $product->setDescription($feedItem->getDescription());
+                $product->setlink($feedItem->getlink());
+                $em->persist($product);
 
-            $output->writeln("\n".$item->getTitle());
-            $output->writeln('<info>'.trim(strip_tags($item->getDescription())).'</info>');
-            $output->writeln('<info>----------</info>');
+                $output->writeln("\n" . $feedItem->getTitle());
+                $output->writeln('<info>' . trim(strip_tags($feedItem->getDescription())) . '</info>');
+                $output->writeln('<info>----------</info>');
+            }
         }
+
+        $source->setUpdatedAt(new \DateTime());
+        $em->flush();
     }
 }
