@@ -14,20 +14,20 @@ services:
     volumes_from:
       - app
     ports:
-      - "81:80"
+      - 834:80
 
   db:
     container_name: sf.mysql
     image: mysql
     volumes:
-      - "./docker/mysql/.db:/var/lib/mysql"
+      - ./docker/mysql/.db:/var/lib/mysql
     env_file:
-      - "./docker/mysql/.env"
+      - ./docker/mysql/.env
     ports:
-        - 3306:3306
+        - 849:3306
 
   phpmyadmin:
     container_name: sf.phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
-        - 8080:80
+        - 863:80
