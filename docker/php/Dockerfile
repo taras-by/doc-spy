@@ -50,3 +50,7 @@ RUN docker-php-ext-enable xdebug \
 RUN usermod -u 1000 www-data
 
 CMD php-fpm -F
+
+RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
+
+WORKDIR /app
