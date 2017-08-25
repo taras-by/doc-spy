@@ -12,4 +12,16 @@ use CoreBundle\Entity\Item;
  */
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @return array
+     */
+    public function findLast()
+    {
+        return $this->createQueryBuilder('i')
+            ->select(['i.title', 'i.link'])
+            ->orderBy('i.publishedAt','DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

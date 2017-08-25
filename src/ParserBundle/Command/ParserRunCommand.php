@@ -16,8 +16,7 @@ class ParserRunCommand extends ContainerAwareCommand
     {
         $this
             ->setName('parser:run')
-            ->setDescription('Parse document')
-        ;
+            ->setDescription('Parse document');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,11 +35,12 @@ class ParserRunCommand extends ContainerAwareCommand
         foreach ($feed as $feedItem) {
             if (!$itemRepository->findByLink($feedItem->getLink())) {
 
-                $product = new Item;
-                $product->setTitle($feedItem->getTitle());
-                $product->setDescription($feedItem->getDescription());
-                $product->setlink($feedItem->getlink());
-                $em->persist($product);
+                $item = new Item;
+                $item->setTitle($feedItem->getTitle());
+                $item->setDescription($feedItem->getDescription());
+                $item->setlink($feedItem->getlink());
+                $item->setPublishedAt($feedItem->getLastModified());
+                $em->persist($item);
 
                 $output->writeln("\n" . $feedItem->getTitle());
                 $output->writeln('<info>' . trim(strip_tags($feedItem->getDescription())) . '</info>');

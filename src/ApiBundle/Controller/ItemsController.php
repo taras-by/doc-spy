@@ -20,7 +20,7 @@ class ItemsController extends Controller
     public function indexAction()
     {
 
-        $items = $this->getDoctrine()->getRepository(Item::class)->findAll();
+        $items = $this->getDoctrine()->getRepository(Item::class)->findLast();
 
         $serializer = new Serializer(
             [new GetSetMethodNormalizer()],

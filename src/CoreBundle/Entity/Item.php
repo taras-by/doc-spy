@@ -45,6 +45,13 @@ class Item
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="published_at", type="datetime")
+     */
+    private $publishedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -169,6 +176,30 @@ class Item
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Item
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
     }
 
     /**
