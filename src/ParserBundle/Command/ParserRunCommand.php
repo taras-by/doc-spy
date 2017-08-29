@@ -32,6 +32,7 @@ class ParserRunCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getManager();
 
+        $count = 0;
         foreach ($feed as $feedItem) {
             if (!$itemRepository->findByLink($feedItem->getLink())) {
 
@@ -41,14 +42,18 @@ class ParserRunCommand extends ContainerAwareCommand
                 $item->setlink($feedItem->getlink());
                 $item->setPublishedAt($feedItem->getLastModified());
                 $em->persist($item);
-
-                $output->writeln("\n" . $feedItem->getTitle());
-                $output->writeln('<info>' . trim(strip_tags($feedItem->getDescription())) . '</info>');
-                $output->writeln('<info>----------</info>');
+                $count++;
             }
         }
 
         $source->setUpdatedAt(new \DateTime());
         $em->flush();
+
+        $output->writeln('Parsed: ' . $source->getUrl());
+
+        $output->writeln(
+            'Received items: ' . count($feed) .
+            ($count ? '. <info>new items: ' . $count . '</info>' : '')
+        );
     }
 }

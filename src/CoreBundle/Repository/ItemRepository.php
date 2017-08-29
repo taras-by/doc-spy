@@ -18,9 +18,9 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
     public function findLast()
     {
         return $this->createQueryBuilder('i')
-            ->select(['i.title', 'i.link'])
+            //->select(['i.title', 'i.link'])
             ->orderBy('i.publishedAt','DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(30)
             ->getQuery()
             ->getArrayResult();
     }
