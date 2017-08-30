@@ -49,7 +49,7 @@ class ParserRunCommand extends ContainerAwareCommand
         $source->setUpdatedAt(new \DateTime());
         $em->flush();
 
-        $output->writeln('Parsed: ' . $source->getUrl());
+        $output->writeln('Parsed: ' . $source->getName());
 
         $output->writeln(
             'Received items: ' . count($feed) .
