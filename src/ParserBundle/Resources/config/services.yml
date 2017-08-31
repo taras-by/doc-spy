@@ -1,3 +1,4 @@
 services:
-    my_mailer:
-        class: Acme\HelloBundle\Mailer
+    parser:
+        class: ParserBundle\Service\ParserService
+        arguments: ['@feedio', '@doctrine']
