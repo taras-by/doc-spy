@@ -17,22 +17,30 @@ class ParserRunCommand extends ContainerAwareCommand
     {
         $this
             ->setName('parser:run')
-            ->setDescription('Parse document');
+            ->setDescription('Parse document')
+            ->addArgument('results', InputArgument::OPTIONAL, 'Count of Sources for parsing');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $results = $input->getArgument('results');
+
         /** @var SourceRepository $sourceRepository */
         $sourceRepository = $this->getContainer()->get('doctrine')->getRepository(Source::class);
-        $source = $sourceRepository->findNextSource();
+        $sources = $sourceRepository->findNextSources($results);
 
-        /** @var ParserService $parser */
-        $parser = $this->getContainer()->get('parser');
-        $parser->read($source);
+        foreach ($sources as $source) {
 
-        $output->writeln('Parsed: ' . $source->getName());
-        $output->writeln('Received items: ' . $parser->getAllCount() .
-            ($parser->getAddedCount() ? '. <info>new items: ' . $parser->getAddedCount() . '</info>' : '')
-        );
+            /** @var Source $source */
+            /** @var ParserService $parser */
+            $parser = $this->getContainer()->get('parser');
+            $parser->read($source);
+
+            $output->writeln('Parsed: ' . $source->getName());
+            $output->writeln('  Received items: ' . $parser->getAllCount() .
+                ($parser->getAddedCount() ? '. <info>new items: ' . $parser->getAddedCount() . '</info>' : '')
+            );
+        }
+
     }
 }

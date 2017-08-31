@@ -14,14 +14,15 @@ class SourceRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
-     * @return Source
+     * @var int|null $results
+     * @return array
      */
-    public function findNextSource()
+    public function findNextSources($results = null)
     {
         return $this->createQueryBuilder('sourse')
             ->orderBy('sourse.updatedAt')
-            ->setMaxResults(1)
+            ->setMaxResults($results)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
     }
 }
