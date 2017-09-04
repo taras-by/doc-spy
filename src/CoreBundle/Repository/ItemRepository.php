@@ -20,7 +20,7 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         return $this->createQueryBuilder('i')
             //->select(['i.title', 'i.link'])
             ->orderBy('i.publishedAt','DESC')
-            ->setMaxResults(30)
+            ->setMaxResults(60)
             ->getQuery()
             ->getArrayResult();
     }
