@@ -12,16 +12,17 @@
     </nav>
 
     <div class="container">
-        {% for item in items %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h4><a href="{{ item.link }}" target="_blank">{{ item.title }}</a></h4>
-                    <p>{{ item.publishedAt|date("d.m.Y") }}</p>
-                    <p class="card-text">{{ item.description|striptags|replace({'&nbsp;':" "}) }}</p>
-                    <span class="text-muted">{{ item.link }}</span>
-                </div>
-            </div>
-        {% endfor %}
+            {% for item in items %}
+                    <div class="row">
+                        <div class="col-2 text-muted text-right">
+                            {{ item.publishedAt|date("d.m.Y") }}
+                        </div>
+                        <div class="col-10">
+                            <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+                            <hr />
+                        </div>
+                    </div>
+            {% endfor %}
     </div>
 
     {% endblock %}
