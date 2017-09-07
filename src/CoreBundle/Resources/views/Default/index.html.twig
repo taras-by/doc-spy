@@ -13,7 +13,9 @@
             {% for item in items %}
                     <div class="row item">
                         <div class="col-2 text-right item-date">
-                            {{ item.publishedAt|date("d.m.Y") }}
+                            {% if (date is not defined) or (date is defined and item.publishedAt|date("d.m.Y") != date|date("d.m.Y")) %}
+                                {{ item.publishedAt|date("d.m.Y") }}
+                            {% endif %}
                         </div>
                         <div class="col-10 item-title">
                             {% if item.source.icon %}
@@ -23,6 +25,7 @@
                             <hr />
                         </div>
                     </div>
+                {% set date = item.publishedAt %}
             {% endfor %}
     </div>
 
@@ -32,15 +35,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
     <style>
-
-        .item-date {
-            padding-right: 30px;
-            opacity: .5;
-        }
-
-        .item:hover .item-date {
-            opacity: .7;
-        }
 
         .item-title {
             position: relative;
