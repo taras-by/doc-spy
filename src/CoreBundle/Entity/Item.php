@@ -3,6 +3,7 @@
 namespace CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ParserBundle\Entity\Source;
 
 /**
  * Item
@@ -41,6 +42,13 @@ class Item
      * @ORM\Column(name="link", type="string", length=255, nullable=true)
      */
     private $link;
+
+    /**
+     * Many Items have One Source.
+     * @ORM\ManyToOne(targetEntity="ParserBundle\Entity\Source", inversedBy="items")
+     * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
+     */
+    private $source;
 
     /**
      * @var \DateTime
@@ -128,6 +136,30 @@ class Item
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set source.
+     *
+     * @param Source $source
+     *
+     * @return Item
+     */
+    public function setSource(Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source.
+     *
+     * @return Source
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**

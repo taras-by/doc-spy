@@ -2,6 +2,7 @@
 
 namespace ParserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +37,19 @@ class Source
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", length=255)
+     */
+    private $icon;
+
+    /**
+     * One Source has Many items.
+     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Item", mappedBy="source")
+     */
+    private $items;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetimetz", nullable=true)
@@ -49,6 +63,12 @@ class Source
      */
     private $createdAt;
 
+    /**
+     * Source constructor.
+     */
+    public function __construct() {
+        $this->items = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -106,6 +126,30 @@ class Source
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return Source
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     /**

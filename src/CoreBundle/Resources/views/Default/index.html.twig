@@ -14,10 +14,13 @@
     <div class="container">
             {% for item in items %}
                     <div class="row">
-                        <div class="col-2 text-muted text-right">
+                        <div class="col-2 text-muted text-right item-date">
                             {{ item.publishedAt|date("d.m.Y") }}
                         </div>
-                        <div class="col-10">
+                        <div class="col-10 item-title">
+                            {% if item.source.icon %}
+                                <img src="{{ item.source.icon }}" width="16" height="16" />
+                            {% endif %}
                             <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
                             <hr />
                         </div>
@@ -29,6 +32,25 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+    <style>
+
+        .item-date{
+            padding-right: 30px;
+        }
+
+        .item-title{
+            position: relative;
+        }
+
+        .item-title img{
+            position: absolute;
+            left: -15px;
+            top: 4px;
+        }
+
+    </style>
+
     {% endblock %}
 
 {% block javascripts %}

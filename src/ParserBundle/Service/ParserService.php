@@ -69,6 +69,7 @@ class ParserService
                 $item->setDescription($feedItem->getDescription());
                 $item->setlink($feedItem->getlink());
                 $item->setPublishedAt($feedItem->getLastModified());
+                $item->setSource($source);
                 $em->persist($item);
                 $this->addedCount++;
             }
