@@ -23,4 +23,12 @@ class TagController extends Controller
 
         return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items, 'tags' => $tags]);
     }
+
+    public function menuTagsAction()
+    {
+        $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
+        $tags = $tagsRepository->findAll();
+
+        return $this->render('CoreBundle:Parts:tags.html.twig', ['tags' => $tags]);
+    }
 }

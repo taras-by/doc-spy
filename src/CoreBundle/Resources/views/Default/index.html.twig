@@ -4,18 +4,6 @@
 
 {% block body %}
 
-    <nav class="navbar navbar-light bg-light mb-3">
-        <a class="navbar-brand" href="/">Doc Spy</a>
-        <a class="btn btn-outline-success" href="/">Update</a>
-    </nav>
-
-    <div class="container text-center">
-        {% for tag in tags %}
-            <a href="{{ path('tag_show', {'id': tag.id}) }}" class="btn btn-outline-info">{{ tag.name }}</a>
-        {% endfor %}
-    </div>
-    <hr/>
-
     <div class="container">
         {% for item in items %}
                 <div class="row item">

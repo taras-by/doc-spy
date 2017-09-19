@@ -1,0 +1,8 @@
+
+<ul class="navbar-nav ">
+    <li class="nav-item active">
+        {% for tag in tags %}
+            <a href="{{ path('tag_show', {'id': tag.id}) }}" class="nav-link">{{ tag.name }}</a>
+        {% endfor %}
+    </li>
+</ul>
