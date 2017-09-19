@@ -50,6 +50,12 @@ class Source
     private $items;
 
     /**
+     * @ORM\ManyToMany(targetEntity="CoreBundle\Entity\Tag", inversedBy="sources")
+     * @ORM\JoinTable(name="sources_tags")
+     */
+    private $tags;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="updatedAt", type="datetimetz", nullable=true)
@@ -199,5 +205,72 @@ class Source
     {
         return $this->createdAt;
     }
-}
 
+    /**
+     * Add item
+     *
+     * @param \CoreBundle\Entity\Item $item
+     *
+     * @return Source
+     */
+    public function addItem(\CoreBundle\Entity\Item $item)
+    {
+        $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * Remove item
+     *
+     * @param \CoreBundle\Entity\Item $item
+     */
+    public function removeItem(\CoreBundle\Entity\Item $item)
+    {
+        $this->items->removeElement($item);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Add tag
+     *
+     * @param \CoreBundle\Entity\Tag $tag
+     *
+     * @return Source
+     */
+    public function addTag(\CoreBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \CoreBundle\Entity\Tag $tag
+     */
+    public function removeTag(\CoreBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+}

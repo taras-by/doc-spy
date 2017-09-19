@@ -258,4 +258,3 @@ class Item
         return $this->updatedAt;
     }
 }
-
