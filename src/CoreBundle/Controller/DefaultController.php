@@ -3,6 +3,7 @@
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\Item;
+use CoreBundle\Entity\Tag;
 use CoreBundle\Repository\ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -14,9 +15,12 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        /** @var $itemsRepository ItemRepository */
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemsRepository->findLast();
-        return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items]);
+
+        $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
+        $tags = $tagsRepository->findAll();
+
+        return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items, 'tags' => $tags]);
     }
 }

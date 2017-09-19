@@ -26,4 +26,21 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    /**
+     * @return array
+     */
+    public function findByTagId($id)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->leftJoin('s.tags', 't')
+            ->addSelect('s')
+            ->where('t.id = :tag_id')
+            ->setParameter('tag_id', $id)
+            ->orderBy('i.   publishedAt', 'DESC')
+            ->setMaxResults(60)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
