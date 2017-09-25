@@ -21,13 +21,14 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             //->select(['i.title', 'i.link'])
             ->leftJoin('i.source', 's')
             ->addSelect('s')
-            ->orderBy('i.publishedAt','DESC')
+            ->orderBy('i.publishedAt', 'DESC')
             ->setMaxResults(60)
             ->getQuery()
             ->getArrayResult();
     }
 
     /**
+     * @param integer $id
      * @return array
      */
     public function findByTagId($id)
@@ -38,7 +39,23 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('s')
             ->where('t.id = :tag_id')
             ->setParameter('tag_id', $id)
-            ->orderBy('i.   publishedAt', 'DESC')
+            ->orderBy('i.publishedAt', 'DESC')
+            ->setMaxResults(60)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function findFromFavoriteSources()
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->addSelect('s')
+            ->where('s.favorite = :favorite')
+            ->setParameter('favorite', true)
+            ->orderBy('i.publishedAt', 'DESC')
             ->setMaxResults(60)
             ->getQuery()
             ->getArrayResult();

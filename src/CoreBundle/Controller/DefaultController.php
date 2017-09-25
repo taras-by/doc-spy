@@ -16,11 +16,8 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findLast();
+        $items = $itemsRepository->findFromFavoriteSources();
 
-        $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
-        $tags = $tagsRepository->findAll();
-
-        return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items, 'tags' => $tags]);
+        return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items]);
     }
 }
