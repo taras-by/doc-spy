@@ -1,5 +1,4 @@
-
-<ul class="navbar-nav ">
+<ul class="navbar-nav mr-auto">
     {% for tag in tags %}
         <li class="nav-item active">
         <a href="{{ path('tag_show', {'id': tag.id}) }}" class="nav-link">{{ tag.name }}</a>

@@ -45,6 +45,19 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getArrayResult();
     }
 
+    public function findByPhrase($phrase)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->addSelect('s')
+            ->where('i.title like :phrase')
+            ->setParameter('phrase', '%' . $phrase . '%')
+            ->orderBy('i.publishedAt', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     /**
      * @return array
      */

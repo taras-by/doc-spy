@@ -3,8 +3,6 @@
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\Item;
-use CoreBundle\Entity\Tag;
-use CoreBundle\Repository\ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 

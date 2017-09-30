@@ -16,6 +16,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 {{ render(controller('CoreBundle:Tag:menuTags')) }}
+                {{ render(controller('CoreBundle:Search:form')) }}
             </div>
         </nav>
         {% block body %}{% endblock %}

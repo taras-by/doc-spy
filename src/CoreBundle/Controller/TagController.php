@@ -6,7 +6,6 @@ use CoreBundle\Entity\Item;
 use CoreBundle\Entity\Tag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 class TagController extends Controller
 {
