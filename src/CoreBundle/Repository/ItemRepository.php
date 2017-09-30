@@ -45,6 +45,19 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getArrayResult();
     }
 
+    public function findBySourceId($id)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->addSelect('s')
+            ->where('s.id = :source_id')
+            ->setParameter('source_id', $id)
+            ->orderBy('i.publishedAt', 'DESC')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     public function findByPhrase($phrase)
     {
         $query = $this->createQueryBuilder('i')

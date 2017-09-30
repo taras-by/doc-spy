@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-10 item-title">
                         {% if item.source.icon %}
-                            <img src="{{ item.source.icon }}" width="16" height="16" />
+                            <a href="{{ path('source_show', {'id' : item.source.id} ) }}"><img src="{{ item.source.icon }}" width="16" height="16" /></a>
                         {% endif %}
                         <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
                         <hr />
