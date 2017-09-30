@@ -47,12 +47,16 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
     public function findByPhrase($phrase)
     {
-        return $this->createQueryBuilder('i')
+        $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
-            ->addSelect('s')
-            ->where('i.title like :phrase')
-            ->setParameter('phrase', '%' . $phrase . '%')
-            ->orderBy('i.publishedAt', 'DESC')
+            ->addSelect('s');
+
+        foreach (explode(' ', $phrase) as $word) {
+            $query->where('i.title like :phrase')
+                ->setParameter('phrase', '%' . $word . '%');
+        }
+
+        return $query->orderBy('i.publishedAt', 'DESC')
             ->setMaxResults(50)
             ->getQuery()
             ->getArrayResult();
