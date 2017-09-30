@@ -51,9 +51,9 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->leftJoin('i.source', 's')
             ->addSelect('s');
 
-        foreach (explode(' ', $phrase) as $word) {
-            $query->where('i.title like :phrase')
-                ->setParameter('phrase', '%' . $word . '%');
+        foreach (explode(' ', $phrase) as $i => $word) {
+            $query->andWhere('i.title like :word_' . $i)
+                ->setParameter('word_' . $i, '%' . $word . '%');
         }
 
         return $query->orderBy('i.publishedAt', 'DESC')
