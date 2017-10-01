@@ -77,9 +77,26 @@ class Source
     private $errorCount;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_on", type="datetimetz", nullable=true)
+     */
+    private $updateOn;
+
+    /**
+     * Interval for updating Source in minutes
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="update_interval", type="integer", options={"default":5})
+     */
+    private $updateInterval;
+
+    /**
      * Source constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->items = new ArrayCollection();
     }
 
@@ -329,5 +346,53 @@ class Source
     public function getErrorCount()
     {
         return $this->errorCount;
+    }
+
+    /**
+     * Set updateOn
+     *
+     * @param \DateTime $updateOn
+     *
+     * @return Source
+     */
+    public function setUpdateOn($updateOn)
+    {
+        $this->updateOn = $updateOn;
+
+        return $this;
+    }
+
+    /**
+     * Get updateOn
+     *
+     * @return \DateTime
+     */
+    public function getUpdateOn()
+    {
+        return $this->updateOn;
+    }
+
+    /**
+     * Set updateInterval
+     *
+     * @param integer $updateInterval
+     *
+     * @return Source
+     */
+    public function setUpdateInterval($updateInterval)
+    {
+        $this->updateInterval = $updateInterval;
+
+        return $this;
+    }
+
+    /**
+     * Get updateInterval
+     *
+     * @return integer
+     */
+    public function getUpdateInterval()
+    {
+        return $this->updateInterval;
     }
 }

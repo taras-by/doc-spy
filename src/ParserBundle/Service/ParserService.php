@@ -55,6 +55,7 @@ class ParserService
     public function read(Source $source)
     {
         $this->addedCount = 0;
+        $this->allCount = 0;
 
         /** @var ItemRepository $itemRepository */
         $itemRepository = $this->doctrine->getRepository(Item::class);
@@ -80,6 +81,9 @@ class ParserService
             }
             $source->setErrorCount(0);
         }catch (ReadErrorException $exception) {
+            /**
+             * @todo Logging
+             */
             $source->upErrorCount();
         }
 
