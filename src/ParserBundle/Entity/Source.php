@@ -72,7 +72,7 @@ class Source
     /**
      * @var integer
      *
-     * @ORM\Column(name="error_count", type="integer")
+     * @ORM\Column(name="error_count", type="integer", options={"default":0})
      */
     private $errorCount;
 
