@@ -26,6 +26,13 @@ class ParserService
     private $addedCount = 0;
 
     /**
+     * Current time with rounding to minutes
+     *
+     * @var \DateTime
+     */
+    private $now;
+
+    /**
      * @var FeedIo
      */
     private $feedio;
@@ -45,6 +52,7 @@ class ParserService
     {
         $this->feedio = $feedio;
         $this->doctrine = $doctrine;
+        $this->now = new \DateTime(date('H:i'));
     }
 
     /**
@@ -80,12 +88,15 @@ class ParserService
                 }
             }
             $source->setErrorCount(0);
-        }catch (ReadErrorException $exception) {
+        } catch (ReadErrorException $exception) {
             /**
              * @todo Logging
              */
             $source->upErrorCount();
         }
+
+        $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
+        $source->setUpdateOn($nextUpdateTime);
 
         $source->setUpdatedAt(new \DateTime());
         $em->flush();
@@ -109,5 +120,18 @@ class ParserService
     public function getAddedCount()
     {
         return $this->addedCount;
+    }
+
+    /**
+     * Set next update time
+     *
+     * @param integer $updateInteval
+     * @param integer$errorCount
+     * @return \DateTime
+     */
+    private function getNextUpdateTime($updateInteval, $errorCount)
+    {
+        $now = clone $this->now;
+        return $now->add(new \DateInterval('PT' . $updateInteval * ($errorCount + 1) . 'M'));
     }
 }
