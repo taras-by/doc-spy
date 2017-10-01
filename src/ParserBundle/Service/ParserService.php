@@ -88,6 +88,7 @@ class ParserService
                 }
             }
             $source->setErrorCount(0);
+            $source->setUpdatedAt(new \DateTime());
         } catch (ReadErrorException $exception) {
             /**
              * @todo Logging
@@ -98,7 +99,6 @@ class ParserService
         $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
         $source->setUpdateOn($nextUpdateTime);
 
-        $source->setUpdatedAt(new \DateTime());
         $em->flush();
     }
 
