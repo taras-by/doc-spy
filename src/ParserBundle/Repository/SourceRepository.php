@@ -17,10 +17,13 @@ class SourceRepository extends \Doctrine\ORM\EntityRepository
      * @var int|null $results
      * @return array
      */
-    public function findNextSources($results = null)
+    public function findForUpdate($results = null)
     {
         return $this->createQueryBuilder('sourse')
-            ->orderBy('sourse.updatedAt')
+            ->where('sourse.updateOn <= :now')
+            ->setParameter('now', new \DateTime())
+            ->orWhere('sourse.updateOn is null')
+            ->orderBy('sourse.updateOn')
             ->setMaxResults($results)
             ->getQuery()
             ->getResult();

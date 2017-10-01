@@ -27,7 +27,7 @@ class ParserRunCommand extends ContainerAwareCommand
 
         /** @var SourceRepository $sourceRepository */
         $sourceRepository = $this->getContainer()->get('doctrine')->getRepository(Source::class);
-        $sources = $sourceRepository->findNextSources($results);
+        $sources = $sourceRepository->findForUpdate($results);
 
         /** @var Source $source */
         /** @var ParserService $parser */
