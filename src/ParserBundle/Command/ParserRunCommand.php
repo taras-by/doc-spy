@@ -29,11 +29,12 @@ class ParserRunCommand extends ContainerAwareCommand
         $sourceRepository = $this->getContainer()->get('doctrine')->getRepository(Source::class);
         $sources = $sourceRepository->findNextSources($results);
 
+        /** @var Source $source */
+        /** @var ParserService $parser */
+        $parser = $this->getContainer()->get('parser');
+
         foreach ($sources as $source) {
 
-            /** @var Source $source */
-            /** @var ParserService $parser */
-            $parser = $this->getContainer()->get('parser');
             $parser->read($source);
 
             $output->writeln('Parsed: ' . $source->getName());

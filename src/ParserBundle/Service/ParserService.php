@@ -5,6 +5,7 @@ namespace ParserBundle\Service;
 use CoreBundle\Entity\Item;
 use CoreBundle\Repository\ItemRepository;
 use FeedIo\FeedIo;
+use FeedIo\Reader\ReadErrorException;
 use ParserBundle\Entity\Source;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -53,27 +54,35 @@ class ParserService
      */
     public function read(Source $source)
     {
+        $this->addedCount = 0;
+
         /** @var ItemRepository $itemRepository */
         $itemRepository = $this->doctrine->getRepository(Item::class);
 
-        $feed = $this->feedio->read($source->getUrl())->getFeed();
-        $this->allCount = count($feed);
-
         $em = $this->doctrine->getManager();
 
-        foreach ($feed as $feedItem) {
-            if (!$itemRepository->findByLink($feedItem->getLink())) {
+        try {
 
-                $item = new Item();
-                $item->setTitle($feedItem->getTitle());
-                $item->setDescription($feedItem->getDescription());
-                $item->setlink($feedItem->getlink());
-                $item->setPublishedAt($feedItem->getLastModified());
-                $item->setSource($source);
-                $em->persist($item);
-                $this->addedCount++;
+            $feed = $this->feedio->read($source->getUrl())->getFeed();
+            $this->allCount = count($feed);
+            foreach ($feed as $feedItem) {
+                if (!$itemRepository->findByLink($feedItem->getLink())) {
+
+                    $item = new Item();
+                    $item->setTitle($feedItem->getTitle());
+                    $item->setDescription($feedItem->getDescription());
+                    $item->setlink($feedItem->getlink());
+                    $item->setPublishedAt($feedItem->getLastModified());
+                    $item->setSource($source);
+                    $em->persist($item);
+                    $this->addedCount++;
+                }
             }
+            $source->setErrorCount(0);
+        }catch (ReadErrorException $exception) {
+            $source->upErrorCount();
         }
+
         $source->setUpdatedAt(new \DateTime());
         $em->flush();
     }

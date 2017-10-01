@@ -65,16 +65,16 @@ class Source
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="datetimetz", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetimetz", nullable=true)
      */
     private $updatedAt;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="createdAt", type="datetimetz")
+     * @ORM\Column(name="error_count", type="integer")
      */
-    private $createdAt;
+    private $errorCount;
 
     /**
      * Source constructor.
@@ -204,16 +204,6 @@ class Source
     }
 
     /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * Add item
      *
      * @param \CoreBundle\Entity\Item $item
@@ -303,5 +293,41 @@ class Source
     public function getFavorite()
     {
         return $this->favorite;
+    }
+
+    /**
+     * Set errorCount
+     *
+     * @param integer $errorCount
+     *
+     * @return Source
+     */
+    public function setErrorCount($errorCount)
+    {
+        $this->errorCount = $errorCount;
+
+        return $this;
+    }
+
+    /**
+     * Increment error counter
+     *
+     * @return Source
+     */
+    public function upErrorCount()
+    {
+        ++$this->errorCount;
+
+        return $this;
+    }
+
+    /**
+     * Get errorCount
+     *
+     * @return integer
+     */
+    public function getErrorCount()
+    {
+        return $this->errorCount;
     }
 }
