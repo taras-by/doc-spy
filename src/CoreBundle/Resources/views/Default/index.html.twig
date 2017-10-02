@@ -7,17 +7,20 @@
     <div class="container">
         {% for item in items %}
                 <div class="row item">
-                    <div class="col-2 text-right item-date">
+                    <div class="col-md-2">
                         {% if (date is not defined) or (date is defined and item.publishedAt|date("d.m.Y") != date|date("d.m.Y")) %}
-                            {{ item.publishedAt|date("d.m.Y") }}
+                            <div class="item-date">
+                                {{ item.publishedAt|date("d.m.Y") }}
+                            </div>
                         {% endif %}
                     </div>
-                    <div class="col-10 item-title">
+                    <div class="col-md-10 item-title">
                         {% if item.source.icon %}
-                            <a href="{{ path('source_show', {'id' : item.source.id} ) }}"><img src="{{ item.source.icon }}" width="16" height="16" /></a>
+                            <a href="{{ path('source_show', {'id' : item.source.id} ) }}">
+                                <img src="{{ item.source.icon }}" width="16" height="16" />
+                            </a>
                         {% endif %}
-                        <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
-                        <hr />
+                        <a  class="item-link" href="{{ item.link }}" target="_blank">{{ item.title }}</a>
                     </div>
                 </div>
             {% set date = item.publishedAt %}
@@ -32,22 +35,53 @@
     <style>
 
         .item-date {
-            padding-right: 30px;
+            font-style: italic;
+        }
+
+        @media (max-width: 767px) {
+            .item-date {
+                margin-left: 30px;
+            }
+            .item-date:after {
+                display: block;
+                content: "";
+                border-bottom: 1px solid #DDDDDD;
+                margin: 1em 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .item-date {
+                text-align: right;
+                position: relative;
+                left: 14px;
+            }
         }
 
         .item-title {
             position: relative;
         }
 
+        .item-title:after {
+            display: block;
+            content: "";
+            border-bottom: 1px solid #DDDDDD;
+            margin: 1em 0 1em 30px;
+        }
+
         .item-title img {
             position: absolute;
-            left: -15px;
             top: 4px;
             opacity: .7;
         }
 
         .item:hover .item-title img {
             opacity: 1;
+        }
+
+        .item-link {
+            display: block;
+            margin-left: 30px;
         }
 
     </style>
