@@ -24,4 +24,8 @@
     $ php bin/console doctrine:database:create
     $ php bin/console doctrine:schema:update --force
     ```
+### Run console commands with Docker
+    ```
+    $ ./docker/app bin/console
+    ```
     
