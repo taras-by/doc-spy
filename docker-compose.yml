@@ -3,13 +3,13 @@ version: '2'
 services:
 
   app:
-    container_name: sf.app
+    container_name: ds.app
     build: docker/php
     volumes:
       - .:/app
 
   nginx:
-    container_name: sf.nginx
+    container_name: ds.nginx
     build: docker/nginx
     volumes_from:
       - app
@@ -17,17 +17,11 @@ services:
       - 834:80
 
   db:
-    container_name: sf.mysql
+    container_name: ds.mysql
     image: mysql
     volumes:
       - ./docker/mysql/.db:/var/lib/mysql
     env_file:
       - ./docker/mysql/.env
     ports:
-        - 849:3306
-
-  phpmyadmin:
-    container_name: sf.phpmyadmin
-    image: phpmyadmin/phpmyadmin
-    ports:
-        - 863:80
+        - 849:330
