@@ -6,7 +6,7 @@ services:
     container_name: ds.app
     build: docker/php
     volumes:
-      - .:/app
+      - .:/var/www
 
   nginx:
     container_name: ds.nginx

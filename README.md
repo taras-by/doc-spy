@@ -25,7 +25,8 @@
     $ php bin/console doctrine:schema:update --force
     ```
 ### Run console commands with Docker
-    ```
-    $ ./docker/app bin/console
-    ```
+```
+$ ./docker/app bin/console
+$ ./docker/app composer install
+```
     
