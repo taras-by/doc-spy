@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:7.1-fpm
 
 WORKDIR /var/www
 ENV COMPOSER_HOME /var/www/docker/php/.composer
