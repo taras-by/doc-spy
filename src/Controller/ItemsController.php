@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Controller;
+namespace App\Controller;
 
 use CoreBundle\Entity\Item;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

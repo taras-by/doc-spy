@@ -1,8 +1,8 @@
 <?php
 
-namespace App\CoreBundle\Controller;
+namespace App\Controller;
 
-use CoreBundle\Entity\Item;
+use App\Entity\Item;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -16,6 +16,6 @@ class DefaultController extends Controller
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemsRepository->findFromFavoriteSources();
 
-        return $this->render('CoreBundle:Default:index.html.twig', ['items' => $items]);
+        return $this->render('default/index.html.twig', ['items' => $items]);
     }
 }

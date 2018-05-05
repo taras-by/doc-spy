@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ParserBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -52,12 +52,12 @@ class Source
 
     /**
      * One Source has Many items.
-     * @ORM\OneToMany(targetEntity="CoreBundle\Entity\Item", mappedBy="source")
+     * @ORM\OneToMany(targetEntity="App\Entity\Item", mappedBy="source")
      */
     private $items;
 
     /**
-     * @ORM\ManyToMany(targetEntity="CoreBundle\Entity\Tag", inversedBy="sources")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Item", inversedBy="sources")
      * @ORM\JoinTable(name="sources_tags")
      */
     private $tags;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ParserBundle\Service;
+namespace App\Service;
 
 use CoreBundle\Entity\Item;
 use CoreBundle\Repository\ItemRepository;

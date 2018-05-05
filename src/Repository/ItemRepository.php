@@ -1,8 +1,8 @@
 <?php
 
-namespace App\CoreBundle\Repository;
+namespace App\Repository;
 
-use CoreBundle\Entity\Item;
+use App\Entity\Item;
 
 /**
  * ItemRepository

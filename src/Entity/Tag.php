@@ -1,13 +1,13 @@
 <?php
 
-namespace App\CoreBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Tag
  *
- * @package CoreBundle\Entity
+ * @package App\Entity
  * @ORM\Entity
  * @ORM\Table(name="tag")
  */
@@ -28,7 +28,7 @@ class Tag
     /**
      * Many Tags have Many Sources
      *
-     * @ORM\ManyToMany(targetEntity="ParserBundle\Entity\Source", mappedBy="tags")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Source", mappedBy="tags")
      */
     private $sources;
     /**
@@ -76,11 +76,11 @@ class Tag
     /**
      * Add source
      *
-     * @param \ParserBundle\Entity\Source $source
+     * @param Source $source
      *
      * @return Tag
      */
-    public function addSource(\ParserBundle\Entity\Source $source)
+    public function addSource(Source $source)
     {
         $this->sources[] = $source;
 
@@ -90,9 +90,9 @@ class Tag
     /**
      * Remove source
      *
-     * @param \ParserBundle\Entity\Source $source
+     * @param Source $source
      */
-    public function removeSource(\ParserBundle\Entity\Source $source)
+    public function removeSource(Source $source)
     {
         $this->sources->removeElement($source);
     }

@@ -1,7 +1,7 @@
 <?php
-namespace App\CoreBundle\Controller;
+namespace App\Controller;
 
-use CoreBundle\Entity\Item;
+use App\Entity\Item;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,6 +14,6 @@ class SourceController extends Controller
     {
         $itemRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemRepository->findBySourceId($id);
-        return $this->render('CoreBundle:default:index.html.twig', ['items' => $items]);
+        return $this->render('default/index.html.twig', ['items' => $items]);
     }
 }

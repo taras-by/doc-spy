@@ -1,9 +1,9 @@
 <?php
 
-namespace App\CoreBundle\Controller;
+namespace App\Controller;
 
-use CoreBundle\Entity\Item;
-use CoreBundle\Entity\Tag;
+use App\Entity\Item;
+use App\Entity\Tag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -17,14 +17,14 @@ class TagController extends Controller
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemsRepository->findByTagId($id);
 
-        return $this->render('CoreBundle:default:index.html.twig', ['items' => $items]);
+        return $this->render('default/index.html.twig', ['items' => $items]);
     }
 
-    public function menuTagsAction()
+    public function menuTags()
     {
         $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
         $tags = $tagsRepository->findAll();
 
-        return $this->render('CoreBundle:parts:tags.html.twig', ['tags' => $tags]);
+        return $this->render('parts/tags.html.twig', ['tags' => $tags]);
     }
 }

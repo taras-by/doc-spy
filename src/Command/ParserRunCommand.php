@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ParserBundle\Command;
+namespace App\Command;
 
 use ParserBundle\Entity\Source;
 use ParserBundle\Repository\SourceRepository;

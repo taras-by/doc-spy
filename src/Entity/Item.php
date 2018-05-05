@@ -1,15 +1,15 @@
 <?php
 
-namespace App\CoreBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ParserBundle\Entity\Source;
+use App\Entity\Source;
 
 /**
  * Item
  *
  * @ORM\Table(name="item")
- * @ORM\Entity(repositoryClass="CoreBundle\Repository\ItemRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
  */
 class Item
 {
@@ -45,7 +45,7 @@ class Item
 
     /**
      * Many Items have One Source.
-     * @ORM\ManyToOne(targetEntity="ParserBundle\Entity\Source", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Source", inversedBy="items")
      * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
      */
     private $source;
@@ -237,8 +237,7 @@ class Item
     /**
      * Set apdatedAt
      *
-     * @param \DateTime $apdatedAt
-     *
+     * @param $updatedAt
      * @return Item
      */
     public function setUpdatedAt($updatedAt)

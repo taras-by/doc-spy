@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CoreBundle\Command;
+namespace App\Command;
 
 use CoreBundle\Entity\Item;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;

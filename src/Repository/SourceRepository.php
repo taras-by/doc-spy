@@ -1,8 +1,6 @@
 <?php
 
-namespace App\ParserBundle\Repository;
-
-use ParserBundle\Entity\Source;
+namespace App\Repository;
 
 /**
  * SourceRepository
