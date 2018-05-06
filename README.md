@@ -14,19 +14,29 @@
 3. Install dependencies
 
     ```bash
-    $ docker-compose exec app bash
-    $ composer install
+    $ ./docker/composer install
     ```
         
 4. Create database and tables if not exist
 
     ```bash
-    $ php bin/console doctrine:database:create
-    $ php bin/console doctrine:schema:update --force
+    $ ./docker/console doctrine:schema:update --force
     ```
-### Run console commands with Docker
+4. Run application: http://localhost:834
+### Usage
+Start containers:
 ```
-$ ./docker/composer install
+$ ./docker/start
+```
+Symfony commands:
+```
 $ ./docker/console
 ```
-    
+Composer:
+```
+$ ./docker/composer update
+```
+Stop containers:
+```   
+$ ./docker/stop
+```
