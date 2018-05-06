@@ -24,4 +24,4 @@ services:
     env_file:
       - ./docker/mysql/.env
     ports:
-        - 849:330
+        - 849:3306

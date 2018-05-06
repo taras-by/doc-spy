@@ -2,15 +2,15 @@
 
 namespace App\Service;
 
-use CoreBundle\Entity\Item;
-use CoreBundle\Repository\ItemRepository;
+use App\Entity\Item;
+use App\Repository\ItemRepository;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
-use ParserBundle\Entity\Source;
+use App\Entity\Source;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @todo add two methods for reading Sourse and for saving Items
+ * @todo add two methods for reading Source and for saving Items
  */
 class ParserService
 {
@@ -40,18 +40,18 @@ class ParserService
     /**
      * @var RegistryInterface
      */
-    private $doctrine;
+    private $entityManager;
 
     /**
      * ParserService constructor
      *
      * @param FeedIo $feedio
-     * @param RegistryInterface $doctrine
+     * @param RegistryInterface $entityManager
      */
-    public function __construct(FeedIo $feedio, RegistryInterface $doctrine)
+    public function __construct(FeedIo $feedio, RegistryInterface $entityManager)
     {
         $this->feedio = $feedio;
-        $this->doctrine = $doctrine;
+        $this->entityManager = $entityManager;
         $this->now = new \DateTime(date('H:i'));
     }
 
@@ -59,6 +59,7 @@ class ParserService
      * Run parser
      *
      * @param Source $source
+     * @throws \Exception
      */
     public function read(Source $source)
     {
@@ -66,12 +67,11 @@ class ParserService
         $this->allCount = 0;
 
         /** @var ItemRepository $itemRepository */
-        $itemRepository = $this->doctrine->getRepository(Item::class);
+        $itemRepository = $this->entityManager->getRepository(Item::class);
 
-        $em = $this->doctrine->getManager();
+        $em = $this->entityManager->getManager();
 
         try {
-
             $feed = $this->feedio->read($source->getUrl())->getFeed();
             $this->allCount = count($feed);
             foreach ($feed as $feedItem) {
@@ -126,8 +126,9 @@ class ParserService
      * Set next update time
      *
      * @param integer $updateInteval
-     * @param integer$errorCount
+     * @param integer $errorCount
      * @return \DateTime
+     * @throws \Exception
      */
     private function getNextUpdateTime($updateInteval, $errorCount)
     {

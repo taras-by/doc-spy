@@ -26,7 +26,7 @@
     ```
 ### Run console commands with Docker
 ```
-$ ./docker/app bin/console
-$ ./docker/app composer install
+$ ./docker/composer install
+$ ./docker/console
 ```
     

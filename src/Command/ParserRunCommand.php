@@ -2,17 +2,30 @@
 
 namespace App\Command;
 
-use ParserBundle\Entity\Source;
-use ParserBundle\Repository\SourceRepository;
-use ParserBundle\Service\ParserService;
+use App\Entity\Source;
+use App\Repository\SourceRepository;
+use App\Service\ParserService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ParserRunCommand extends ContainerAwareCommand
 {
+    private $parser;
+
+    /**
+     * ParserRunCommand constructor.
+     * @param $parser
+     */
+    public function __construct(ParserService $parser)
+    {
+        $this->parser = $parser;
+
+        parent::__construct();
+    }
+
+
     protected function configure()
     {
         $this
@@ -30,16 +43,13 @@ class ParserRunCommand extends ContainerAwareCommand
         $sources = $sourceRepository->findForUpdate($results);
 
         /** @var Source $source */
-        /** @var ParserService $parser */
-        $parser = $this->getContainer()->get('parser');
-
         foreach ($sources as $source) {
 
-            $parser->read($source);
+            $this->parser->read($source);
 
             $output->writeln('Parsed: ' . $source->getName());
-            $output->writeln('  Received items: ' . $parser->getAllCount() .
-                ($parser->getAddedCount() ? '. <info>new items: ' . $parser->getAddedCount() . '</info>' : '')
+            $output->writeln('  Received items: ' . $this->parser->getAllCount() .
+                ($this->parser->getAddedCount() ? '. <info>new items: ' . $this->parser->getAddedCount() . '</info>' : '')
             );
         }
 

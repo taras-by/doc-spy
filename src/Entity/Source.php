@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Source
  *
  * @ORM\Table(name="source")
- * @ORM\Entity(repositoryClass="ParserBundle\Repository\SourceRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SourceRepository")
  */
 class Source
 {
@@ -57,7 +57,7 @@ class Source
     private $items;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Item", inversedBy="sources")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="sources")
      * @ORM\JoinTable(name="sources_tags")
      */
     private $tags;
@@ -223,11 +223,11 @@ class Source
     /**
      * Add item
      *
-     * @param \CoreBundle\Entity\Item $item
+     * @param Item $item
      *
      * @return Source
      */
-    public function addItem(\CoreBundle\Entity\Item $item)
+    public function addItem(Item $item)
     {
         $this->items[] = $item;
 
@@ -237,9 +237,9 @@ class Source
     /**
      * Remove item
      *
-     * @param \CoreBundle\Entity\Item $item
+     * @param Item $item
      */
-    public function removeItem(\CoreBundle\Entity\Item $item)
+    public function removeItem(Item $item)
     {
         $this->items->removeElement($item);
     }
@@ -257,11 +257,11 @@ class Source
     /**
      * Add tag
      *
-     * @param \CoreBundle\Entity\Tag $tag
+     * @param Tag $tag
      *
      * @return Source
      */
-    public function addTag(\CoreBundle\Entity\Tag $tag)
+    public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
 
@@ -271,9 +271,9 @@ class Source
     /**
      * Remove tag
      *
-     * @param \CoreBundle\Entity\Tag $tag
+     * @param Tag $tag
      */
-    public function removeTag(\CoreBundle\Entity\Tag $tag)
+    public function removeTag(Tag $tag)
     {
         $this->tags->removeElement($tag);
     }
