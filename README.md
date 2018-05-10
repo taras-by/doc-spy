@@ -35,6 +35,7 @@ $ ./docker/console
 Composer:
 ```
 $ ./docker/composer update
+$ ./docker/composer install
 ```
 Stop containers:
 ```   
