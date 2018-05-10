@@ -1,4 +1,0 @@
-services:
-    parser:
-        class: ParserBundle\Service\ParserService
-        arguments: ['@feedio', '@doctrine']
