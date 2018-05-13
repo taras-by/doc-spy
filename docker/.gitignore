@@ -1,2 +1,3 @@
 /mysql/.db
 /php/.composer
+.env

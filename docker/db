@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+source ./docker/.env
+source ./docker/mysql/.env
+
+echo "Connect to $SERVER_HOST ..."
+ssh $SERVER_USER@$SERVER_HOST $SERVER_PATH/bin/dump
+
+echo "Download dump to var/dump.sql ..."
+scp $SERVER_USER@$SERVER_HOST:$SERVER_PATH/var/dump.sql ./var/dump.sql
+
+echo "Import to database ..."
+docker-compose exec db sh -c 'mysql -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE < /var/www/var/dump.sql'

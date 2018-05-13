@@ -21,6 +21,8 @@ services:
     image: mysql
     volumes:
       - ./docker/mysql/.db:/var/lib/mysql
+    volumes_from:
+      - app
     env_file:
       - ./docker/mysql/.env
     ports:

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+SCRIPT_PATH=`dirname "$BASH_SOURCE"`
+
+source $SCRIPT_PATH/../.env
+
+regex="^mysql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)$"
+[[ $DATABASE_URL =~ $regex ]]
+DATABASE_HOST=${BASH_REMATCH[3]}:${BASH_REMATCH[4]}
+DATABASE_NAME=${BASH_REMATCH[5]}
+DATABASE_USER=${BASH_REMATCH[1]}
+DATABASE_PASSWORD=${BASH_REMATCH[2]}
+
+filename=$SCRIPT_PATH/../var/dump.sql
+
+mysqldump -u$DATABASE_USER -p$DATABASE_PASSWORD $DATABASE_NAME > $filename
