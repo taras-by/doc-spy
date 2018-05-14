@@ -1,0 +1,49 @@
+.item-date {
+    font-style: italic;
+}
+
+@media (max-width: 767px) {
+    .item-date {
+        margin-left: 30px;
+    }
+    .item-date:after {
+        display: block;
+        content: "";
+        border-bottom: 1px solid #DDDDDD;
+        margin: 1em 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .item-date {
+        text-align: right;
+        position: relative;
+        left: 14px;
+    }
+}
+
+.item-title {
+    position: relative;
+}
+
+.item-title:after {
+    display: block;
+    content: "";
+    border-bottom: 1px solid #DDDDDD;
+    margin: 1em 0 1em 30px;
+}
+
+.item-title img {
+    position: absolute;
+    top: 4px;
+    opacity: .7;
+}
+
+.item:hover .item-title img {
+    opacity: 1;
+}
+
+.item-link {
+    display: block;
+    margin-left: 30px;
+}
