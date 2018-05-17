@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ source.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% include 'parts/items.html.twig' %}
+    </div>
+
+    {{ pagination_render(maxPages, page, 'source_index', {'id': source.id}) }}
+
+{% endblock %}

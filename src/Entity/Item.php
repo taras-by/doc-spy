@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Item
 {
+    const LIMIT = 60;
+
     /**
      * @var int
      *

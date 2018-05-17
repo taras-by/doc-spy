@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Item;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * ItemRepository
@@ -12,10 +12,9 @@ use App\Entity\Item;
  */
 class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
-    /**
-     * @return array
-     */
-    public function findLast()
+    use PaginatorTrait;
+
+    public function findLast(): array
     {
         return $this->createQueryBuilder('i')
             //->select(['i.title', 'i.link'])
@@ -27,38 +26,34 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getArrayResult();
     }
 
-    /**
-     * @param integer $id
-     * @return array
-     */
-    public function findByTagId($id)
+    public function findPaginatedByTagId(int $id, int $page, int $limit): Paginator
     {
-        return $this->createQueryBuilder('i')
+        $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->leftJoin('s.tags', 't')
             ->addSelect('s')
             ->where('t.id = :tag_id')
             ->setParameter('tag_id', $id)
             ->orderBy('i.publishedAt', 'DESC')
-            ->setMaxResults(60)
-            ->getQuery()
-            ->getArrayResult();
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
     }
 
-    public function findBySourceId($id)
+    public function findPaginatedBySourceId(int $id, int $page, int $limit): Paginator
     {
-        return $this->createQueryBuilder('i')
+        $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->where('s.id = :source_id')
             ->setParameter('source_id', $id)
             ->orderBy('i.publishedAt', 'DESC')
-            ->setMaxResults(50)
-            ->getQuery()
-            ->getArrayResult();
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
     }
 
-    public function findByPhrase($phrase)
+    public function findPaginatedByPhrase(string $phrase, int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
@@ -69,25 +64,21 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('word_' . $i, '%' . $word . '%');
         }
 
-        return $query->orderBy('i.publishedAt', 'DESC')
-            ->setMaxResults(50)
-            ->getQuery()
-            ->getArrayResult();
+        $query->orderBy('i.publishedAt', 'DESC');
+
+        return $this->paginate($query->getQuery(), $page, $limit);
     }
 
-    /**
-     * @return array
-     */
-    public function findFromFavoriteSources()
+    public function findPaginatedFromFavoriteSources(int $page, int $limit): Paginator
     {
-        return $this->createQueryBuilder('i')
+        $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->where('s.favorite = :favorite')
             ->setParameter('favorite', true)
             ->orderBy('i.publishedAt', 'DESC')
-            ->setMaxResults(60)
-            ->getQuery()
-            ->getArrayResult();
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
     }
 }

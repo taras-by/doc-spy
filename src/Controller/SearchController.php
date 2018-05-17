@@ -10,14 +10,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends Controller
 {
     /**
-     * @Route("/search", name="search")
+     * @Route("/search/{page}", name="search", requirements={"page"="\d+"})
+     * @param Request $request
+     * @param int $page
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $page = 1)
     {
-        $itemRepository = $this->getDoctrine()->getRepository(Item::class);
         $phrase = $request->get('q');
-        $items = $itemRepository->findByPhrase($phrase);
-        return $this->render('default/index.html.twig', ['items' => $items]);
+
+        $itemRepository = $this->getDoctrine()->getRepository(Item::class);
+        $items = $itemRepository->findPaginatedByPhrase($phrase, $page, Item::LIMIT);
+
+        $maxPages = ceil($items->count() / Item::LIMIT);
+
+        return $this->render('search/index.html.twig', [
+            'items' => $items,
+            'phrase' => $phrase,
+            'maxPages' => $maxPages,
+            'page' => $page,
+        ]);
     }
 
     /**
