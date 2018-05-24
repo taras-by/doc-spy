@@ -37,6 +37,13 @@ class Source
     private $url;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="parser", type="string", length=255, options={"default" : "rss"})
+     */
+    private $parser;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="favorite", type="boolean")
@@ -156,6 +163,26 @@ class Source
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @param string $parser
+     *
+     * @return Source
+     */
+    public function setParser($parser)
+    {
+        $this->parser = $parser;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParser()
+    {
+        return $this->parser;
     }
 
     /**

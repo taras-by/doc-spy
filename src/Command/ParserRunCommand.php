@@ -4,7 +4,8 @@ namespace App\Command;
 
 use App\Entity\Source;
 use App\Repository\SourceRepository;
-use App\Service\ParserService;
+use App\Service\Parser\ParserManager;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,19 +13,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ParserRunCommand extends ContainerAwareCommand
 {
-    private $parser;
+    /**
+     * @var ParserManager
+     */
+    private $parserManager;
 
     /**
-     * ParserRunCommand constructor.
-     * @param $parser
+     * @var RegistryInterface
      */
-    public function __construct(ParserService $parser)
+    private $entityManager;
+
+    /**
+     * Current time with rounding to minutes
+     *
+     * @var \DateTime
+     */
+    private $now;
+
+    public function __construct(ParserManager $parserManager, RegistryInterface $entityManager)
     {
-        $this->parser = $parser;
+        $this->parserManager = $parserManager;
+        $this->entityManager = $entityManager;
+        $this->now = new \DateTime(date('H:i'));
 
         parent::__construct();
     }
-
 
     protected function configure()
     {
@@ -34,24 +47,61 @@ class ParserRunCommand extends ContainerAwareCommand
             ->addArgument('results', InputArgument::OPTIONAL, 'Count of Sources for parsing');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $results = $input->getArgument('results');
+        $sources = $this->getSourceRepository()->findForUpdate($results);
 
-        /** @var SourceRepository $sourceRepository */
-        $sourceRepository = $this->getContainer()->get('doctrine')->getRepository(Source::class);
-        $sources = $sourceRepository->findForUpdate($results);
+        $parserManager = $this->parserManager;
 
         /** @var Source $source */
         foreach ($sources as $source) {
-
-            $this->parser->read($source);
+            $items = $parserManager->getItems($source);
 
             $output->writeln('Parsed: ' . $source->getName());
-            $output->writeln('  Received items: ' . $this->parser->getAllCount() .
-                ($this->parser->getAddedCount() ? '. <info>new items: ' . $this->parser->getAddedCount() . '</info>' : '')
+            $output->writeln('  Received items: ' . $parserManager->getAllCount() .
+                ($parserManager->getNeedAddCount() ? '. <info>new items: ' . $parserManager->getNeedAddCount() . '</info>' : '')
             );
-        }
 
+            if($parserManager->hasErrors()){
+                $source->upErrorCount();
+            }else{
+                $source->setErrorCount(0);
+                $source->setUpdatedAt(new \DateTime());
+            }
+
+            $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
+            $source->setUpdateOn($nextUpdateTime);
+
+            foreach ($items as $item) {
+                $this->entityManager->getManager()->persist($item);
+            }
+        }
+//        $this->entityManager->getManager()->flush();
+    }
+
+    private function getSourceRepository(): SourceRepository
+    {
+        return $this->getContainer()->get('doctrine')->getRepository(Source::class);
+    }
+
+    /**
+     * Set next update time
+     *
+     * @param integer $updateInteval
+     * @param integer $errorCount
+     * @return \DateTime
+     * @throws \Exception
+     */
+    private function getNextUpdateTime($updateInteval, $errorCount)
+    {
+        $now = clone $this->now;
+        return $now->add(new \DateInterval('PT' . $updateInteval * ($errorCount + 1) . 'M'));
     }
 }
