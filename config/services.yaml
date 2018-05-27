@@ -33,3 +33,6 @@ services:
     App\Service\Parser\Parsers\Rss:
         arguments: ['@feedio', '@doctrine']
         public: true
+
+    App\Service\Parser\Parsers\EventsDevBy:
+        public: true

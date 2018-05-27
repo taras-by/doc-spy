@@ -4,21 +4,31 @@ namespace App\Command;
 
 use App\Entity\Item;
 use App\Entity\Source;
-
 use App\Repository\SourceRepository;
 use App\Service\Parser\ParserManager;
+use App\Service\Parser\ParserInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ParserCheckCommand extends ContainerAwareCommand
 {
+    /**
+     * @var ParserManager
+     */
     private $parserManager;
 
-    public function __construct(ParserManager $parserManager)
+    /**
+     * @var RegistryInterface
+     */
+    private $entityManager;
+
+    public function __construct(ParserManager $parserManager, RegistryInterface $entityManager)
     {
         $this->parserManager = $parserManager;
+        $this->entityManager = $entityManager;
         parent::__construct();
     }
 
@@ -35,29 +45,37 @@ class ParserCheckCommand extends ContainerAwareCommand
         $sourceId = $input->getArgument('source_id');
 
         $source = $this->getSourceRepository()->find($sourceId);
-        $parserManager = $this->parserManager;
-        $items = $parserManager->getItems($source);
-
-        $formatter = $this->getHelper('formatter');
+        $parser = $this->parserManager->getParser($source);
+        $items = $parser->getItems();
 
         /** @var Item $item */
         foreach ($items as $item) {
-            $output->writeln('Title: ' . $item->getTitle());
-            $output->writeln('Description: ' . $formatter->truncate($item->getDescription(), 50));
-            $output->writeln('Link: ' . $item->getLink());
-            $output->writeln('Id: ' . $item->getId());
-            $output->writeln('Created at: ' . $item->getCreatedAt()->format(DATE_ATOM));
-            $output->writeln('Published at: ' . $item->getPublishedAt()->format(DATE_ATOM));
-            $output->writeln('Updated at: ' . $item->getUpdatedAt()->format(DATE_ATOM));
-            $output->writeln('-----');
+            $this->writeItem($item, $output);
         }
-        $output->writeln('Has errors: ' . ($parserManager->hasErrors() ? 'yes' : 'no'));
-        $output->writeln('Need add count: ' . $parserManager->getNeedAddCount());
-        $output->writeln('All count: ' . $parserManager->getAllCount());
+        $this->writeSummary($parser, $output);
+    }
+
+    private function writeItem(Item $item, OutputInterface $output): void
+    {
+        $formatter = $this->getHelper('formatter');
+        $output->writeln('Title: ' . $item->getTitle());
+        $output->writeln('Description: ' . $formatter->truncate($item->getDescription(), 50));
+        $output->writeln('Link: ' . $item->getLink());
+        $output->writeln('Created at: ' . $item->getCreatedAt()->format(DATE_ATOM));
+        $output->writeln('Published at: ' . $item->getPublishedAt()->format(DATE_ATOM));
+        $output->writeln('Updated at: ' . $item->getUpdatedAt()->format(DATE_ATOM));
+        $output->writeln('-----');
+    }
+
+    private function writeSummary(ParserInterface $parser, OutputInterface $output): void
+    {
+        $output->writeln('Has errors: ' . ($parser->hasErrors() ? 'yes' : 'no'));
+        $output->writeln('Need add count: ' . $parser->getNeedAddCount());
+        $output->writeln('All count: ' . $parser->getAllCount());
     }
 
     private function getSourceRepository(): SourceRepository
     {
-        return $this->getContainer()->get('doctrine')->getRepository(Source::class);
+        return $this->entityManager->getRepository(Source::class);
     }
 }

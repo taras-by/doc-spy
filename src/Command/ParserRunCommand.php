@@ -58,18 +58,17 @@ class ParserRunCommand extends ContainerAwareCommand
         $results = $input->getArgument('results');
         $sources = $this->getSourceRepository()->findForUpdate($results);
 
-        $parserManager = $this->parserManager;
-
         /** @var Source $source */
         foreach ($sources as $source) {
-            $items = $parserManager->getItems($source);
+            $parser = $this->parserManager->getParser($source);
+            $items = $parser->getItems();
 
             $output->writeln('Parsed: ' . $source->getName());
-            $output->writeln('  Received items: ' . $parserManager->getAllCount() .
-                ($parserManager->getNeedAddCount() ? '. <info>new items: ' . $parserManager->getNeedAddCount() . '</info>' : '')
+            $output->writeln('  Received items: ' . $parser->getAllCount() .
+                ($parser->getNeedAddCount() ? '. <info>new items: ' . $parser->getNeedAddCount() . '</info>' : '')
             );
 
-            if($parserManager->hasErrors()){
+            if($parser->hasErrors()){
                 $source->upErrorCount();
             }else{
                 $source->setErrorCount(0);
@@ -83,7 +82,7 @@ class ParserRunCommand extends ContainerAwareCommand
                 $this->entityManager->getManager()->persist($item);
             }
         }
-//        $this->entityManager->getManager()->flush();
+       $this->entityManager->getManager()->flush();
     }
 
     private function getSourceRepository(): SourceRepository
