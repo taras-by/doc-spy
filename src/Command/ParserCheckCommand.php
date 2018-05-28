@@ -61,9 +61,11 @@ class ParserCheckCommand extends ContainerAwareCommand
         $output->writeln('Title: ' . $item->getTitle());
         $output->writeln('Description: ' . $formatter->truncate($item->getDescription(), 50));
         $output->writeln('Link: ' . $item->getLink());
-        $output->writeln('Created at: ' . $item->getCreatedAt()->format(DATE_ATOM));
+        $output->writeln('Start date: ' . ($item->getStartDate() ? $item->getStartDate()->format(DATE_ATOM) : 'null'));
+        $output->writeln('End date: ' . ($item->getEndDate() ? $item->getEndDate()->format(DATE_ATOM) : 'null'));
         $output->writeln('Published at: ' . $item->getPublishedAt()->format(DATE_ATOM));
-        $output->writeln('Updated at: ' . $item->getUpdatedAt()->format(DATE_ATOM));
+//        $output->writeln('Created at: ' . $item->getCreatedAt()->format(DATE_ATOM));
+//        $output->writeln('Updated at: ' . $item->getUpdatedAt()->format(DATE_ATOM));
         $output->writeln('-----');
     }
 

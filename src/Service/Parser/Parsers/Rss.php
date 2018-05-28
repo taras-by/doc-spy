@@ -3,8 +3,6 @@
 namespace App\Service\Parser\Parsers;
 
 use App\Entity\Item;
-use App\Entity\Source;
-use App\Repository\ItemRepository;
 use App\Service\Parser\ParserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use FeedIo\FeedIo;
