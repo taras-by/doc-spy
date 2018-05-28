@@ -33,7 +33,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -73,6 +73,20 @@ class Item
     private $updatedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start_date", type="datetime", nullable=true)
+     */
+    private $startDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_date", type="datetime", nullable=true)
+     */
+    private $endDate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -86,7 +100,7 @@ class Item
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -98,7 +112,7 @@ class Item
      *
      * @return Item
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -110,7 +124,7 @@ class Item
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -122,7 +136,7 @@ class Item
      *
      * @return Item
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -134,7 +148,7 @@ class Item
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ? string
     {
         return $this->description;
     }
@@ -146,7 +160,7 @@ class Item
      *
      * @return Item
      */
-    public function setSource(Source $source = null)
+    public function setSource(Source $source = null): self
     {
         $this->source = $source;
 
@@ -158,7 +172,7 @@ class Item
      *
      * @return Source
      */
-    public function getSource()
+    public function getSource(): Source
     {
         return $this->source;
     }
@@ -170,7 +184,7 @@ class Item
      *
      * @return Item
      */
-    public function setLink($link)
+    public function setLink($link): self
     {
         $this->link = $link;
 
@@ -182,7 +196,7 @@ class Item
      *
      * @return string
      */
-    public function getLink()
+    public function getLink(): string
     {
         return $this->link;
     }
@@ -194,7 +208,7 @@ class Item
      *
      * @return Item
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -206,7 +220,7 @@ class Item
      *
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -218,7 +232,7 @@ class Item
      *
      * @return Item
      */
-    public function setPublishedAt($publishedAt)
+    public function setPublishedAt($publishedAt): self
     {
         $this->publishedAt = $publishedAt;
 
@@ -230,7 +244,7 @@ class Item
      *
      * @return \DateTime
      */
-    public function getPublishedAt()
+    public function getPublishedAt(): \DateTime
     {
         return $this->publishedAt;
     }
@@ -241,7 +255,7 @@ class Item
      * @param $updatedAt
      * @return Item
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -253,8 +267,46 @@ class Item
      *
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $startDate
+     * @return Item
+     */
+    public function setStartDate(\DateTime $startDate): self
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStartDate(): ?\DateTime
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param \DateTime $endDate
+     * @return Item
+     */
+    public function setEndDate(\DateTime $endDate): self
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEndDate(): ?\DateTime
+    {
+        return $this->endDate;
     }
 }
