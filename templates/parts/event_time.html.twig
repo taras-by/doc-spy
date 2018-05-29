@@ -1,0 +1,11 @@
+{% if (item.startDate) %}
+    {% if(item.startDate|date('H:i') != '00:00') %}
+        <small>{{ item.startDate|date('d.m H:i') }}</small>
+    {% elseif(item.startDate == item.endDate) %}
+        <small>{{ item.startDate|date('d.m') }}</small>
+    {% elseif(item.startDate|date('m') == item.endDate|date('m')) %}
+        <small>{{ item.startDate|date('d') }} - {{ item.endDate|date('d.m') }}</small>
+    {% else %}
+        <small>{{ item.startDate|date('d.m') }} - {{ item.endDate|date('d.m') }}</small>
+    {% endif %}
+{% endif %}

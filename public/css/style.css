@@ -47,3 +47,9 @@
     display: block;
     margin-left: 30px;
 }
+a.item-link small{
+    text-decoration: underline;
+    text-decoration-color: white;
+    color: #212529;
+    margin-right: 5px;
+}

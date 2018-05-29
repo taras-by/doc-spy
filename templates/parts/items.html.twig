@@ -1,9 +1,9 @@
 {% for item in items %}
     <div class="row item">
         <div class="col-md-2">
-            {% if (date is not defined) or (date is defined and item.publishedAt|date("d.m.Y") != date|date("d.m.Y")) %}
+            {% if (date is not defined) or (date is defined and item.publishedAt|date() != date|date()) %}
                 <div class="item-date">
-                    {{ item.publishedAt|date("d.m.Y") }}
+                    {{ item.publishedAt|date() }}
                 </div>
             {% endif %}
         </div>
@@ -13,7 +13,7 @@
                     <img src="{{ item.source.icon }}" width="16" height="16" />
                 </a>
             {% endif %}
-            <a  class="item-link" href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+            <a  class="item-link" href="{{ item.link }}" target="_blank">{% include 'parts/event_time.html.twig' %}{{ item.title }}</a>
         </div>
     </div>
     {% set date = item.publishedAt %}

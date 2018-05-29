@@ -9,8 +9,6 @@ use App\Service\Parser\BaseParser;
 
 class EventsDevBy extends BaseParser implements ParserInterface
 {
-    const URL = 'https://events.dev.by';
-
     /**
      * @return ArrayCollection
      * @throws \Exception
@@ -26,7 +24,7 @@ class EventsDevBy extends BaseParser implements ParserInterface
             foreach ($itemNodes as $itemNode) {
                 $titleNode = $finder->query("div/a[@class='title']", $itemNode)[0];
                 $title = $titleNode->nodeValue ?? null;
-                $link = self::URL . $titleNode->getAttribute('href');
+                $link = $this->source->getUrl() . $titleNode->getAttribute('href');
 
                 if (!$this->getItemRepository()->findBy(['link' => $link])) {
                     $descriptionNode = $finder->query("div/p", $itemNode)[0];
@@ -47,11 +45,10 @@ class EventsDevBy extends BaseParser implements ParserInterface
                     $endDate = new \DateTime($endDate);
 
                     $item = (new Item())
-                        ->setTitle($startDate->format('g:i a') . ': ' . $title)
+                        ->setTitle($title)
                         ->setDescription($description)
                         ->setlink($link)
-                        //                    ->setPublishedAt(new \DateTime())
-                        ->setPublishedAt($startDate)
+                        ->setPublishedAt(new \DateTime())
                         ->setStartDate($startDate)
                         ->setEndDate($endDate)
                         ->setSource($this->source);
