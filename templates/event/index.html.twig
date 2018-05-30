@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Events{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% include 'parts/events.html.twig' %}
+    </div>
+
+    {{ pagination_render(maxPages, page, 'event_index') }}
+
+{% endblock %}

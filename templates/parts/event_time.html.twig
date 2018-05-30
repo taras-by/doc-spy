@@ -1,11 +1,31 @@
 {% if (item.startDate) %}
-    {% if(item.startDate|date('H:i') != '00:00') %}
-        <small>{{ item.startDate|date('d.m H:i') }}</small>
-    {% elseif(item.startDate == item.endDate) %}
-        <small>{{ item.startDate|date('d.m') }}</small>
-    {% elseif(item.startDate|date('m') == item.endDate|date('m')) %}
-        <small>{{ item.startDate|date('d') }} - {{ item.endDate|date('d.m') }}</small>
-    {% else %}
-        <small>{{ item.startDate|date('d.m') }} - {{ item.endDate|date('d.m') }}</small>
+    {% if type is not defined %}
+        {% set type = "post" %}
     {% endif %}
+    <small>
+    {% if(item.startDate|date('H:i') != '00:00') %}
+        {% if type == 'event' %}
+            {{ item.startDate|date('H:i') }}
+        {% else %}
+            {{ item.startDate|date('d.m H:i') }}
+        {% endif %}
+    {% elseif(item.startDate == item.endDate) %}
+        {% if type == 'event' %}
+        {% else %}
+            {{ item.startDate|date('d.m') }}
+        {% endif %}
+    {% elseif(item.startDate|date('m') == item.endDate|date('m')) %}
+        {% if type == 'event' %}
+            any days
+        {% else %}
+            {{ item.startDate|date('d') }} - {{ item.endDate|date('d.m') }}
+        {% endif %}
+    {% else %}
+        {% if type == 'event' %}
+            any days
+        {% else %}
+            {{ item.startDate|date('d.m') }} - {{ item.endDate|date('d.m') }}
+        {% endif %}
+    {% endif %}
+    </small>
 {% endif %}

@@ -1,7 +1,10 @@
 <ul class="navbar-nav mr-auto">
+    <li class="nav-item active">
+        <a href="{{ path('event_index') }}" class="nav-link">Events</a>
+    </li>
     {% for tag in tags %}
         <li class="nav-item active">
-        <a href="{{ path('tag_index', {'id': tag.id}) }}" class="nav-link">{{ tag.name }}</a>
+                <a href="{{ path('tag_index', {'id': tag.id}) }}" class="nav-link">{{ tag.name }}</a>
         </li>
     {% endfor %}
 </ul>

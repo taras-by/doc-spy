@@ -14,6 +14,8 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 {
     use PaginatorTrait;
 
+    const EVENT_LIFETIME = 2;
+
     public function findLast(): array
     {
         return $this->createQueryBuilder('i')
@@ -35,6 +37,21 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->where('t.id = :tag_id')
             ->setParameter('tag_id', $id)
             ->orderBy('i.publishedAt', 'DESC')
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
+    }
+
+    public function findEventsPaginated(int $page, int $limit): Paginator
+    {
+        $query = $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->leftJoin('s.tags', 't')
+            ->addSelect('s')
+            ->where('i.startDate IS NOT NULL')
+            ->where('i.startDate > :date')
+            ->setParameter('date', new \DateTime(sprintf('-%s days', self::EVENT_LIFETIME)))
+            ->orderBy('i.startDate', 'ASC')
             ->getQuery();
 
         return $this->paginate($query, $page, $limit);

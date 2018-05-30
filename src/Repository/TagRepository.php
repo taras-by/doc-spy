@@ -7,8 +7,12 @@ use Doctrine\ORM\EntityRepository;
 class TagRepository extends EntityRepository
 {
 
-    public function findByTagId($id)
+    public function findFavorites(): array
     {
-
+        return $this->createQueryBuilder('t')
+            ->where('t.favorite = :favorite')
+            ->setParameter('favorite', true)
+            ->getQuery()
+            ->getArrayResult();
     }
 }

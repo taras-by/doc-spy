@@ -5,11 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Tag
- *
- * @package App\Entity
- * @ORM\Entity
  * @ORM\Table(name="tag")
+ * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  */
 class Tag
 {
@@ -24,6 +21,13 @@ class Tag
      * @ORM\Column(type="string")
      */
     private $name;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="favorite", type="boolean")
+     */
+    private $favorite;
 
     /**
      * Many Tags have Many Sources
@@ -71,6 +75,30 @@ class Tag
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set favorite
+     *
+     * @param boolean $favorite
+     *
+     * @return Tag
+     */
+    public function setFavorite($favorite)
+    {
+        $this->favorite = $favorite;
+
+        return $this;
+    }
+
+    /**
+     * Get favorite
+     *
+     * @return boolean
+     */
+    public function getFavorite()
+    {
+        return $this->favorite;
     }
 
     /**
