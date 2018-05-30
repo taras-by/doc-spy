@@ -11,6 +11,6 @@ DATABASE_NAME=${BASH_REMATCH[5]}
 DATABASE_USER=${BASH_REMATCH[1]}
 DATABASE_PASSWORD=${BASH_REMATCH[2]}
 
-filename=$SCRIPT_PATH/../var/dump.sql
+filename=$SCRIPT_PATH/../var/dump.sql.gz
 
-mysqldump -u$DATABASE_USER -p$DATABASE_PASSWORD $DATABASE_NAME > $filename
+mysqldump -u$DATABASE_USER -p$DATABASE_PASSWORD $DATABASE_NAME | gzip -c > $filename

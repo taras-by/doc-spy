@@ -6,11 +6,11 @@ source ./docker/mysql/.env
 echo "Connect to $SERVER_HOST ..."
 ssh $SERVER_USER@$SERVER_HOST $SERVER_PATH/bin/dump
 
-echo "Download dump to var/dump.sql ..."
-scp $SERVER_USER@$SERVER_HOST:$SERVER_PATH/var/dump.sql ./var/dump.sql
+echo "Download dump to var/dump.sql.gz ..."
+scp $SERVER_USER@$SERVER_HOST:$SERVER_PATH/var/dump.sql.gz ./var/dump.sql.gz
 
 echo "Import to database ..."
-docker-compose exec db sh -c 'mysql -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE < /var/www/var/dump.sql'
+docker-compose exec db sh -c 'zcat /var/www/var/dump.sql.gz | mysql -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
 
 echo "Import to database ..."
 ./docker/console doctrine:schema:update --force
