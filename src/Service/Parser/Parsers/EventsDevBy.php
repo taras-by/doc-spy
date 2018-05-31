@@ -9,14 +9,33 @@ use App\Service\Parser\BaseParser;
 
 class EventsDevBy extends BaseParser implements ParserInterface
 {
+    const NUMBER_PAGES = 3;
+
     /**
      * @return ArrayCollection
      * @throws \Exception
      */
     public function getItems(): ArrayCollection
     {
+        foreach ($this->getUrls() as $url) {
+            $this->parsePage($url);
+        }
+        return $this->items;
+    }
+
+    private function getUrls(): array
+    {
+        $urls = [];
+        for ($i = 1; $i <= self::NUMBER_PAGES; $i++) {
+            $urls[] = $this->source->getUrl() . "/?page=" . $i;
+        }
+        return $urls;
+    }
+
+    private function parsePage(string $url): void
+    {
         try {
-            $document = $this->getDomDocument($this->source->getUrl());
+            $document = $this->getDomDocument($url);
 
             $finder = new \DomXPath($document);
             $itemNodes = $finder->query("//*[contains(@class, 'list-item-events')]/div[@class='item']");
@@ -62,7 +81,6 @@ class EventsDevBy extends BaseParser implements ParserInterface
             $this->hasErrors = true;
 //            throw $exception;
         }
-        return $this->items;
     }
 
     private function getDataFromLinkToGoogleCalendar(string $link): array
