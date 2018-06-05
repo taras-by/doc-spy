@@ -2,30 +2,30 @@
     {% if type is not defined %}
         {% set type = "post" %}
     {% endif %}
-    <small>
     {% if(item.startDate|date('H:i') != '00:00') %}
         {% if type == 'event' %}
-            {{ item.startDate|date('H:i') }}
+            <small>{{ item.startDate|date('H:i') }}</small>
         {% else %}
-            {{ item.startDate|date('d.m H:i') }}
+            <small>{{ item.startDate|date('d.m H:i') }}</small>
         {% endif %}
     {% elseif(item.startDate == item.endDate) %}
         {% if type == 'event' %}
         {% else %}
-            {{ item.startDate|date('d.m') }}
+            <small>{{ item.startDate|date('d.m') }}</small>
         {% endif %}
     {% elseif(item.startDate|date('m') == item.endDate|date('m')) %}
         {% if type == 'event' %}
-            any days
+            {% set intervalDays = item.endDate.diff(item.startDate).days + 1 %}
+            <small>{{ intervalDays }} days</small>
         {% else %}
-            {{ item.startDate|date('d') }} - {{ item.endDate|date('d.m') }}
+            <small>{{ item.startDate|date('d') }} - {{ item.endDate|date('d.m') }}</small>
         {% endif %}
     {% else %}
         {% if type == 'event' %}
-            any days
+            {% set intervalDays = item.endDate.diff(item.startDate).days + 1 %}
+            <small>{{ intervalDays }} days</small>
         {% else %}
-            {{ item.startDate|date('d.m') }} - {{ item.endDate|date('d.m') }}
+            <small>{{ item.startDate|date('d.m') }} - {{ item.endDate|date('d.m') }}</small>
         {% endif %}
     {% endif %}
-    </small>
 {% endif %}
