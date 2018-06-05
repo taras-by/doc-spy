@@ -7,7 +7,6 @@ use App\Service\Parser\ParserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use App\Service\Parser\BaseParser;
 
 class Rss extends BaseParser implements ParserInterface
@@ -17,29 +16,25 @@ class Rss extends BaseParser implements ParserInterface
      */
     private $feedio;
 
-    public function __construct(FeedIo $feedio, RegistryInterface $entityManager)
+    public function __construct(FeedIo $feedio)
     {
         $this->feedio = $feedio;
-        $this->entityManager = $entityManager;
     }
 
     public function getItems(): ArrayCollection
     {
         try {
             $feed = $this->feedio->read($this->source->getUrl())->getFeed();
-            $this->allCount = count($feed);
+            $this->count = count($feed);
 
             foreach ($feed as $feedItem) {
-                if (!$this->getItemRepository()->findBy(['link' => $feedItem->getLink()])) {
-                    $item = (new Item())
-                        ->setTitle($feedItem->getTitle())
-                        ->setDescription($feedItem->getDescription())
-                        ->setlink($feedItem->getlink())
-                        ->setPublishedAt($feedItem->getLastModified())
-                        ->setSource($this->source);
-                    $this->items->add($item);
-                    ++$this->needAddCount;
-                }
+                $item = (new Item())
+                    ->setTitle($feedItem->getTitle())
+                    ->setDescription($feedItem->getDescription())
+                    ->setlink($feedItem->getlink())
+                    ->setPublishedAt($feedItem->getLastModified())
+                    ->setSource($this->source);
+                $this->items->add($item);
             }
 
         } catch (ReadErrorException $exception) {

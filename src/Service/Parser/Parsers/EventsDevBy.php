@@ -45,36 +45,34 @@ class EventsDevBy extends BaseParser implements ParserInterface
                 $title = $titleNode->nodeValue ?? null;
                 $link = $this->source->getUrl() . $titleNode->getAttribute('href');
 
-                if (!$this->getItemRepository()->findBy(['link' => $link])) {
-                    $descriptionNode = $finder->query("div/p", $itemNode)[0];
-                    $descriptionHtml = str_replace("\n", ' ', $descriptionNode->ownerDocument->saveHTML($descriptionNode));
-                    // Parse HTML: <p><time>text<time/>description</p>
-                    preg_match('/<\/time>(.+)<\/p>/', $descriptionHtml, $matches);
-                    $description = $matches[1] ?? null;
+                $descriptionNode = $finder->query("div/p", $itemNode)[0];
+                $descriptionHtml = str_replace("\n", ' ', $descriptionNode->ownerDocument->saveHTML($descriptionNode));
+                // Parse HTML: <p><time>text<time/>description</p>
+                preg_match('/<\/time>(.+)<\/p>/', $descriptionHtml, $matches);
+                $description = $matches[1] ?? null;
 
-                    // $idNode = $finder->query("div/div[@class='status-event']", $itemNode)[0];
-                    // $id = $idNode->getAttribute('id');
+                // $idNode = $finder->query("div/div[@class='status-event']", $itemNode)[0];
+                // $id = $idNode->getAttribute('id');
 
-                    $dateNode = $finder->query("div/ul[@class='list-gray']/li/a", $itemNode)[1];
-                    $googleCalendarLink = $dateNode->getAttribute('href');
-                    $data = $this->getDataFromLinkToGoogleCalendar($googleCalendarLink);
+                $dateNode = $finder->query("div/ul[@class='list-gray']/li/a", $itemNode)[1];
+                $googleCalendarLink = $dateNode->getAttribute('href');
+                $data = $this->getDataFromLinkToGoogleCalendar($googleCalendarLink);
 
-                    list($startDate, $endDate) = explode('/', $data['dates']);
-                    $startDate = new \DateTime($startDate);
-                    $endDate = new \DateTime($endDate);
+                list($startDate, $endDate) = explode('/', $data['dates']);
+                $startDate = new \DateTime($startDate);
+                $endDate = new \DateTime($endDate);
 
-                    $item = (new Item())
-                        ->setTitle($title)
-                        ->setDescription($description)
-                        ->setlink($link)
-                        ->setPublishedAt(new \DateTime())
-                        ->setStartDate($startDate)
-                        ->setEndDate($endDate)
-                        ->setSource($this->source);
-                    $this->items->add($item);
-                    ++$this->needAddCount;
-                }
+                $item = (new Item())
+                    ->setTitle($title)
+                    ->setDescription($description)
+                    ->setlink($link)
+                    ->setPublishedAt(new \DateTime())
+                    ->setStartDate($startDate)
+                    ->setEndDate($endDate)
+                    ->setSource($this->source);
+                $this->items->add($item);
 
+                ++$this->count;
             }
 
         } catch (\Exception $exception) {

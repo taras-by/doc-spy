@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Source;
 use App\Repository\SourceRepository;
+use App\Service\ItemSavingService;
 use App\Service\Parser\ParserManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -19,6 +20,11 @@ class ParserRunCommand extends ContainerAwareCommand
     private $parserManager;
 
     /**
+     * @var ItemSavingService
+     */
+    private $itemSavingService;
+
+    /**
      * @var RegistryInterface
      */
     private $entityManager;
@@ -30,9 +36,10 @@ class ParserRunCommand extends ContainerAwareCommand
      */
     private $now;
 
-    public function __construct(ParserManager $parserManager, RegistryInterface $entityManager)
+    public function __construct(ParserManager $parserManager, ItemSavingService $itemSavingService, RegistryInterface $entityManager)
     {
         $this->parserManager = $parserManager;
+        $this->itemSavingService = $itemSavingService;
         $this->entityManager = $entityManager;
         $this->now = new \DateTime(date('H:i'));
 
@@ -57,50 +64,22 @@ class ParserRunCommand extends ContainerAwareCommand
     {
         $results = $input->getArgument('results');
         $sources = $this->getSourceRepository()->findForUpdate($results);
+        $saver = $this->itemSavingService;
 
         /** @var Source $source */
         foreach ($sources as $source) {
             $parser = $this->parserManager->getParser($source);
-            $items = $parser->getItems();
+            $saver->save($parser);
 
-            $output->writeln('Parsed: ' . $source->getName());
-            $output->writeln('  Received items: ' . $parser->getAllCount() .
-                ($parser->getNeedAddCount() ? '. <info>new items: ' . $parser->getNeedAddCount() . '</info>' : '')
-            );
-
-            if($parser->hasErrors()){
-                $source->upErrorCount();
-            }else{
-                $source->setErrorCount(0);
-                $source->setUpdatedAt(new \DateTime());
-            }
-
-            $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
-            $source->setUpdateOn($nextUpdateTime);
-
-            foreach ($items as $item) {
-                $this->entityManager->getManager()->persist($item);
-            }
+            $writelnIfSaved = $saver->getSavedCount() ?
+                sprintf(' <info>new items: %s</info>', $saver->getSavedCount()) : '';
+            $output->writeln(sprintf('Parsed: %s', $source->getName()));
+            $output->writeln(sprintf('  Received items: %s', $saver->getAllCount()) . $writelnIfSaved);
         }
-       $this->entityManager->getManager()->flush();
     }
 
     private function getSourceRepository(): SourceRepository
     {
         return $this->getContainer()->get('doctrine')->getRepository(Source::class);
-    }
-
-    /**
-     * Set next update time
-     *
-     * @param integer $updateInteval
-     * @param integer $errorCount
-     * @return \DateTime
-     * @throws \Exception
-     */
-    private function getNextUpdateTime($updateInteval, $errorCount)
-    {
-        $now = clone $this->now;
-        return $now->add(new \DateInterval('PT' . $updateInteval * ($errorCount + 1) . 'M'));
     }
 }

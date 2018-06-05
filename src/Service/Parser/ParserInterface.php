@@ -9,9 +9,9 @@ interface ParserInterface
 {
     public function setSource(Source $source): ParserInterface;
 
-    public function getAllCount(): int;
+    public function getSource(): Source;
 
-    public function getNeedAddCount(): int;
+    public function getCount(): int;
 
     public function hasErrors(): bool;
 
