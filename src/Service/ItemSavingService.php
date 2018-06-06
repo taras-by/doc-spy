@@ -66,7 +66,7 @@ class ItemSavingService
         }
 
         $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
-        $source->setUpdateOn($nextUpdateTime);
+        $source->setScheduleAt($nextUpdateTime);
 
         $this->entityManager->getManager()->flush();
         $this->allCount = $parser->getCount();

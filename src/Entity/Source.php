@@ -86,9 +86,9 @@ class Source
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="update_on", type="datetimetz", nullable=true)
+     * @ORM\Column(name="schedule_at", type="datetimetz", nullable=true)
      */
-    private $updateOn;
+    private $scheduleAt;
 
     /**
      * Interval for updating Source in minutes
@@ -376,27 +376,23 @@ class Source
     }
 
     /**
-     * Set updateOn
-     *
-     * @param \DateTime $updateOn
+     * @param \DateTime $scheduleAt
      *
      * @return Source
      */
-    public function setUpdateOn($updateOn)
+    public function setScheduleAt($scheduleAt)
     {
-        $this->updateOn = $updateOn;
+        $this->scheduleAt = $scheduleAt;
 
         return $this;
     }
 
     /**
-     * Get updateOn
-     *
      * @return \DateTime
      */
-    public function getUpdateOn()
+    public function getScheduleAt()
     {
-        return $this->updateOn;
+        return $this->scheduleAt;
     }
 
     /**
