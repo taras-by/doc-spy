@@ -98,4 +98,14 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
         return $this->paginate($query, $page, $limit);
     }
+
+    public function deleteOlderThenDate(\DateTime $date): int
+    {
+        return $this->createQueryBuilder('i')
+            ->delete()
+            ->where('i.publishedAt < :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->execute();
+    }
 }
