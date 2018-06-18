@@ -13,7 +13,7 @@ class EventController extends Controller
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showAction($page = 1)
+    public function indexAction($page = 1)
     {
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemsRepository->findEventsPaginated($page, Item::LIMIT);

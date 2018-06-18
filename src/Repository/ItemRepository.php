@@ -28,6 +28,16 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getArrayResult();
     }
 
+    public function findAllPaginated(int $page, int $limit): Paginator
+    {
+        $query = $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->addSelect('s')
+            ->orderBy('i.publishedAt', 'DESC')
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
+    }
     public function findPaginatedByTagId(int $id, int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('i')

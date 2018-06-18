@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% include 'parts/items.html.twig' %}
+    </div>
+
+    {{ pagination_render(maxPages, page, 'all') }}
+
+{% endblock %}

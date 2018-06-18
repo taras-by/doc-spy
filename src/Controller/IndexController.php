@@ -26,4 +26,23 @@ class IndexController extends Controller
             'page' => $page,
         ]);
     }
+
+    /**
+     * @Route("/all/{page}", name="all", requirements={"page"="\d+"})
+     * @param int $page
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function allAction($page = 1)
+    {
+        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
+        $items = $itemsRepository->findAllPaginated($page, Item::LIMIT);
+
+        $maxPages = ceil($items->count() / Item::LIMIT);
+
+        return $this->render('index/all.html.twig', [
+            'items' => $items,
+            'maxPages' => $maxPages,
+            'page' => $page,
+        ]);
+    }
 }
