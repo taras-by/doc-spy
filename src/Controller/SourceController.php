@@ -31,4 +31,18 @@ class SourceController extends Controller
             'page' => $page,
         ]);
     }
+
+    /**
+     * @Route("/sources", name="sources_list")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction()
+    {
+        $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
+        $sources = $sourceRepository->findAll();
+
+        return $this->render('source/list.html.twig', [
+            'sources' => $sources,
+        ]);
+    }
 }
