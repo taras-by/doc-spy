@@ -33,3 +33,6 @@ services:
 
     App\Service\Parser\Parsers\EventsDevBy:
         public: true
+
+    App\Service\Parser\Parsers\HhRu:
+        public: true

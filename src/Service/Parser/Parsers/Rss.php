@@ -30,7 +30,7 @@ class Rss extends BaseParser implements ParserInterface
             foreach ($feed as $feedItem) {
                 $item = (new Item())
                     ->setTitle($feedItem->getTitle())
-                    ->setDescription($feedItem->getDescription())
+//                    ->setDescription($feedItem->getDescription())
                     ->setlink($feedItem->getlink())
                     ->setPublishedAt($feedItem->getLastModified())
                     ->setSource($this->source);
