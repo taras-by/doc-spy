@@ -45,22 +45,4 @@ class HhRu extends BaseParser implements ParserInterface
 
         return $this->items;
     }
-
-    protected function getDomDocument($path)
-    {
-        $content = file_get_contents($path);
-        $document = new \DOMDocument();
-
-        libxml_use_internal_errors(true);
-        $document->loadHTML('<?xml encoding="utf-8" ?>' . $content);
-        libxml_use_internal_errors(false);
-
-        return $document;
-    }
-
-    protected function url(string $url): string
-    {
-        $parsed_url = parse_url($this->source->getUrl());
-        return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $url;
-    }
 }

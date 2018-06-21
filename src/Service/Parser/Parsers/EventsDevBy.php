@@ -43,7 +43,7 @@ class EventsDevBy extends BaseParser implements ParserInterface
             foreach ($itemNodes as $itemNode) {
                 $titleNode = $finder->query("div/a[@class='title']", $itemNode)[0];
                 $title = $titleNode->nodeValue ?? null;
-                $link = $this->source->getUrl() . $titleNode->getAttribute('href');
+                $link = $this->url($titleNode->getAttribute('href'));
 
                 $descriptionNode = $finder->query("div/p", $itemNode)[0];
                 $descriptionHtml = str_replace("\n", ' ', $descriptionNode->ownerDocument->saveHTML($descriptionNode));
@@ -85,17 +85,5 @@ class EventsDevBy extends BaseParser implements ParserInterface
     {
         parse_str($link, $data);
         return $data;
-    }
-
-    protected function getDomDocument($path)
-    {
-        $content = file_get_contents($path);
-        $document = new \DOMDocument();
-
-        libxml_use_internal_errors(true);
-        $document->loadHTML('<?xml encoding="utf-8" ?>' . $content);
-        libxml_use_internal_errors(false);
-
-        return $document;
     }
 }
