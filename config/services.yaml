@@ -36,3 +36,6 @@ services:
 
     App\Service\Parser\Parsers\HhRu:
         public: true
+
+    App\Service\Parser\Parsers\FacebookCom:
+        public: true
