@@ -39,3 +39,7 @@ services:
 
     App\Service\Parser\Parsers\FacebookCom:
         public: true
+        calls:
+          - [setKey, ['%env(resolve:PHANTOM_JS_CLOUD_API_URL)%']]
+          - [setEmail, ['%env(resolve:FACEBOOK_EMAIL)%']]
+          - [setPassword, ['%env(resolve:FACEBOOK_PASSWORD)%']]

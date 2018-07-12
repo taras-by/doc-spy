@@ -51,9 +51,14 @@ class BaseParser
         return $this->hasErrors;
     }
 
-    protected function getDomDocument($path)
+    protected function getDomDocument(string $path): \DOMDocument
     {
         $content = file_get_contents($path);
+        return $this->getDomDocumentFromContent($content);
+    }
+
+    protected function getDomDocumentFromContent(string $content): \DOMDocument
+    {
         $document = new \DOMDocument();
 
         libxml_use_internal_errors(true);
