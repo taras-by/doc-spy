@@ -48,7 +48,7 @@ class Source
      *
      * @ORM\Column(name="favorite", type="boolean")
      */
-    private $favorite;
+    private $favorite = false;
 
     /**
      * @var string
@@ -81,7 +81,7 @@ class Source
      *
      * @ORM\Column(name="error_count", type="integer", options={"default":0})
      */
-    private $errorCount;
+    private $errorCount = 0;
 
     /**
      * @var \DateTime
@@ -95,9 +95,9 @@ class Source
      *
      * @var integer
      *
-     * @ORM\Column(name="update_interval", type="integer", options={"default":5})
+     * @ORM\Column(name="update_interval", type="integer", options={"default":60})
      */
-    private $updateInterval;
+    private $updateInterval = 60;
 
     /**
      * Source constructor.

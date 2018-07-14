@@ -34,7 +34,6 @@ class FacebookCom extends BaseParser implements ParserInterface
     {
         try {
             $content = $this->getContent($this->source->getUrl());
-            //file_put_contents('var/fb.jpg', $content);
             //file_put_contents('var/fb.html', $content);
 
             $document = $this->getDomDocumentFromContent($content);
@@ -42,19 +41,28 @@ class FacebookCom extends BaseParser implements ParserInterface
             $finder = new \DomXPath($document);
             $itemNodes = $finder->query("//div[contains(@class, '_5lqg _4-u2  _4-u8')]");
 
+            setlocale(LC_TIME, 'ru_RU');
+
             foreach ($itemNodes as $itemNode) {
 
                 $titleNode = $finder->query("div/div/div/div/div/div/div/div/a", $itemNode)[0];
                 $title = $titleNode->nodeValue ?? null;
                 $link = $this->url($titleNode->getAttribute('href'));
+                $link = $this->clearUrl($link);
+
+                $dateNodes = $finder->query("div/div/div/div/div/span/span", $itemNode);
+                $month = $dateNodes[0]->nodeValue;
+                $month = $this->convertMonth((string)$month);
+                $day = $dateNodes[1]->nodeValue;
+                $date = new \DateTime(sprintf('%s %s, -3 hours', $day, $month));
 
                 $item = (new Item())
                     ->setTitle($title)
 //                    ->setDescription($description)
                     ->setlink($link)
                     ->setPublishedAt(new \DateTime())
-//                    ->setStartDate($startDate)
-//                    ->setEndDate($endDate)
+                   ->setStartDate($date)
+                   ->setEndDate($date)
                     ->setSource($this->source);
                 $this->items->add($item);
 
@@ -71,19 +79,18 @@ class FacebookCom extends BaseParser implements ParserInterface
 
     private function getContent(string $url): string
     {
-        //return file_get_contents('var/fb.html');
+        // return file_get_contents('var/fb.html');
 
         $apiUrl = sprintf(self::PHANTOM_JS_CLOUD_API_URL, $this->key);
 
         $payload = (object)[
             'url' => $url,
             'renderType' => 'html',
-            //'renderType' => 'jpg',
             'scripts' => (object)[
                 'domReady' => [
                     sprintf('document.getElementsByName("email")[0].value = "%s"', $this->email),
                     sprintf('document.getElementsByName("pass")[0].value = "%s"', $this->password),
-                    sprintf('document.getElementById("login_form").submit()'),
+                    'document.getElementById("login_form").submit()',
                 ]
             ]
         ];
@@ -98,6 +105,12 @@ class FacebookCom extends BaseParser implements ParserInterface
 
         $context = stream_context_create($options);
         return file_get_contents($apiUrl, false, $context);
+    }
+
+    public function clearUrl(string $url): string
+    {
+        $parsed_url = parse_url($url);
+        return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path'];
     }
 
     /**

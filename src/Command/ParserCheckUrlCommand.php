@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Entity\Source;
 use App\Service\Parser\ParserInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,11 +18,20 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
             ->setName('parser:check:url')
             ->setDescription('Check parser for url')
             ->addArgument('parserService', InputArgument::REQUIRED, 'Parser service')
-            ->addArgument('url', InputArgument::REQUIRED, 'Url');
+            ->addArgument('url', InputArgument::REQUIRED, 'Url')
+            ->addOption(
+                'create',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Should I yell while greeting?',
+                false
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $create = ($input->getOption('create') !== false);
+
         $url = $input->getArgument('url');
         $parserService = $input->getArgument('parserService');
 
@@ -34,13 +44,21 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
             $this->writeItem($item, $output);
         }
         $this->writeSummary($parser, $output);
+
+        if($create && !$parser->hasErrors()){
+            $this->entityManager->getManager()->persist($source);
+            $this->entityManager->getManager()->flush();
+            $output->writeln(sprintf('The resource with id = %s was successfully created!', $source->getId()));
+        }
     }
 
     protected function createNewSource(string $parserService, string $url): Source
     {
         $source = new Source();
         return $source
+            ->setName(parse_url($url, PHP_URL_HOST))
             ->setParser($parserService)
+            ->setIcon('/favicon.ico')
             ->setUrl($url);
     }
 

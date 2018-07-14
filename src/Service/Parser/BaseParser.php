@@ -73,4 +73,27 @@ class BaseParser
         $parsed_url = parse_url($this->source->getUrl());
         return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $url;
     }
+
+    /**
+     * @todo Need to make helper or service
+     */
+    protected function convertMonth(string $month): string
+    {
+        $months = [
+            'янв' => 'january',
+            'фев' => 'february',
+            'мар' => 'march',
+            'апр' => 'april',
+            'май' => 'may',
+            'июн' => 'june',
+            'июл' => 'july',
+            'авг' => 'august',
+            'сен' => 'september',
+            'окт' => 'october',
+            'ноя' => 'november',
+            'дек' => 'december',
+        ];
+
+        return $months[mb_strtolower($month)] ?? $month;
+    }
 }
