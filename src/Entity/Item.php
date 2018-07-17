@@ -295,7 +295,7 @@ class Item
      * @param \DateTime $endDate
      * @return Item
      */
-    public function setEndDate(\DateTime $endDate): self
+    public function setEndDate(?\DateTime $endDate): self
     {
         $this->endDate = $endDate;
 
