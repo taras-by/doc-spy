@@ -89,9 +89,13 @@ class FacebookCom extends BaseParser implements ParserInterface
                 ++$this->count;
             }
 
+            if($this->count == 0){
+                $this->hasErrors = true;
+            }
+
         } catch (\Exception $exception) {
             $this->hasErrors = true;
-            throw $exception;
+            //throw $exception;
         }
 
         return $this->items;
