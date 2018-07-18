@@ -105,12 +105,14 @@ class FacebookCom extends BaseParser implements ParserInterface
 
         $payload = (object)[
             'url' => $url,
+            'ignoreImages' => true,
             'renderType' => 'html',
             'scripts' => (object)[
                 'domReady' => [
                     sprintf('document.getElementsByName("email")[0].value = "%s"', $this->email),
                     sprintf('document.getElementsByName("pass")[0].value = "%s"', $this->password),
                     'document.getElementById("login_form").submit()',
+                    'setTimeout(function(){window.scrollBy(0,10000);},1000)',
                 ]
             ]
         ];
