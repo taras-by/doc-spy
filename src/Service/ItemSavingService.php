@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Item;
 use App\Repository\ItemRepository;
-use App\Service\Parser\ParserInterface;
+use App\Parser\ParserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ItemSavingService

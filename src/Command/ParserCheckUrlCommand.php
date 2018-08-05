@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Entity\Item;
 use App\Entity\Source;
-use App\Service\Parser\ParserInterface;
+use App\Parser\ParserInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;

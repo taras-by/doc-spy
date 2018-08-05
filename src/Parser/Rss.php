@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Service\Parser\Parsers;
+namespace App\Parser;
 
 use App\Entity\Item;
-use App\Service\Parser\ParserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use FeedIo\FeedIo;
 use FeedIo\Reader\ReadErrorException;
-use App\Service\Parser\BaseParser;
 
 class Rss extends BaseParser implements ParserInterface
 {

@@ -27,17 +27,21 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Service\Parser\Parsers\Rss:
+    rss:
+        class: App\Parser\Rss
         arguments: ['@feedio']
         public: true
 
-    App\Service\Parser\Parsers\EventsDevBy:
+    events_dev_by:
+        class: App\Parser\EventsDevBy
         public: true
 
-    App\Service\Parser\Parsers\HhRu:
+    hh_ru:
+        class: App\Parser\HhRu
         public: true
 
-    App\Service\Parser\Parsers\FacebookCom:
+    facebook_com:
+        class: App\Parser\FacebookCom
         public: true
         calls:
           - [setKey, ['%env(resolve:PHANTOM_JS_CLOUD_API_URL)%']]

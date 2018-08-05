@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Entity\Source;
 use App\Repository\SourceRepository;
 use App\Service\ItemSavingService;
-use App\Service\Parser\ParserManager;
+use App\Service\ParserManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

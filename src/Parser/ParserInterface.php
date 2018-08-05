@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Parser;
+namespace App\Parser;
 
 use App\Entity\Source;
 use Doctrine\Common\Collections\ArrayCollection;

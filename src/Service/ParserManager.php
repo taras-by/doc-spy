@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Service\Parser;
+namespace App\Service;
 
 use App\Entity\Source;
-use Doctrine\Common\Util\Inflector;
+use App\Parser\ParserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ParserManager
 {
-    CONST PARSERS_PATH = 'App\\Service\\Parser\\Parsers\\';
-
     /**
      * @var ContainerInterface
      */
@@ -23,12 +21,7 @@ class ParserManager
     public function getParser(Source $source): ParserInterface
     {
         /** @var ParserInterface $parser */
-        return $this->container->get($this->getParserClass($source->getParser()))
+        return $this->container->get($source->getParser())
             ->setSource($source);
-    }
-
-    private function getParserClass(string $parser): string
-    {
-        return self::PARSERS_PATH . Inflector::classify($parser);
     }
 }

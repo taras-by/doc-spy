@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Service\Parser\Parsers;
+namespace App\Parser;
 
 use App\Entity\Item;
-use App\Service\Parser\ParserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Service\Parser\BaseParser;
 
 class EventsDevBy extends BaseParser implements ParserInterface
 {
