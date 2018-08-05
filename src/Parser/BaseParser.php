@@ -74,6 +74,12 @@ class BaseParser
         return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $url;
     }
 
+    protected function clearUrl(string $url): string
+    {
+        $parsed_url = parse_url($url);
+        return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path'];
+    }
+
     /**
      * @todo Need to make helper or service
      */
