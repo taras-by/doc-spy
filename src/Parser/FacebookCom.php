@@ -4,26 +4,22 @@ namespace App\Parser;
 
 use App\Entity\Item;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\Definition;
 
 class FacebookCom extends BaseParser implements ParserInterface
 {
     const PHANTOM_JS_CLOUD_API_URL = 'http://PhantomJScloud.com/api/browser/v2/%s/';
     const DATE_FORMAT = '%s %s %s:%s, -3 hours';
 
-    /**
-     * @var string
-     */
-    private $key;
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+    }
 
     /**
-     * @var string
+     * @var array
      */
-    private $email;
-
-    /**
-     * @var string
-     */
-    private $password;
+    private $config = [];
 
     /**
      * @return ArrayCollection
@@ -103,7 +99,7 @@ class FacebookCom extends BaseParser implements ParserInterface
     {
         // return file_get_contents('var/fb.html');
 
-        $apiUrl = sprintf(self::PHANTOM_JS_CLOUD_API_URL, $this->key);
+        $apiUrl = sprintf(self::PHANTOM_JS_CLOUD_API_URL, $this->config['key']);
 
         $payload = (object)[
             'url' => $url,
@@ -111,8 +107,8 @@ class FacebookCom extends BaseParser implements ParserInterface
             'renderType' => 'html',
             'scripts' => (object)[
                 'domReady' => [
-                    sprintf('document.getElementsByName("email")[0].value = "%s"', $this->email),
-                    sprintf('document.getElementsByName("pass")[0].value = "%s"', $this->password),
+                    sprintf('document.getElementsByName("email")[0].value = "%s"', $this->config['email']),
+                    sprintf('document.getElementsByName("pass")[0].value = "%s"', $this->config['password']),
                     'document.getElementById("login_form").submit()',
                     'setTimeout(function(){window.scrollBy(0,10000);},2000)',
                 ]
@@ -140,29 +136,5 @@ class FacebookCom extends BaseParser implements ParserInterface
     {
         $parsed_url = parse_url($url);
         return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path'];
-    }
-
-    /**
-     * @param string $key
-     */
-    public function setKey(string $key): void
-    {
-        $this->key = $key;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
     }
 }
