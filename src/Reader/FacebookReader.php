@@ -2,22 +2,34 @@
 
 namespace App\Reader;
 
+use App\Service\ReaderCacheService;
+
 class FacebookReader implements ReaderInterface
 {
     const PHANTOM_JS_CLOUD_API_URL = 'http://PhantomJScloud.com/api/browser/v2/%s/';
+
+    /**
+     * @var ReaderCacheService
+     */
+    private $cacheService;
 
     /**
      * @var array
      */
     private $config = [];
 
-    public function __construct(array $config)
+    public function __construct(ReaderCacheService $cacheService, array $config)
     {
+        $this->cacheService = $cacheService;
         $this->config = $config;
     }
 
     public function getContent(string $url): string
     {
+        if ($cachedContent = $this->cacheService->getContent() and $this->cacheService->isEnabled()) {
+            return $cachedContent;
+        }
+
         $apiUrl = sprintf(self::PHANTOM_JS_CLOUD_API_URL, $this->config['key']);
 
         $payload = (object)[
@@ -43,6 +55,10 @@ class FacebookReader implements ReaderInterface
         ];
 
         $context = stream_context_create($options);
-        return file_get_contents($apiUrl, false, $context);
+        $content = file_get_contents($apiUrl, false, $context);
+
+        $this->cacheService->putContent($content);
+
+        return $content;
     }
 }

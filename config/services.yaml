@@ -27,15 +27,20 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    reader_cache_service:
+        class: App\Service\ReaderCacheService
+        arguments:
+            - '%kernel.cache_dir%'
+            - '%env(resolve:PARSER_CASH_IS_ENABLED)%'
+
     # Readers
     facebook_reader:
         class: App\Reader\FacebookReader
-        public: true
         arguments:
-            -
-                key: '%env(resolve:PHANTOM_JS_CLOUD_API_URL)%'
-                email: '%env(resolve:FACEBOOK_EMAIL)%'
-                password: '%env(resolve:FACEBOOK_PASSWORD)%'
+            - '@reader_cache_service'
+            -  key: '%env(resolve:PHANTOM_JS_CLOUD_API_URL)%'
+               email: '%env(resolve:FACEBOOK_EMAIL)%'
+               password: '%env(resolve:FACEBOOK_PASSWORD)%'
 
     # Parsers
     rss_parser:
