@@ -3,6 +3,7 @@
 namespace App\Parser;
 
 use App\Entity\Item;
+use App\Reader\ReaderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class EventsDevBy extends BaseParser implements ParserInterface
@@ -10,13 +11,23 @@ class EventsDevBy extends BaseParser implements ParserInterface
     const NUMBER_PAGES = 3;
 
     /**
+     * @var ReaderInterface $reader
+     */
+    private $reader;
+
+    public function __construct(ReaderInterface $reader)
+    {
+        $this->reader = $reader;
+    }
+
+    /**
      * @return ArrayCollection
      * @throws \Exception
      */
     public function getItems(): ArrayCollection
     {
-        foreach ($this->getUrls() as $url) {
-            $this->parsePage($url);
+        foreach ($this->getUrls() as $number => $url) {
+            $this->parsePage($url, $number);
         }
         return $this->items;
     }
@@ -30,10 +41,14 @@ class EventsDevBy extends BaseParser implements ParserInterface
         return $urls;
     }
 
-    private function parsePage(string $url): void
+    private function parsePage(string $url,int $number): void
     {
         try {
-            $document = $this->getDomDocument($url);
+            $content = $this->reader
+                ->setSourceId($this->source->getId())
+                ->setPageNumber($number)
+                ->getContent($url);
+            $document = $this->getDomDocumentFromContent($content);
 
             $finder = new \DomXPath($document);
             $itemNodes = $finder->query("//*[contains(@class, 'list-item-events')]/div[@class='item']");

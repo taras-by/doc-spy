@@ -27,9 +27,9 @@ class FacebookCom extends BaseParser implements ParserInterface
     public function getItems(): ArrayCollection
     {
         try {
-            $content = $this->reader->getContent($this->source->getUrl());
-            //file_put_contents('var/fb.html', $content);
-
+            $content = $this->reader
+                ->setSourceId($this->source->getId())
+                ->getContent($this->source->getUrl());
             $document = $this->getDomDocumentFromContent($content);
 
             $finder = new \DomXPath($document);

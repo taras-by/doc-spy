@@ -42,6 +42,10 @@ services:
                email: '%env(resolve:FACEBOOK_EMAIL)%'
                password: '%env(resolve:FACEBOOK_PASSWORD)%'
 
+    simple_reader:
+        class: App\Reader\SimpleReader
+        arguments: ['@reader_cache_service']
+
     # Parsers
     rss_parser:
         class: App\Parser\Rss
@@ -50,6 +54,7 @@ services:
 
     events_dev_by_parser:
         class: App\Parser\EventsDevBy
+        arguments: ['@simple_reader']
         public: true
 
     hh_ru_parser:
