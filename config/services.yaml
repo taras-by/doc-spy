@@ -27,6 +27,14 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    notification_service:
+        class: App\Service\NotificationService
+        arguments:
+            - '@swiftmailer.mailer.default'
+            - '@twig'
+            - '%env(MAIL_FROM)%'
+        public: true
+
     reader_cache_service:
         class: App\Service\ReaderCacheService
         arguments:

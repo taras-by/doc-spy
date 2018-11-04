@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -30,9 +33,9 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string")
      */
-    private $roles = [];
+    private $role = [];
 
     /**
      * @var string The hashed password
@@ -48,6 +51,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->subscribes = new ArrayCollection();
+        $this->role = self::ROLE_USER;
     }
 
     public function getId(): ?int
@@ -94,16 +98,17 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return [$this->role];
     }
 
-    public function setRoles(array $roles): self
+    public function getRole(): string
     {
-        $this->roles = $roles;
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
