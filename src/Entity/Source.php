@@ -111,6 +111,7 @@ class Source
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->subscribes = new ArrayCollection();
     }
 
@@ -283,7 +284,7 @@ class Source
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -317,7 +318,7 @@ class Source
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTags()
+    public function getTags(): Collection
     {
         return $this->tags;
     }
