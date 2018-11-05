@@ -2,22 +2,35 @@
 
 namespace App\Service;
 
-use App\Entity\Item;
+use App\Entity\User;
+use Swift_Mailer;
+use Twig\Environment;
 
 class NotificationService
 {
+    /**
+     * @var Swift_Mailer
+     */
     private $mailer;
+
+    /**
+     * @var Environment
+     */
     private $twig;
+
+    /**
+     * @var string
+     */
     private $from;
 
-    public function __construct($mailer, $twig, $from)
+    public function __construct(Swift_Mailer $mailer, Environment $twig, string $from)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->from = $from;
     }
 
-    public function send($user, $subject, $template, $parameters = [])
+    public function send(User $user, string $subject, string $template, array $parameters = [])
     {
         $message = (new \Swift_Message($subject))
         ->setFrom($this->from)

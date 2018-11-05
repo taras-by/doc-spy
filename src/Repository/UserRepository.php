@@ -19,6 +19,9 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+   /**
+   * @return User[]
+   */
     public function findAdmins()
     {
         return $this->createQueryBuilder('u')
