@@ -32,6 +32,10 @@ services:
         tags:
         - { name: kernel.event_listener, event: items.added }
 
+    App\Listener\SourceParsingErrorListener:
+        tags:
+        - { name: kernel.event_listener, event: source.parsing_error }
+
     App\Service\NotificationService:
         arguments:
             - '@swiftmailer.mailer.default'

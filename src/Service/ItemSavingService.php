@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Item;
 use App\Event\ItemsAddedEvent;
+use App\Event\SourceParsingErrorEvent;
 use App\Repository\ItemRepository;
 use App\Parser\ParserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -66,6 +67,8 @@ class ItemSavingService
 
         if ($parser->hasErrors()) {
             $source->upErrorCount();
+            $event = (new SourceParsingErrorEvent($source))->setMessage($parser->getErrorMessage());
+            $this->dispatcher->dispatch(SourceParsingErrorEvent::NAME, $event);
         } else {
             $source->setErrorCount(0);
             $source->setUpdatedAt(new \DateTime());

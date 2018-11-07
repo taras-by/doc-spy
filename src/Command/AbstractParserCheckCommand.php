@@ -42,7 +42,11 @@ abstract class AbstractParserCheckCommand extends ContainerAwareCommand
 
     protected function writeSummary(ParserInterface $parser, OutputInterface $output): void
     {
-        $output->writeln('Has errors: ' . ($parser->hasErrors() ? 'yes' : 'no'));
         $output->writeln('All count: ' . $parser->getCount());
+        $output->writeln('Has errors: ' . ($parser->hasErrors() ? 'yes' : 'no'));
+        if($parser->hasErrors()){
+            $output->writeln('Error message:');
+            $output->writeln($parser->getErrorMessage());
+        }
     }
 }

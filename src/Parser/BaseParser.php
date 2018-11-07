@@ -27,10 +27,16 @@ class BaseParser
      */
     protected $hasErrors = false;
 
+    /**
+     * @var string
+     */
+    protected $errorMessage = '';
+
     public function setSource(Source $source): ParserInterface
     {
         $this->items = new ArrayCollection();
         $this->count = 0;
+        $this->errorMessage = '';
         $this->source = $source;
 
         return $this;
@@ -49,6 +55,11 @@ class BaseParser
     public function hasErrors(): bool
     {
         return $this->hasErrors;
+    }
+
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
     }
 
     protected function getDomDocument(string $path): \DOMDocument
