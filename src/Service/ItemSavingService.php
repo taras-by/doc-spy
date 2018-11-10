@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Item;
-use App\Event\ItemsAddedEvent;
+use App\Event\SourceItemsAddedEvent;
 use App\Event\SourceParsingErrorEvent;
 use App\Repository\ItemRepository;
 use App\Parser\ParserInterface;
@@ -75,8 +75,9 @@ class ItemSavingService
         }
 
         if(count($persistedItems) && !$parser->hasErrors()){
-            $event = new ItemsAddedEvent($persistedItems);
-            $this->dispatcher->dispatch(ItemsAddedEvent::NAME, $event);
+            $event = (new SourceItemsAddedEvent($source))
+                ->setItems($persistedItems);
+            $this->dispatcher->dispatch(SourceItemsAddedEvent::NAME, $event);
         }
 
         $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());

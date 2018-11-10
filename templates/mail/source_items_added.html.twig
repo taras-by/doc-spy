@@ -1,5 +1,5 @@
 <p>Hi {{ name }}!</p>
-<p>New items added:</p>
+<p>New items for <b>{{ source.name }}</b> added:</p>
 
 {% for item in items %}
     <p><a  class="item-link" href="{{ item.link }}" target="_blank">{{ item.title }}</a></p>

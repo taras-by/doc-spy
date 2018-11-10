@@ -3,11 +3,11 @@
 namespace App\Listener;
 
 use App\Entity\User;
-use App\Event\ItemsAddedEvent;
+use App\Event\SourceItemsAddedEvent;
 use App\Service\NotificationService;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ItemsAddedListener
+class SourceItemsAddedListener
 {
     /**
      * @var NotificationService
@@ -25,10 +25,18 @@ class ItemsAddedListener
         $this->entityManager = $entityManager;
     }
 
-    public function onItemsAdded(ItemsAddedEvent $event){
+    public function onSourceItemsAdded(SourceItemsAddedEvent $event){
         $subscribers = $this->entityManager->getRepository(User::class)->findAdmins();
         foreach($subscribers as $subscriber){
-            $this->notificationService->send($subscriber, 'New items added!', 'mail/items_added.html.twig', ['items' => $event->getItems()]);
+            $this->notificationService->send(
+                $subscriber,
+                'New items added!',
+                'mail/source_items_added.html.twig',
+                [
+                    'items' => $event->getItems(),
+                    'source' => $event->getSource(),
+                ]
+            );
         }
     }
 }
