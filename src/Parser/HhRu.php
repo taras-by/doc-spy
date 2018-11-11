@@ -38,7 +38,7 @@ class HhRu extends BaseParser implements ParserInterface
 
         } catch (\Exception $exception) {
             $this->hasErrors = true;
-//            throw $exception;
+            $this->errorMessage = $exception->getMessage(). PHP_EOL .$exception->getTraceAsString();
         }
 
         return $this->items;

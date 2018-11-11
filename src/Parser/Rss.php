@@ -36,10 +36,8 @@ class Rss extends BaseParser implements ParserInterface
             }
 
         } catch (ReadErrorException $exception) {
-            /**
-             * @todo Logging
-             */
             $this->hasErrors = true;
+            $this->errorMessage = $exception->getMessage(). PHP_EOL .$exception->getTraceAsString();
         }
 
         return $this->items;

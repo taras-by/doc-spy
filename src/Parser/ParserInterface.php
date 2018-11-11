@@ -15,5 +15,7 @@ interface ParserInterface
 
     public function hasErrors(): bool;
 
+    public function getErrorMessage(): string;
+
     public function getItems(): ArrayCollection;
 }

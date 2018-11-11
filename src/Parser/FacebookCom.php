@@ -84,11 +84,12 @@ class FacebookCom extends BaseParser implements ParserInterface
 
             if ($this->count == 0) {
                 $this->hasErrors = true;
+                $this->errorMessage = 'Items not found';
             }
 
         } catch (\Exception $exception) {
             $this->hasErrors = true;
-            //throw $exception;
+            $this->errorMessage = $exception->getMessage(). PHP_EOL .$exception->getTraceAsString();
         }
 
         return $this->items;

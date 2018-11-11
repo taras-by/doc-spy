@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -100,11 +101,18 @@ class Source
     private $updateInterval = 60;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Subscribe", mappedBy="source")
+     */
+    private $subscribes;
+
+    /**
      * Source constructor.
      */
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+        $this->subscribes = new ArrayCollection();
     }
 
     /**
@@ -276,7 +284,7 @@ class Source
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -310,7 +318,7 @@ class Source
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTags()
+    public function getTags(): Collection
     {
         return $this->tags;
     }
@@ -417,5 +425,36 @@ class Source
     public function getUpdateInterval()
     {
         return $this->updateInterval;
+    }
+
+    /**
+     * @return Collection|Subscribe[]
+     */
+    public function getSubscribes(): Collection
+    {
+        return $this->subscribes;
+    }
+
+    public function addSubscribe(Subscribe $subscribe): self
+    {
+        if (!$this->subscribes->contains($subscribe)) {
+            $this->subscribes[] = $subscribe;
+            $subscribe->setSource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscribe(Subscribe $subscribe): self
+    {
+        if ($this->subscribes->contains($subscribe)) {
+            $this->subscribes->removeElement($subscribe);
+            // set the owning side to null (unless already changed)
+            if ($subscribe->getSource() === $this) {
+                $subscribe->setSource(null);
+            }
+        }
+
+        return $this;
     }
 }

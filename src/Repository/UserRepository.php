@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Source;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,34 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findAdmins(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.role = :role')
+            ->setParameter('role', User::ROLE_ADMIN)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findSourceSubscribers(Source $source): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.subscribes', 's')
+            ->andWhere('s.source = :source')
+            ->setParameter('source', $source)
+            ->orderBy('u.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**
