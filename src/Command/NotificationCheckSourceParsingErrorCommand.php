@@ -53,6 +53,7 @@ class NotificationCheckSourceParsingErrorCommand extends ContainerAwareCommand
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+        $source->setErrorCount(5);
 
         $event = (new SourceParsingErrorEvent($source))->setMessage("Message string 1\nMessage string 2");
 

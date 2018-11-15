@@ -10,6 +10,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SourceParsingErrorListener
 {
+    private const NOTIFY_COUNTS = [5, 10];
+
     /**
      * @var NotificationService
      */
@@ -27,6 +29,13 @@ class SourceParsingErrorListener
     }
 
     public function onSourceParsingError(SourceParsingErrorEvent $event){
+
+        $source = $event->getSource();
+
+        if(!in_array($source->getErrorCount(), self::NOTIFY_COUNTS)){
+            return;
+        }
+
         /** @var UserRepository $repository */
         $repository = $this->entityManager->getRepository(User::class);
         $subscribers = $repository->findAdmins();
@@ -36,7 +45,7 @@ class SourceParsingErrorListener
                 'Source parsing error!',
                 'mail/source_error.html.twig',
                 [
-                    'source' => $event->getSource(),
+                    'source' => $source,
                     'message' => $event->getMessage(),
                 ]
             );

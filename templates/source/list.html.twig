@@ -19,7 +19,7 @@
             </thead>
             <tbody>
             {% for source in sources %}
-                <tr>
+                <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
                     <th>{{ source.id }}</th>
                     <th><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></th>
                     <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
