@@ -1,3 +1,6 @@
-<p>Hi {{ name }}!</p>
-<p>Count errors: <b>{{ source.errorCount }}</b>, source: <b>{{ source.name }}</b></p>
-<pre style="border: 1px solid #DDDDDD; padding: 15px">{{ message }}</pre>
+{% extends 'mail.html.twig' %}
+
+{% block body %}
+    <p>Count errors: <b>{{ source.errorCount }}</b>, source: <b>{{ source.name }}</b></p>
+    <pre style="border: 1px solid #DDDDDD; padding: 15px">{{ message }}</pre>
+{% endblock %}
