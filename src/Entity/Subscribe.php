@@ -28,6 +28,13 @@ class Subscribe
      */
     private $user;
 
+    /**
+     * @var \DateTime    
+     *  
+     * @ORM\Column(name="expire_at", type="datetimetz", nullable=true)
+     */
+    private $expireAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +60,18 @@ class Subscribe
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getExpireAt(): \DateTime
+    {
+        return $this->expireAt;
+    }
+
+    public function serExpireAt(\DateTime $expireAt): self
+    {
+        $this->expireAt = $expireAt;
 
         return $this;
     }

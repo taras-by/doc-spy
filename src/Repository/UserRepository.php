@@ -38,9 +38,13 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findSourceSubscribers(Source $source): array
     {
+        $currentDate = new \DateTime;
+
         return $this->createQueryBuilder('u')
             ->join('u.subscribes', 's')
             ->andWhere('s.source = :source')
+            ->andWhere('s.expireAt IS NULL OR s.expireAt > :currentDate')
+            ->setParameter('currentDate', $currentDate)
             ->setParameter('source', $source)
             ->orderBy('u.id', 'ASC')
             ->getQuery()
