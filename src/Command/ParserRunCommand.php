@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Entity\Source;
 use App\Repository\SourceRepository;
-use App\Service\ItemSavingService;
+use App\Service\ParserHandler;
 use App\Service\ParserManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -20,9 +20,9 @@ class ParserRunCommand extends ContainerAwareCommand
     private $parserManager;
 
     /**
-     * @var ItemSavingService
+     * @var ParserHandler
      */
-    private $itemSavingService;
+    private $parserHandler;
 
     /**
      * @var RegistryInterface
@@ -36,10 +36,10 @@ class ParserRunCommand extends ContainerAwareCommand
      */
     private $now;
 
-    public function __construct(ParserManager $parserManager, ItemSavingService $itemSavingService, RegistryInterface $entityManager)
+    public function __construct(ParserManager $parserManager, ParserHandler $parserHandler, RegistryInterface $entityManager)
     {
         $this->parserManager = $parserManager;
-        $this->itemSavingService = $itemSavingService;
+        $this->parserHandler = $parserHandler;
         $this->entityManager = $entityManager;
         $this->now = new \DateTime(date('H:i'));
 
@@ -64,17 +64,20 @@ class ParserRunCommand extends ContainerAwareCommand
     {
         $results = $input->getArgument('results');
         $sources = $this->getSourceRepository()->findForUpdate($results);
-        $saver = $this->itemSavingService;
+        $parserHandler = $this->parserHandler;
 
         /** @var Source $source */
         foreach ($sources as $source) {
             $parser = $this->parserManager->getParser($source);
-            $saver->save($parser);
+            $parserHandler->handle($parser);
 
-            $writelnIfSaved = $saver->getSavedCount() ?
-                sprintf(' <info>new items: %s</info>', $saver->getSavedCount()) : '';
+            $writelnIfSaved = $parserHandler->getSavedCount() ?
+                sprintf(' <info>new items: %s</info>', $parserHandler->getSavedCount()) : '';
             $output->writeln(sprintf('Parsed: %s', $source->getName()));
-            $output->writeln(sprintf('  Received items: %s', $saver->getAllCount()) . $writelnIfSaved);
+            $output->writeln(sprintf('  Received items: %s', $parserHandler->getAllCount()) . $writelnIfSaved);
+            if($parser->hasErrors()){
+                $output->writeln($parser->getErrorMessage());
+            }
         }
     }
 

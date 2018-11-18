@@ -43,54 +43,48 @@ class EventsDevBy extends BaseParser implements ParserInterface
 
     private function parsePage(string $url,int $number): void
     {
-        try {
-            $content = $this->reader
-                ->setSourceId($this->source->getId())
-                ->setPageNumber($number)
-                ->getContent($url);
-            $document = $this->getDomDocumentFromContent($content);
+        $content = $this->reader
+            ->setSourceId($this->source->getId())
+            ->setPageNumber($number)
+            ->getContent($url);
+        $document = $this->getDomDocumentFromContent($content);
 
-            $finder = new \DomXPath($document);
-            $itemNodes = $finder->query("//*[contains(@class, 'list-item-events')]/div[@class='item']");
+        $finder = new \DomXPath($document);
+        $itemNodes = $finder->query("//*[contains(@class, 'list-item-events')]/div[@class='item']");
 
-            foreach ($itemNodes as $itemNode) {
-                $titleNode = $finder->query("div/a[@class='title']", $itemNode)[0];
-                $title = $titleNode->nodeValue ?? null;
-                $link = $this->url($titleNode->getAttribute('href'));
+        foreach ($itemNodes as $itemNode) {
+            $titleNode = $finder->query("div/a[@class='title']", $itemNode)[0];
+            $title = $titleNode->nodeValue ?? null;
+            $link = $this->url($titleNode->getAttribute('href'));
 
-                $descriptionNode = $finder->query("div/p", $itemNode)[0];
-                $descriptionHtml = str_replace("\n", ' ', $descriptionNode->ownerDocument->saveHTML($descriptionNode));
-                // Parse HTML: <p><time>text<time/>description</p>
-                preg_match('/<\/time>(.+)<\/p>/', $descriptionHtml, $matches);
-                $description = $matches[1] ?? null;
+            $descriptionNode = $finder->query("div/p", $itemNode)[0];
+            $descriptionHtml = str_replace("\n", ' ', $descriptionNode->ownerDocument->saveHTML($descriptionNode));
+            // Parse HTML: <p><time>text<time/>description</p>
+            preg_match('/<\/time>(.+)<\/p>/', $descriptionHtml, $matches);
+            $description = $matches[1] ?? null;
 
-                // $idNode = $finder->query("div/div[@class='status-event']", $itemNode)[0];
-                // $id = $idNode->getAttribute('id');
+            // $idNode = $finder->query("div/div[@class='status-event']", $itemNode)[0];
+            // $id = $idNode->getAttribute('id');
 
-                $dateNode = $finder->query("div/ul[@class='list-gray']/li/a", $itemNode)[1];
-                $googleCalendarLink = $dateNode->getAttribute('href');
-                $data = $this->getDataFromLinkToGoogleCalendar($googleCalendarLink);
+            $dateNode = $finder->query("div/ul[@class='list-gray']/li/a", $itemNode)[1];
+            $googleCalendarLink = $dateNode->getAttribute('href');
+            $data = $this->getDataFromLinkToGoogleCalendar($googleCalendarLink);
 
-                list($startDate, $endDate) = explode('/', $data['dates']);
-                $startDate = new \DateTime($startDate);
-                $endDate = new \DateTime($endDate);
+            list($startDate, $endDate) = explode('/', $data['dates']);
+            $startDate = new \DateTime($startDate);
+            $endDate = new \DateTime($endDate);
 
-                $item = (new Item())
-                    ->setTitle($title)
-                    ->setDescription($description)
-                    ->setlink($link)
-                    ->setPublishedAt(new \DateTime())
-                    ->setStartDate($startDate)
-                    ->setEndDate($endDate)
-                    ->setSource($this->source);
-                $this->items->add($item);
+            $item = (new Item())
+                ->setTitle($title)
+                ->setDescription($description)
+                ->setlink($link)
+                ->setPublishedAt(new \DateTime())
+                ->setStartDate($startDate)
+                ->setEndDate($endDate)
+                ->setSource($this->source);
+            $this->items->add($item);
 
-                ++$this->count;
-            }
-
-        } catch (\Exception $exception) {
-            $this->hasErrors = true;
-            $this->errorMessage = $exception->getMessage(). PHP_EOL .$exception->getTraceAsString();
+            ++$this->count;
         }
     }
 

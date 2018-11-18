@@ -21,23 +21,17 @@ class Rss extends BaseParser implements ParserInterface
 
     public function getItems(): ArrayCollection
     {
-        try {
-            $feed = $this->feedio->read($this->source->getUrl())->getFeed();
-            $this->count = count($feed);
+        $feed = $this->feedio->read($this->source->getUrl())->getFeed();
+        $this->count = count($feed);
 
-            foreach ($feed as $feedItem) {
-                $item = (new Item())
-                    ->setTitle($feedItem->getTitle())
+        foreach ($feed as $feedItem) {
+            $item = (new Item())
+                ->setTitle($feedItem->getTitle())
 //                    ->setDescription($feedItem->getDescription())
-                    ->setlink($feedItem->getlink())
-                    ->setPublishedAt($feedItem->getLastModified())
-                    ->setSource($this->source);
-                $this->items->add($item);
-            }
-
-        } catch (ReadErrorException $exception) {
-            $this->hasErrors = true;
-            $this->errorMessage = $exception->getMessage(). PHP_EOL .$exception->getTraceAsString();
+                ->setlink($feedItem->getlink())
+                ->setPublishedAt($feedItem->getLastModified())
+                ->setSource($this->source);
+            $this->items->add($item);
         }
 
         return $this->items;

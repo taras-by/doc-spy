@@ -10,7 +10,7 @@ use App\Parser\ParserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ItemSavingService
+class ParserHandler
 {
     /**
      * @var RegistryInterface
@@ -50,14 +50,21 @@ class ItemSavingService
      * @param ParserInterface $parser
      * @throws \Exception
      */
-    public function save(ParserInterface $parser): void
+    public function handle(ParserInterface $parser): void
     {
         $this->savedCount = 0;
         $source = $parser->getSource();
         $persistedItems = [];
 
+        try {
+            $items = $parser->getItems();
+        } catch (\Exception $exception) {
+            $items = [];
+            $parser->setErrorMessage($exception->getMessage(). PHP_EOL .$exception->getTraceAsString());
+        }
+
         /** @var Item $item */
-        foreach ($parser->getItems() as $item) {
+        foreach ($items as $item) {
             if (!$this->getItemRepository()->findBy(['link' => $item->getLink()])) {
                 $this->entityManager->getManager()->persist($item);
                 $persistedItems[] = $item;

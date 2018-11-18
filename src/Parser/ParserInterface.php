@@ -17,5 +17,7 @@ interface ParserInterface
 
     public function getErrorMessage(): string;
 
+    public function setErrorMessage(string $errorMessage): ParserInterface;
+
     public function getItems(): ArrayCollection;
 }

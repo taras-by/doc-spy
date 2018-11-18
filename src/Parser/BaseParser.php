@@ -23,11 +23,6 @@ class BaseParser
     protected $count = 0;
 
     /**
-     * @var bool
-     */
-    protected $hasErrors = false;
-
-    /**
      * @var string
      */
     protected $errorMessage = '';
@@ -54,12 +49,19 @@ class BaseParser
 
     public function hasErrors(): bool
     {
-        return $this->hasErrors;
+        return $this->errorMessage ? true : false;
     }
 
     public function getErrorMessage(): string
     {
         return $this->errorMessage;
+    }
+
+    public function setErrorMessage(string $errorMessage): ParserInterface
+    {
+        $this->errorMessage = $errorMessage;
+
+        return $this;
     }
 
     protected function getDomDocument(string $path): \DOMDocument
