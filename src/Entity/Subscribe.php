@@ -64,7 +64,7 @@ class Subscribe
         return $this;
     }
 
-    public function getExpireAt(): \DateTime
+    public function getExpireAt(): ?\DateTime
     {
         return $this->expireAt;
     }

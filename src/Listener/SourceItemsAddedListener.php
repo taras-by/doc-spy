@@ -2,6 +2,7 @@
 
 namespace App\Listener;
 
+use App\Entity\Subscribe;
 use App\Entity\User;
 use App\Event\SourceItemsAddedEvent;
 use App\Repository\UserRepository;
@@ -28,10 +29,18 @@ class SourceItemsAddedListener
 
     public function onSourceItemsAdded(SourceItemsAddedEvent $event)
     {
-        /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        $subscribers = $repository->findSourceSubscribers($event->getSource());
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+
+        /** @var SubscribeRepository $subscribeRepository */
+        $subscribeRepository = $this->entityManager->getRepository(Subscribe::class);
+
+        $subscribers = $userRepository->findSourceSubscribers($event->getSource());
         foreach($subscribers as $subscriber){
+            $subscribe = $subscribeRepository->findOneBy([
+                'source' => $event->getSource(),
+                'user' => $subscriber,
+            ]);
             $this->notificationService->send(
                 $subscriber,
                 'New items added!',
@@ -39,6 +48,7 @@ class SourceItemsAddedListener
                 [
                     'items' => $event->getItems(),
                     'source' => $event->getSource(),
+                    'subscribe' => $subscribe,
                 ]
             );
         }
