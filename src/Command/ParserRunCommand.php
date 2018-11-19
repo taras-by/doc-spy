@@ -69,13 +69,14 @@ class ParserRunCommand extends ContainerAwareCommand
         /** @var Source $source */
         foreach ($sources as $source) {
             $parser = $this->parserManager->getParser($source);
+            $parser->run();
             $parserHandler->handle($parser);
 
             $writelnIfSaved = $parserHandler->getSavedCount() ?
                 sprintf(' <info>new items: %s</info>', $parserHandler->getSavedCount()) : '';
             $output->writeln(sprintf('Parsed: %s', $source->getName()));
             $output->writeln(sprintf('  Received items: %s', $parserHandler->getAllCount()) . $writelnIfSaved);
-            if($parser->hasErrors()){
+            if ($parser->hasErrors()) {
                 $output->writeln($parser->getErrorMessage());
             }
         }

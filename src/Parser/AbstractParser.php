@@ -5,8 +5,11 @@ namespace App\Parser;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Source;
 
-class BaseParser
+abstract class AbstractParser implements ParserInterface
 {
+
+    private const ERROR_ITEMS_NOT_FOUND = 'Items not found';
+
     /**
      * @var Source
      */
@@ -27,11 +30,29 @@ class BaseParser
      */
     protected $errorMessage = '';
 
-    public function setSource(Source $source): ParserInterface
+    public function run()
     {
         $this->items = new ArrayCollection();
         $this->count = 0;
         $this->errorMessage = '';
+
+        try {
+            $this->parse();
+            if ($this->count == 0) {
+                $this->errorMessage = self::ERROR_ITEMS_NOT_FOUND;
+            }
+        } catch (\Exception $exception) {
+            $this->items = new ArrayCollection();
+            $this->errorMessage = $exception->getMessage() . PHP_EOL . $exception->getTraceAsString();
+        }
+
+        return $this;
+    }
+
+    abstract protected function parse(): void;
+
+    public function setSource(Source $source): ParserInterface
+    {
         $this->source = $source;
 
         return $this;
@@ -40,6 +61,11 @@ class BaseParser
     public function getSource(): Source
     {
         return $this->source;
+    }
+
+    public function getItems(): ArrayCollection
+    {
+        return $this->items;
     }
 
     public function getCount(): int
@@ -55,13 +81,6 @@ class BaseParser
     public function getErrorMessage(): string
     {
         return $this->errorMessage;
-    }
-
-    public function setErrorMessage(string $errorMessage): ParserInterface
-    {
-        $this->errorMessage = $errorMessage;
-
-        return $this;
     }
 
     protected function getDomDocument(string $path): \DOMDocument

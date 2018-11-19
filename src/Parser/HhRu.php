@@ -3,15 +3,13 @@
 namespace App\Parser;
 
 use App\Entity\Item;
-use Doctrine\Common\Collections\ArrayCollection;
 
-class HhRu extends BaseParser implements ParserInterface
+class HhRu extends AbstractParser implements ParserInterface
 {
     /**
-     * @return ArrayCollection
      * @throws \Exception
      */
-    public function getItems(): ArrayCollection
+    protected function parse(): void
     {
         $document = $this->getDomDocument($this->source->getUrl());
 
@@ -34,7 +32,5 @@ class HhRu extends BaseParser implements ParserInterface
 
             ++$this->count;
         }
-
-        return $this->items;
     }
 }

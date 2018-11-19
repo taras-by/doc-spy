@@ -56,15 +56,10 @@ class ParserHandler
         $source = $parser->getSource();
         $persistedItems = [];
 
-        try {
-            $items = $parser->getItems();
-        } catch (\Exception $exception) {
-            $items = [];
-            $parser->setErrorMessage($exception->getMessage(). PHP_EOL .$exception->getTraceAsString());
-        }
+        $parser->run();
 
         /** @var Item $item */
-        foreach ($items as $item) {
+        foreach ($parser->getItems() as $item) {
             if (!$this->getItemRepository()->findBy(['link' => $item->getLink()])) {
                 $this->entityManager->getManager()->persist($item);
                 $persistedItems[] = $item;
@@ -81,7 +76,7 @@ class ParserHandler
             $source->setUpdatedAt(new \DateTime());
         }
 
-        if(count($persistedItems) && !$parser->hasErrors()){
+        if (count($persistedItems) && !$parser->hasErrors()) {
             $event = (new SourceItemsAddedEvent($source))
                 ->setItems($persistedItems);
             $this->dispatcher->dispatch(SourceItemsAddedEvent::NAME, $event);

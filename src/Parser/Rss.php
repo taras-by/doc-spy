@@ -3,11 +3,9 @@
 namespace App\Parser;
 
 use App\Entity\Item;
-use Doctrine\Common\Collections\ArrayCollection;
 use FeedIo\FeedIo;
-use FeedIo\Reader\ReadErrorException;
 
-class Rss extends BaseParser implements ParserInterface
+class Rss extends AbstractParser implements ParserInterface
 {
     /**
      * @var FeedIo
@@ -19,7 +17,7 @@ class Rss extends BaseParser implements ParserInterface
         $this->feedio = $feedio;
     }
 
-    public function getItems(): ArrayCollection
+    protected function parse(): void
     {
         $feed = $this->feedio->read($this->source->getUrl())->getFeed();
         $this->count = count($feed);
@@ -33,7 +31,5 @@ class Rss extends BaseParser implements ParserInterface
                 ->setSource($this->source);
             $this->items->add($item);
         }
-
-        return $this->items;
     }
 }

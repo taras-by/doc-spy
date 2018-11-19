@@ -26,6 +26,7 @@ class ParserCheckCommand extends AbstractParserCheckCommand
         /** @var Source $source */
         $source = $this->getSourceRepository()->find($sourceId);
         $parser = $this->parserManager->getParser($source);
+        $parser->run();
         $items = $parser->getItems();
 
         /** @var Item $item */

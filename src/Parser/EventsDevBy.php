@@ -4,9 +4,8 @@ namespace App\Parser;
 
 use App\Entity\Item;
 use App\Reader\ReaderInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
-class EventsDevBy extends BaseParser implements ParserInterface
+class EventsDevBy extends AbstractParser implements ParserInterface
 {
     const NUMBER_PAGES = 3;
 
@@ -21,15 +20,13 @@ class EventsDevBy extends BaseParser implements ParserInterface
     }
 
     /**
-     * @return ArrayCollection
      * @throws \Exception
      */
-    public function getItems(): ArrayCollection
+    protected function parse(): void
     {
         foreach ($this->getUrls() as $number => $url) {
             $this->parsePage($url, $number);
         }
-        return $this->items;
     }
 
     private function getUrls(): array

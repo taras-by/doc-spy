@@ -37,6 +37,7 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
 
         $source = $this->createNewSource($parserService, $url);
         $parser = $this->parserManager->getParser($source);
+        $parser->run();
         $items = $parser->getItems();
 
         /** @var Item $item */
@@ -45,7 +46,7 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
         }
         $this->writeSummary($parser, $output);
 
-        if($create && !$parser->hasErrors()){
+        if ($create && !$parser->hasErrors()) {
             $this->entityManager->getManager()->persist($source);
             $this->entityManager->getManager()->flush();
             $output->writeln(sprintf('The resource with id = %s was successfully created!', $source->getId()));

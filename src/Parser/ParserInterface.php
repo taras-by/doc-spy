@@ -7,9 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 interface ParserInterface
 {
+    public function run();
+
     public function setSource(Source $source): ParserInterface;
 
     public function getSource(): Source;
+
+    public function getItems(): ArrayCollection;
 
     public function getCount(): int;
 
@@ -17,7 +21,4 @@ interface ParserInterface
 
     public function getErrorMessage(): string;
 
-    public function setErrorMessage(string $errorMessage): ParserInterface;
-
-    public function getItems(): ArrayCollection;
 }

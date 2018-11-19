@@ -4,9 +4,8 @@ namespace App\Parser;
 
 use App\Entity\Item;
 use App\Reader\ReaderInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
-class FacebookCom extends BaseParser implements ParserInterface
+class FacebookCom extends AbstractParser implements ParserInterface
 {
     const DATE_FORMAT = '%s %s %s:%s, -3 hours';
 
@@ -21,10 +20,9 @@ class FacebookCom extends BaseParser implements ParserInterface
     }
 
     /**
-     * @return ArrayCollection
      * @throws \Exception
      */
-    public function getItems(): ArrayCollection
+    protected function parse(): void
     {
         $content = $this->reader
             ->setSourceId($this->source->getId())
@@ -80,13 +78,6 @@ class FacebookCom extends BaseParser implements ParserInterface
 
             ++$this->count;
         }
-
-        if ($this->count == 0) {
-            $this->hasErrors = true;
-            $this->errorMessage = 'Items not found';
-        }
-
-        return $this->items;
     }
 
     private function getDate(string $month, string $day, string $hour = '00', string $minute = '00'): \DateTime
