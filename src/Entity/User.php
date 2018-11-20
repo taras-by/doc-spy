@@ -37,11 +37,6 @@ class User implements UserInterface
      */
     private $role = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Subscribe", mappedBy="user")
@@ -118,14 +113,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
+        // not implemented
     }
 
     /**
