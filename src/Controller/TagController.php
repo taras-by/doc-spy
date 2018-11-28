@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Entity\Tag;
 use App\Repository\TagRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class TagController extends Controller
