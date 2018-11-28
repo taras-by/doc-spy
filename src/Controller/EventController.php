@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Item;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class EventController extends Controller
