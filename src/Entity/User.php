@@ -114,6 +114,7 @@ class User implements UserInterface
     public function getPassword(): string
     {
         // not implemented
+        return '';
     }
 
     /**
