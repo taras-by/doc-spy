@@ -6,6 +6,6 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         {{ render(controller('App\\Controller\\TagController:menuTags')) }}
         {{ render(controller('App\\Controller\\SearchController:form')) }}
-        <a class="btn btn-outline-primary ml-md-3" href="{{ path('login') }}">Login</a>
+        {{ render(controller('App\\Controller\\SecurityController:menuAuth')) }}
     </div>
 </nav>
