@@ -33,16 +33,4 @@ class TagController extends Controller
             'page' => $page,
         ]);
     }
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function menuTags()
-    {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
-
-        return $this->render('parts/tags.html.twig', ['tags' => $tags]);
-    }
 }

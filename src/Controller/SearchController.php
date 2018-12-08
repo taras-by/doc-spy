@@ -31,13 +31,4 @@ class SearchController extends Controller
             'page' => $page,
         ]);
     }
-
-    /**
-     * Action for rendering search form
-     */
-    public function form()
-    {
-        $phrase = Request::createFromGlobals()->get('q');
-        return $this->render('parts/search.html.twig', ['phrase' => $phrase]);
-    }
 }

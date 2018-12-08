@@ -31,14 +31,4 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('will be intercepted before getting here.');
     }
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function menuAuth()
-    {
-        return $this->render('parts/auth.html.twig', [
-            'user' => $this->getUser(),
-        ]);
-    }
 }
