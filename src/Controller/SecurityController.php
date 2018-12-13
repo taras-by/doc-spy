@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -20,6 +22,35 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
+        ]);
+    }
+
+    /**
+     * @Route("/reset_password", name="reset_password")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function resetPassword(Request $request)
+    {
+        $error = null;
+        $message = null;
+        $email = $request->get('email');
+        $user = $this->getUser();
+        $defaultEmail = $user ? $user->getEmail() : null;
+
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $user = $user ? $user : $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
+            if ($user) {
+                $message = 'Password sent to email!';
+            } else {
+                $error = 'User not found!';
+            }
+        }
+
+        return $this->render('security/reset_password.html.twig', [
+            'defaultEmail' => $defaultEmail,
+            'message' => $message,
+            'error' => $error,
         ]);
     }
 
