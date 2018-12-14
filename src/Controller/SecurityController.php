@@ -18,11 +18,12 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
-        $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
+        if($error = $authenticationUtils->getLastAuthenticationError()){
+            $this->addFlash('danger', $error->getMessageKey());
+        }
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
-            'error'         => $error,
         ]);
     }
 
@@ -35,8 +36,6 @@ class SecurityController extends AbstractController
      */
     public function resetPassword(Request $request, UserService $userService)
     {
-        $error = null;
-        $message = null;
         $email = $request->get('email');
         $user = $this->getUser();
         $defaultEmail = $user ? $user->getEmail() : null;
@@ -45,16 +44,15 @@ class SecurityController extends AbstractController
             $user = $user ? $user : $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
             if ($user) {
                 $userService->resetPassword($user);
-                $message = 'Password sent to email!';
+                $this->addFlash('success', 'Password sent to email!');
             } else {
-                $error = 'User not found!';
+                $this->addFlash('danger', 'User not found!');
             }
+            return $this->redirectToRoute('reset_password');
         }
 
         return $this->render('security/reset_password.html.twig', [
             'defaultEmail' => $defaultEmail,
-            'message' => $message,
-            'error' => $error,
         ]);
     }
 
