@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,11 +27,13 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/reset_password", name="reset_password")
+     * @Route("/reset-password", name="reset_password")
      * @param Request $request
+     * @param UserService $userService
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function resetPassword(Request $request)
+    public function resetPassword(Request $request, UserService $userService)
     {
         $error = null;
         $message = null;
@@ -41,6 +44,7 @@ class SecurityController extends AbstractController
         if ($request->isMethod(Request::METHOD_POST)) {
             $user = $user ? $user : $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
             if ($user) {
+                $userService->resetPassword($user);
                 $message = 'Password sent to email!';
             } else {
                 $error = 'User not found!';
