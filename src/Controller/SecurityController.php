@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\LoginFormType;
+use App\Form\PasswordResetFormType;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,12 +20,15 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
-        $lastUsername = $authenticationUtils->getLastUsername();
-        if($error = $authenticationUtils->getLastAuthenticationError()){
+        if ($error = $authenticationUtils->getLastAuthenticationError()) {
             $this->addFlash('danger', $error->getMessageKey());
+            return $this->redirectToRoute('login');
         }
+
+        $form = $this->createForm(LoginFormType::class);
+
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
+            'loginForm' => $form->createView(),
         ]);
     }
 
@@ -36,23 +41,25 @@ class SecurityController extends AbstractController
      */
     public function resetPassword(Request $request, UserService $userService)
     {
-        $email = $request->get('email');
-        $user = $this->getUser();
-        $defaultEmail = $user ? $user->getEmail() : null;
+        $form = $this->createForm(PasswordResetFormType::class);
+        $form->handleRequest($request);
 
-        if ($request->isMethod(Request::METHOD_POST)) {
-            $user = $user ? $user : $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
-            if ($user) {
-                $userService->resetPassword($user);
-                $this->addFlash('success', 'Password sent to email!');
-            } else {
-                $this->addFlash('danger', 'User not found!');
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $email = $form->getData()->getEmail();
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            $userService->resetPassword($user);
+            $this->addFlash('success', 'Password sent to email!');
             return $this->redirectToRoute('reset_password');
         }
 
+        foreach ($form->getErrors(true) as $error) {
+            $this->addFlash('danger', $error->getMessage());
+        }
+
         return $this->render('security/reset_password.html.twig', [
-            'defaultEmail' => $defaultEmail,
+            'passwordResetForm' => $form->createView(),
         ]);
     }
 
