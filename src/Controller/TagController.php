@@ -4,11 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\Tag;
-use App\Repository\TagRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class TagController extends Controller
+class TagController extends AbstractController
 {
     /**
      * @Route("/tag/{id}/{page}", name="tag_index", requirements={"page"="\d+"})
@@ -32,17 +31,5 @@ class TagController extends Controller
             'maxPages' => $maxPages,
             'page' => $page,
         ]);
-    }
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function menuTags()
-    {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->getDoctrine()->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
-
-        return $this->render('parts/tags.html.twig', ['tags' => $tags]);
     }
 }

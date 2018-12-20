@@ -5,3 +5,5 @@ twig:
     date:
         timezone: Europe/Minsk
         format: d.m.Y
+    form_themes:
+        - bootstrap_4_layout.html.twig
