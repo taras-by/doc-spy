@@ -38,6 +38,7 @@ class LoginFormType extends AbstractType
             ])
             ->add('remember_me', CheckboxType::class, [
                 'data' => true,
+                'required' => false,
             ])
         ;
     }

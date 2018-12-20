@@ -19,9 +19,11 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
-
             logout:
                 path: logout
+            remember_me:
+                secret: '%kernel.secret%'
+                remember_me_parameter: 'login_form[remember_me]'
 
             # activate different ways to authenticate
 

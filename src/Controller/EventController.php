@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class EventController extends Controller
+class EventController extends AbstractController
 {
     /**
      * @Route("/events/{page}", name="event_index", requirements={"page"="\d+"})

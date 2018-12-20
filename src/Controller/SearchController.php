@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Item;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends Controller
+class SearchController extends AbstractController
 {
     /**
      * @Route("/search/{page}", name="search", requirements={"page"="\d+"})
