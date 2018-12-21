@@ -39,13 +39,13 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Subscribe", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="user")
      */
-    private $subscribes;
+    private $subscriptions;
 
     public function __construct()
     {
-        $this->subscribes = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
         $this->role = self::ROLE_USER;
     }
 
@@ -134,30 +134,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Subscribe[]
+     * @return Collection|Subscription[]
      */
-    public function getSubscribes(): Collection
+    public function getSubscriptions(): Collection
     {
-        return $this->subscribes;
+        return $this->subscriptions;
     }
 
-    public function addSubscribe(Subscribe $subscribe): self
+    public function addSubscription(Subscription $subscription): self
     {
-        if (!$this->subscribes->contains($subscribe)) {
-            $this->subscribes[] = $subscribe;
-            $subscribe->setUser($this);
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeSubscribe(Subscribe $subscribe): self
+    public function removeSubscription(Subscription $subscription): self
     {
-        if ($this->subscribes->contains($subscribe)) {
-            $this->subscribes->removeElement($subscribe);
+        if ($this->subscriptions->contains($subscription)) {
+            $this->subscriptions->removeElement($subscription);
             // set the owning side to null (unless already changed)
-            if ($subscribe->getUser() === $this) {
-                $subscribe->setUser(null);
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
             }
         }
 

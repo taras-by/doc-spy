@@ -2,7 +2,7 @@
 
 namespace App\Listener;
 
-use App\Entity\Subscribe;
+use App\Entity\Subscription;
 use App\Entity\User;
 use App\Event\SourceItemsAddedEvent;
 use App\Repository\UserRepository;
@@ -33,7 +33,7 @@ class SourceItemsAddedListener
         $userRepository = $this->entityManager->getRepository(User::class);
 
         /** @var SubscribeRepository $subscribeRepository */
-        $subscribeRepository = $this->entityManager->getRepository(Subscribe::class);
+        $subscribeRepository = $this->entityManager->getRepository(Subscription::class);
 
         $subscribers = $userRepository->findSourceSubscribers($event->getSource());
         foreach($subscribers as $subscriber){
