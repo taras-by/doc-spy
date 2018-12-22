@@ -3,10 +3,11 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\Source;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SourceController extends Controller
+class SourceController extends AbstractController
 {
     /**
      * @Route("/source/{id}/{page}", name="source_index", requirements={"page"="\d+"})
@@ -33,6 +34,7 @@ class SourceController extends Controller
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/sources", name="sources_list")
      * @return \Symfony\Component\HttpFoundation\Response
      */

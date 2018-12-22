@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Item;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController extends Controller
+class IndexController extends AbstractController
 {
     /**
      * @Route("/{page}", name="index", requirements={"page"="\d+"})

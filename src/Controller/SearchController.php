@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Item;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends Controller
+class SearchController extends AbstractController
 {
     /**
      * @Route("/search/{page}", name="search", requirements={"page"="\d+"})
@@ -30,14 +30,5 @@ class SearchController extends Controller
             'maxPages' => $maxPages,
             'page' => $page,
         ]);
-    }
-
-    /**
-     * Action for rendering search form
-     */
-    public function form()
-    {
-        $phrase = Request::createFromGlobals()->get('q');
-        return $this->render('parts/search.html.twig', ['phrase' => $phrase]);
     }
 }
