@@ -5,11 +5,11 @@ namespace App\Command;
 use App\Entity\Item;
 use App\Service\ParserManager;
 use App\Parser\ParserInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-abstract class AbstractParserCheckCommand extends ContainerAwareCommand
+abstract class AbstractParserCheckCommand extends Command
 {
     /**
      * @var \App\Service\ParserManager

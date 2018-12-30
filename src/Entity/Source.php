@@ -101,9 +101,9 @@ class Source
     private $updateInterval = 60;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Subscribe", mappedBy="source")
+     * @ORM\OneToMany(targetEntity="Subscription", mappedBy="source")
      */
-    private $subscribes;
+    private $subscriptions;
 
     /**
      * Source constructor.
@@ -112,7 +112,7 @@ class Source
     {
         $this->items = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->subscribes = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     /**
@@ -428,30 +428,30 @@ class Source
     }
 
     /**
-     * @return Collection|Subscribe[]
+     * @return Collection|Subscription[]
      */
-    public function getSubscribes(): Collection
+    public function getSubscriptions(): Collection
     {
-        return $this->subscribes;
+        return $this->subscriptions;
     }
 
-    public function addSubscribe(Subscribe $subscribe): self
+    public function addSubscription(Subscription $subscription): self
     {
-        if (!$this->subscribes->contains($subscribe)) {
-            $this->subscribes[] = $subscribe;
-            $subscribe->setSource($this);
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions[] = $subscription;
+            $subscription->setSource($this);
         }
 
         return $this;
     }
 
-    public function removeSubscribe(Subscribe $subscribe): self
+    public function removeSubscription(Subscription $subscription): self
     {
-        if ($this->subscribes->contains($subscribe)) {
-            $this->subscribes->removeElement($subscribe);
+        if ($this->subscriptions->contains($subscription)) {
+            $this->subscriptions->removeElement($subscription);
             // set the owning side to null (unless already changed)
-            if ($subscribe->getSource() === $this) {
-                $subscribe->setSource(null);
+            if ($subscription->getSource() === $this) {
+                $subscription->setSource(null);
             }
         }
 

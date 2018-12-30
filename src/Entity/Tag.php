@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,7 +41,7 @@ class Tag
      */
     public function __construct()
     {
-        $this->sources = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sources = new ArrayCollection();
     }
 
     /**

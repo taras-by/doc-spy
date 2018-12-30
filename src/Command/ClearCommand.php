@@ -32,6 +32,11 @@ class ClearCommand extends Command
         $this->setDescription('Command to clean the database');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);

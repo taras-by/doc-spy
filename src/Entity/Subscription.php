@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SubscribeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SubscriptionRepository")
  */
-class Subscribe
+class Subscription
 {
     /**
      * @ORM\Id()
@@ -17,13 +17,13 @@ class Subscribe
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Source", inversedBy="subscribes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Source", inversedBy="subscriptions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $source;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="subscribes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="subscriptions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

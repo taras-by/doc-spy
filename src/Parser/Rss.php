@@ -17,6 +17,9 @@ class Rss extends AbstractParser implements ParserInterface
         $this->feedio = $feedio;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function parse(): void
     {
         $feed = $this->feedio->read($this->source->getUrl())->getFeed();

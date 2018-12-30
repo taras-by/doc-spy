@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Item;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -16,6 +17,10 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
     const EVENT_LIFETIME = 2;
 
+
+    /**
+     * @return Item[]
+     */
     public function findLast(): array
     {
         return $this->createQueryBuilder('i')
@@ -25,7 +30,7 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('i.publishedAt', 'DESC')
             ->setMaxResults(60)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     public function findAllPaginated(int $page, int $limit): Paginator

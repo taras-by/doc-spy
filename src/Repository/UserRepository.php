@@ -34,14 +34,16 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param Source $source
      * @return User[]
+     * @throws \Exception
      */
     public function findSourceSubscribers(Source $source): array
     {
         $currentDate = new \DateTime;
 
         return $this->createQueryBuilder('u')
-            ->join('u.subscribes', 's')
+            ->join('u.subscriptions', 's')
             ->andWhere('s.source = :source')
             ->andWhere('s.expireAt IS NULL OR s.expireAt > :currentDate')
             ->setParameter('currentDate', $currentDate)

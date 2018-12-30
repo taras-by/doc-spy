@@ -5,11 +5,11 @@ namespace App\Command;
 use App\Entity\User;
 use App\Service\NotificationService;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NotificationCheckCommand extends ContainerAwareCommand
+class NotificationCheckCommand extends Command
 {
     /**
      * @var NotificationService

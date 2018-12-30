@@ -88,6 +88,7 @@ class Item
 
     /**
      * Constructor
+     * @throws \Exception
      */
     public function __construct()
     {

@@ -30,6 +30,15 @@ class NotificationService
         $this->from = $from;
     }
 
+    /**
+     * @param User $user
+     * @param string $subject
+     * @param string $template
+     * @param array $parameters
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function send(User $user, string $subject, string $template, array $parameters = [])
     {
         $message = (new \Swift_Message($subject))

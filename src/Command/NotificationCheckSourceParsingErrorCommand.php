@@ -2,18 +2,16 @@
 
 namespace App\Command;
 
-use App\Entity\Item;
 use App\Entity\Source;
-use App\Event\ItemsAddedEvent;
 use App\Event\SourceParsingErrorEvent;
 use App\Repository\SourceRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class NotificationCheckSourceParsingErrorCommand extends ContainerAwareCommand
+class NotificationCheckSourceParsingErrorCommand extends Command
 {
     /**
      * @var EventDispatcherInterface
@@ -41,6 +39,8 @@ class NotificationCheckSourceParsingErrorCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
