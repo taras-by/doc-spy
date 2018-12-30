@@ -7,12 +7,12 @@ use App\Repository\SourceRepository;
 use App\Service\ParserHandler;
 use App\Service\ParserManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParserRunCommand extends ContainerAwareCommand
+class ParserRunCommand extends Command
 {
     /**
      * @var ParserManager
@@ -91,6 +91,6 @@ class ParserRunCommand extends ContainerAwareCommand
 
     private function getSourceRepository(): SourceRepository
     {
-        return $this->getContainer()->get('doctrine')->getRepository(Source::class);
+        return $this->entityManager->getRepository(Source::class);
     }
 }
