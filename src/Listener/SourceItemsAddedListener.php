@@ -5,6 +5,7 @@ namespace App\Listener;
 use App\Entity\Subscription;
 use App\Entity\User;
 use App\Event\SourceItemsAddedEvent;
+use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use App\Service\NotificationService;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -32,12 +33,12 @@ class SourceItemsAddedListener
         /** @var UserRepository $userRepository */
         $userRepository = $this->entityManager->getRepository(User::class);
 
-        /** @var SubscribeRepository $subscribeRepository */
-        $subscribeRepository = $this->entityManager->getRepository(Subscription::class);
+        /** @var SubscriptionRepository $subscribtionRepository */
+        $subscribtionRepository = $this->entityManager->getRepository(Subscription::class);
 
         $subscribers = $userRepository->findSourceSubscribers($event->getSource());
         foreach($subscribers as $subscriber){
-            $subscribe = $subscribeRepository->findOneBy([
+            $subscription = $subscribtionRepository->findOneBy([
                 'source' => $event->getSource(),
                 'user' => $subscriber,
             ]);
@@ -48,7 +49,7 @@ class SourceItemsAddedListener
                 [
                     'items' => $event->getItems(),
                     'source' => $event->getSource(),
-                    'subscribe' => $subscribe,
+                    'subscription' => $subscription,
                 ]
             );
         }

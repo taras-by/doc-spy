@@ -39,6 +39,12 @@ class ParserHandler
      */
     private $savedCount = 0;
 
+    /**
+     * ParserHandler constructor.
+     * @param RegistryInterface $entityManager
+     * @param EventDispatcherInterface $dispatcher
+     * @throws \Exception
+     */
     public function __construct(RegistryInterface $entityManager, EventDispatcherInterface $dispatcher)
     {
         $this->entityManager = $entityManager;

@@ -21,10 +21,11 @@ class ReadCommand extends ContainerAwareCommand
         $items = $this->getContainer()->get('doctrine')->getRepository(Item::class)->findLast();
 
         foreach ($items as $item) {
-            $output->writeln("\n" . $item['publishedAt']->format('d.m.Y'));
-            $output->writeln($item['title']);
-            $output->writeln('<info>' . trim(strip_tags($item['description'])) . '</info>');
-            $output->writeln($item['link']);
+            /** @var Item $item */
+            $output->writeln("\n" . $item->getPublishedAt()->format('d.m.Y'));
+            $output->writeln($item->getTitle());
+            $output->writeln('<info>' . trim(strip_tags($item->getDescription())) . '</info>');
+            $output->writeln($item->getLink());
             $output->writeln('----------');
         }
     }

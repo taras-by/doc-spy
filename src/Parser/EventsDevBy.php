@@ -38,7 +38,12 @@ class EventsDevBy extends AbstractParser implements ParserInterface
         return $urls;
     }
 
-    private function parsePage(string $url,int $number): void
+    /**
+     * @param string $url
+     * @param int $number
+     * @throws \Exception
+     */
+    private function parsePage(string $url, int $number): void
     {
         $content = $this->reader
             ->setSourceId($this->source->getId())

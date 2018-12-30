@@ -14,6 +14,7 @@ class SourceRepository extends \Doctrine\ORM\EntityRepository
     /**
      * @var int|null $results
      * @return array
+     * @throws \Exception
      */
     public function findForUpdate($results = null)
     {

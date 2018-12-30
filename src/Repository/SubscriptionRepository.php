@@ -20,7 +20,7 @@ class SubscriptionRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Subscribe[] Returns an array of Subscribe objects
+//     * @return Subscription[] Returns an array of Subscription objects
 //     */
     /*
     public function findByExampleField($value)

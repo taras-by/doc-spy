@@ -38,6 +38,12 @@ class NotificationCheckItemsAddedCommand extends ContainerAwareCommand
             ->setDescription('Check event after Items added. Send last 5 Items of source to subscribers');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $source = $this->entityManager->getRepository(Source::class)

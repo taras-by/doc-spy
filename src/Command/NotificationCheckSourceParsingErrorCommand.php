@@ -41,6 +41,8 @@ class NotificationCheckSourceParsingErrorCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function execute(InputInterface $input, OutputInterface $output)

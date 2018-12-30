@@ -36,6 +36,13 @@ class ParserRunCommand extends ContainerAwareCommand
      */
     private $now;
 
+    /**
+     * ParserRunCommand constructor.
+     * @param ParserManager $parserManager
+     * @param ParserHandler $parserHandler
+     * @param RegistryInterface $entityManager
+     * @throws \Exception
+     */
     public function __construct(ParserManager $parserManager, ParserHandler $parserHandler, RegistryInterface $entityManager)
     {
         $this->parserManager = $parserManager;
