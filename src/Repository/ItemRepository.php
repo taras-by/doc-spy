@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -16,7 +17,6 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
     use PaginatorTrait;
 
     const EVENT_LIFETIME = 2;
-
 
     /**
      * @return Item[]
@@ -43,6 +43,25 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
 
         return $this->paginate($query, $page, $limit);
     }
+
+    public function findUserFeedPaginated(User $user, int $page, int $limit): Paginator
+    {
+        $currentDate = new \DateTime;
+
+        $query = $this->createQueryBuilder('i')
+            ->leftJoin('i.source', 's')
+            ->leftJoin('s.subscriptions', 'sb')
+            ->addSelect('s')
+            ->where('sb.user = :user')
+            ->andWhere('sb.expireAt IS NULL OR sb.expireAt > :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->setParameter('user', $user)
+            ->orderBy('i.publishedAt', 'DESC')
+            ->getQuery();
+
+        return $this->paginate($query, $page, $limit);
+    }
+
     public function findPaginatedByTagId(int $id, int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('i')
@@ -99,19 +118,6 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         $query->orderBy('i.publishedAt', 'DESC');
 
         return $this->paginate($query->getQuery(), $page, $limit);
-    }
-
-    public function findPaginatedFromFavoriteSources(int $page, int $limit): Paginator
-    {
-        $query = $this->createQueryBuilder('i')
-            ->leftJoin('i.source', 's')
-            ->addSelect('s')
-            ->where('s.favorite = :favorite')
-            ->setParameter('favorite', true)
-            ->orderBy('i.publishedAt', 'DESC')
-            ->getQuery();
-
-        return $this->paginate($query, $page, $limit);
     }
 
     public function deleteOlderThenDate(\DateTime $date): int
