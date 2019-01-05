@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      * @Route("/feed/{page}", name="feed", requirements={"page"="\d+"})
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
