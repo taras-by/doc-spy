@@ -5,7 +5,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% if user %}
             <li class="nav-item">
                 <a href="{{ path('feed') }}" class="nav-link">Feed</a>
             </li>
