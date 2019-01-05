@@ -45,13 +45,6 @@ class Source
     private $parser;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="favorite", type="boolean")
-     */
-    private $favorite = false;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="icon", type="string", length=255)
@@ -321,30 +314,6 @@ class Source
     public function getTags(): Collection
     {
         return $this->tags;
-    }
-
-    /**
-     * Set favorite
-     *
-     * @param boolean $favorite
-     *
-     * @return Source
-     */
-    public function setFavorite($favorite)
-    {
-        $this->favorite = $favorite;
-
-        return $this;
-    }
-
-    /**
-     * Get favorite
-     *
-     * @return boolean
-     */
-    public function getFavorite()
-    {
-        return $this->favorite;
     }
 
     /**

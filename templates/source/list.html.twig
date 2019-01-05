@@ -5,32 +5,34 @@
 {% block body %}
 
     <div class="container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Updated at</th>
-                    <th>Schedule at</th>
-                    <th>Update interval</th>
-                    <th>Error count</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for source in sources %}
-                <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
-                    <th>{{ source.id }}</th>
-                    <th><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></th>
-                    <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
-                    <td>{{ source.updatedAt|date('Y-m-d H:i:s') }}</td>
-                    <td>{{ source.scheduleAt|date('Y-m-d H:i:s') }}</td>
-                    <td class="text-right">{{ source.updateInterval }}</td>
-                    <td class="text-right">{{ source.errorCount }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Updated at</th>
+                        <th>Schedule at</th>
+                        <th>Update interval</th>
+                        <th>Error count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for source in sources %}
+                    <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
+                        <th>{{ source.id }}</th>
+                        <th><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></th>
+                        <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
+                        <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
+                        <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
+                        <td class="text-right">{{ source.updateInterval }}</td>
+                        <td class="text-right">{{ source.errorCount }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
 {% endblock %}

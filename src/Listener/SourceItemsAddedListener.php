@@ -30,28 +30,28 @@ class SourceItemsAddedListener
 
     public function onSourceItemsAdded(SourceItemsAddedEvent $event)
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
-
-        /** @var SubscriptionRepository $subscribtionRepository */
-        $subscribtionRepository = $this->entityManager->getRepository(Subscription::class);
-
-        $subscribers = $userRepository->findSourceSubscribers($event->getSource());
-        foreach($subscribers as $subscriber){
-            $subscription = $subscribtionRepository->findOneBy([
-                'source' => $event->getSource(),
-                'user' => $subscriber,
-            ]);
-            $this->notificationService->send(
-                $subscriber,
-                'New items added!',
-                'mail/source_items_added.html.twig',
-                [
-                    'items' => $event->getItems(),
-                    'source' => $event->getSource(),
-                    'subscription' => $subscription,
-                ]
-            );
-        }
+//        /** @var UserRepository $userRepository */
+//        $userRepository = $this->entityManager->getRepository(User::class);
+//
+//        /** @var SubscriptionRepository $subscribtionRepository */
+//        $subscribtionRepository = $this->entityManager->getRepository(Subscription::class);
+//
+//        $subscribers = $userRepository->findSourceSubscribers($event->getSource());
+//        foreach($subscribers as $subscriber){
+//            $subscription = $subscribtionRepository->findOneBy([
+//                'source' => $event->getSource(),
+//                'user' => $subscriber,
+//            ]);
+//            $this->notificationService->send(
+//                $subscriber,
+//                'New items added!',
+//                'mail/source_items_added.html.twig',
+//                [
+//                    'items' => $event->getItems(),
+//                    'source' => $event->getSource(),
+//                    'subscription' => $subscription,
+//                ]
+//            );
+//        }
     }
 }

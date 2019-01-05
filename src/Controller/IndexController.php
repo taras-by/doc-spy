@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Repository\ItemRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,8 +17,7 @@ class IndexController extends AbstractController
      */
     public function indexAction($page = 1)
     {
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findPaginatedFromFavoriteSources($page, Item::LIMIT);
+        $items = $this->getItemRepository()->findAllPaginated($page, Item::LIMIT);
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 
@@ -28,21 +29,27 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/all/{page}", name="all", requirements={"page"="\d+"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     * @Route("/feed/{page}", name="feed", requirements={"page"="\d+"})
      * @param int $page
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function allAction($page = 1)
+    public function feedAction($page = 1)
     {
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findAllPaginated($page, Item::LIMIT);
+        $user = $this->getUser();
+        $items = $this->getItemRepository()->findUserFeedPaginated($user, $page, Item::LIMIT);
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 
-        return $this->render('index/all.html.twig', [
+        return $this->render('index/feed.html.twig', [
             'items' => $items,
             'maxPages' => $maxPages,
             'page' => $page,
         ]);
+    }
+
+    private function getItemRepository(): ItemRepository
+    {
+        return $this->getDoctrine()->getRepository(Item::class);
     }
 }

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subscriptions{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th ></th>
+                    <th>Name</th>
+                    <th>Expire at</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for subscription in subscriptions %}
+                    <tr>
+                        <th>{{ subscription.source.id }}</th>
+                        <th><a href="{{ path('source_index', {'id' : subscription.source.id} ) }}"><img src="{{ subscription.source.icon }}" width="16" height="16" /></a></th>
+                        <td><a href="{{ subscription.source.url }}" target="_blank">{{ subscription.source.name }}</a></td>
+                        <td>{{ subscription.expireAt ? subscription.expireAt|date('Y-m-d H:i:s') : '-' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
