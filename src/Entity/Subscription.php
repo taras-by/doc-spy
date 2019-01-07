@@ -35,6 +35,11 @@ class Subscription
      */
     private $expireAt;
 
+    /**
+     * @ORM\Column(name="is_notify", type="boolean")
+     */
+    private $isNotify;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,6 +77,18 @@ class Subscription
     public function serExpireAt(\DateTime $expireAt): self
     {
         $this->expireAt = $expireAt;
+
+        return $this;
+    }
+
+    public function getIsNotify()
+    {
+        return $this->isNotify;
+    }
+
+    public function setIsNotify($isNotify): self
+    {
+        $this->isNotify = $isNotify;
 
         return $this;
     }

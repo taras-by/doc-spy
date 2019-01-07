@@ -45,6 +45,7 @@ class UserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->join('u.subscriptions', 's')
             ->andWhere('s.source = :source')
+            ->andWhere('s.isNotify = true')
             ->andWhere('s.expireAt IS NULL OR s.expireAt > :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->setParameter('source', $source)
