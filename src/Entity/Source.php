@@ -14,6 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Source
 {
+
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PROTECTED = 'protected';
+    const VISIBILITY_PRIVATE = 'private';
+
     /**
      * @var int
      *
@@ -50,6 +55,13 @@ class Source
      * @ORM\Column(name="icon", type="string", length=255)
      */
     private $icon;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="visibility", type="string", length=255)
+     */
+    private $visibility;
 
     /**
      * One Source has Many items.
@@ -235,15 +247,21 @@ class Source
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
+     * @return string
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * @param string $visibility
      *
      * @return Source
      */
-    public function setCreatedAt($createdAt)
+    public function setVisibility(string $visibility)
     {
-        $this->createdAt = $createdAt;
+        $this->visibility = $visibility;
 
         return $this;
     }

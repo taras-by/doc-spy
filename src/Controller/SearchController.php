@@ -20,7 +20,7 @@ class SearchController extends AbstractController
         $phrase = $request->get('q');
 
         $itemRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemRepository->findPaginatedByPhrase($phrase, $page, Item::LIMIT);
+        $items = $itemRepository->findPaginatedByPhrase($phrase, $page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 
