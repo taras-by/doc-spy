@@ -18,7 +18,7 @@ class TagController extends AbstractController
     public function showAction($id, $page = 1)
     {
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findPaginatedByTagId($id, $page, Item::LIMIT);
+        $items = $itemsRepository->findPaginatedByTagId($id, $page, Item::LIMIT, $this->getUser());
 
         $tagRepository = $this->getDoctrine()->getRepository(Tag::class);
         $tag = $tagRepository->find($id);

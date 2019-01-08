@@ -17,11 +17,15 @@ class SourceController extends AbstractController
      */
     public function showAction($id, $page = 1)
     {
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findPaginatedBySourceId($id, $page, Item::LIMIT);
-
         $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
         $source = $sourceRepository->find($id);
+
+        if(!$this->getUser() && $source->getVisibility() != Source::VISIBILITY_PUBLIC){
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        }
+
+        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
+        $items = $itemsRepository->findPaginatedBySourceId($id, $page, Item::LIMIT);
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 

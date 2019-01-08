@@ -16,7 +16,7 @@ class EventController extends AbstractController
     public function indexAction($page = 1)
     {
         $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findEventsPaginated($page, Item::LIMIT);
+        $items = $itemsRepository->findEventsPaginated($page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 

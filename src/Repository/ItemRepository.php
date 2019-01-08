@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\Source;
 use App\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -38,6 +39,8 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s')
+            ->where('s.visibility = :visibility')
+            ->setParameter('visibility', Source::VISIBILITY_PUBLIC)
             ->orderBy('i.publishedAt', 'DESC')
             ->getQuery();
 
@@ -62,33 +65,41 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         return $this->paginate($query, $page, $limit);
     }
 
-    public function findPaginatedByTagId(int $id, int $page, int $limit): Paginator
+    public function findPaginatedByTagId(int $id, int $page, int $limit, ?User $user): Paginator
     {
-        $query = $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->leftJoin('s.tags', 't')
             ->addSelect('s')
             ->where('t.id = :tag_id')
             ->setParameter('tag_id', $id)
-            ->orderBy('i.publishedAt', 'DESC')
-            ->getQuery();
+            ->orderBy('i.publishedAt', 'DESC');
 
-        return $this->paginate($query, $page, $limit);
+        if(!$user){
+            $qb->andWhere('s.visibility = :visibility')
+                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
+        }
+
+        return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
-    public function findEventsPaginated(int $page, int $limit): Paginator
+    public function findEventsPaginated(int $page, int $limit, ?User $user): Paginator
     {
-        $query = $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->leftJoin('s.tags', 't')
             ->addSelect('s')
             ->where('i.startDate IS NOT NULL')
             ->where('i.startDate > :date')
             ->setParameter('date', new \DateTime(sprintf('-%s days', self::EVENT_LIFETIME)))
-            ->orderBy('i.startDate', 'ASC')
-            ->getQuery();
+            ->orderBy('i.startDate', 'ASC');
 
-        return $this->paginate($query, $page, $limit);
+        if(!$user){
+            $qb->andWhere('s.visibility = :visibility')
+                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
+        }
+
+        return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
     public function findPaginatedBySourceId(int $id, int $page, int $limit): Paginator
@@ -104,20 +115,25 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         return $this->paginate($query, $page, $limit);
     }
 
-    public function findPaginatedByPhrase(string $phrase, int $page, int $limit): Paginator
+    public function findPaginatedByPhrase(string $phrase, int $page, int $limit, ?User $user): Paginator
     {
-        $query = $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s');
 
         foreach (explode(' ', $phrase) as $i => $word) {
-            $query->andWhere('i.title like :word_' . $i)
+            $qb->andWhere('i.title like :word_' . $i)
                 ->setParameter('word_' . $i, '%' . $word . '%');
         }
 
-        $query->orderBy('i.publishedAt', 'DESC');
+        if(!$user){
+            $qb->andWhere('s.visibility = :visibility')
+                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
+        }
 
-        return $this->paginate($query->getQuery(), $page, $limit);
+        $qb->orderBy('i.publishedAt', 'DESC');
+
+        return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
     public function deleteOlderThenDate(\DateTime $date): int
