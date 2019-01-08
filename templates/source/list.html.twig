@@ -12,6 +12,7 @@
                         <th>#</th>
                         <th></th>
                         <th>Name</th>
+                        <th>Visibility</th>
                         <th>Updated at</th>
                         <th>Schedule at</th>
                         <th>Update interval</th>
@@ -21,9 +22,10 @@
                 <tbody>
                 {% for source in sources %}
                     <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
-                        <th>{{ source.id }}</th>
-                        <th><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></th>
+                        <td>{{ source.id }}</td>
+                        <td><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
                         <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
+                        <td>{{ source.visibility }}</td>
                         <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
                         <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
                         <td class="text-right">{{ source.updateInterval }}</td>
