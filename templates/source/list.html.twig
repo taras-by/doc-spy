@@ -25,7 +25,7 @@
                         <td>{{ source.id }}</td>
                         <td><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
                         <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
-                        <td>{{ source.visibility }}</td>
+                        <td{% if source.createdBy %} title="{{ source.createdBy.name }}"{% endif %}>{{ source.visibility }}</td>
                         <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
                         <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
                         <td class="text-right">{{ source.updateInterval }}</td>

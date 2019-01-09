@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Item;
@@ -20,7 +21,10 @@ class SourceController extends AbstractController
         $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
         $source = $sourceRepository->find($id);
 
-        if(!$this->getUser() && $source->getVisibility() != Source::VISIBILITY_PUBLIC){
+        if (
+            (!$this->getUser() && $source->getVisibility() != Source::VISIBILITY_PUBLIC) ||
+            ($this->getUser() && $source->getVisibility() == Source::VISIBILITY_PRIVATE && $source->getCreatedBy() != $this->getUser())
+        ) {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         }
 
