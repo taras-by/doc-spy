@@ -23,7 +23,7 @@
                         <td>{{ subscription.source.id }}</td>
                         <td><a href="{{ path('source_index', {'id' : subscription.source.id} ) }}"><img src="{{ subscription.source.icon }}" width="16" height="16" /></a></td>
                         <td><a href="{{ subscription.source.url }}" target="_blank">{{ subscription.source.name }}</a></td>
-                        <td>{{ subscription.source.visibility }}</td>
+                        <td{% if subscription.source.createdBy %} title="{{ subscription.source.createdBy.name }}"{% endif %}>{{ subscription.source.visibility }}</td>
                         <td>{{ subscription.expireAt ? subscription.expireAt|date('Y-m-d H:i:s') : '-' }}</td>
                         <td>{{ subscription.isNotify ? 'Yes' : 'No' }}</td>
                     </tr>

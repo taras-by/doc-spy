@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Item;
 use App\Entity\Source;
 use App\Entity\User;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -51,18 +52,18 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
     {
         $currentDate = new \DateTime;
 
-        $query = $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('i');
+        $qb->addSelect('s')
             ->leftJoin('i.source', 's')
             ->leftJoin('s.subscriptions', 'sb')
-            ->addSelect('s')
             ->where('sb.user = :user')
             ->andWhere('sb.expireAt IS NULL OR sb.expireAt > :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->setParameter('user', $user)
-            ->orderBy('i.publishedAt', 'DESC')
-            ->getQuery();
+            ->orderBy('i.publishedAt', 'DESC');
+        $this->applyVisibilityCriteria($qb, $user);
 
-        return $this->paginate($query, $page, $limit);
+        return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
     public function findPaginatedByTagId(int $id, int $page, int $limit, ?User $user): Paginator
@@ -74,11 +75,7 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->where('t.id = :tag_id')
             ->setParameter('tag_id', $id)
             ->orderBy('i.publishedAt', 'DESC');
-
-        if(!$user){
-            $qb->andWhere('s.visibility = :visibility')
-                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
-        }
+        $this->applyVisibilityCriteria($qb, $user);
 
         return $this->paginate($qb->getQuery(), $page, $limit);
     }
@@ -93,11 +90,7 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->where('i.startDate > :date')
             ->setParameter('date', new \DateTime(sprintf('-%s days', self::EVENT_LIFETIME)))
             ->orderBy('i.startDate', 'ASC');
-
-        if(!$user){
-            $qb->andWhere('s.visibility = :visibility')
-                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
-        }
+        $this->applyVisibilityCriteria($qb, $user);
 
         return $this->paginate($qb->getQuery(), $page, $limit);
     }
@@ -119,19 +112,14 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
-            ->addSelect('s');
+            ->addSelect('s')
+            ->orderBy('i.publishedAt', 'DESC');
+        $this->applyVisibilityCriteria($qb, $user);
 
         foreach (explode(' ', $phrase) as $i => $word) {
             $qb->andWhere('i.title like :word_' . $i)
                 ->setParameter('word_' . $i, '%' . $word . '%');
         }
-
-        if(!$user){
-            $qb->andWhere('s.visibility = :visibility')
-                ->setParameter('visibility', Source::VISIBILITY_PUBLIC);
-        }
-
-        $qb->orderBy('i.publishedAt', 'DESC');
 
         return $this->paginate($qb->getQuery(), $page, $limit);
     }
@@ -144,5 +132,26 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('date', $date)
             ->getQuery()
             ->execute();
+    }
+
+    private function applyVisibilityCriteria(QueryBuilder $qb, ?User $user)
+    {
+        $exprForPrivate = null;
+        $exprForProtected = null;
+        $exprForPublic = $qb->expr()->eq('s.visibility', ':public');
+
+        if ($user) {
+            $exprForPrivate = $qb->expr()->andX(
+                $qb->expr()->eq('s.visibility', ':private'),
+                $qb->expr()->eq('s.createdBy', ':user')
+            );
+            $exprForProtected = $qb->expr()->eq('s.visibility', ':protected');
+            $qb->setParameter('user', $user)
+                ->setParameter('private', Source::VISIBILITY_PRIVATE)
+                ->setParameter('protected', Source::VISIBILITY_PROTECTED);
+        }
+
+        $qb->andWhere($qb->expr()->orX($exprForPublic, $exprForProtected, $exprForPrivate))
+            ->setParameter('public', Source::VISIBILITY_PUBLIC);
     }
 }

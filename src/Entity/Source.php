@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Traits\CreatorTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Source
 {
+    use CreatorTrait;
 
     const VISIBILITY_PUBLIC = 'public';
     const VISIBILITY_PROTECTED = 'protected';
