@@ -20,7 +20,6 @@ class RelaxBy extends AbstractParser implements ParserInterface
             $title = $itemNode->nodeValue ?? null;
 
             $link = $itemNode->getAttribute('href');
-            $link = $this->url($link);
 
             $item = (new Item())
                 ->setTitle($title)
