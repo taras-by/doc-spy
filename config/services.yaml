@@ -76,6 +76,14 @@ services:
         class: App\Parser\HhRu
         public: true
 
+    holiday_by_parser:
+        class: App\Parser\HolidayBy
+        public: true
+
+    relax_by_parser:
+        class: App\Parser\RelaxBy
+        public: true
+
     facebook_com_parser:
         class: App\Parser\FacebookCom
         public: true

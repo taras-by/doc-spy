@@ -60,6 +60,7 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
             ->setName(parse_url($url, PHP_URL_HOST))
             ->setParser($parserService)
             ->setIcon('/favicon.ico')
+            ->setVisibility(Source::VISIBILITY_PUBLIC)
             ->setUrl($url);
     }
 
