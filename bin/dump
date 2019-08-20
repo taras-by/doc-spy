@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-SCRIPT_PATH=`dirname "$BASH_SOURCE"`
+SCRIPT=$(realpath "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+PROJECT_PATH=$(realpath "$SCRIPT_PATH/../")
 
-source $SCRIPT_PATH/../.env
+source "$PROJECT_PATH"/.env
 
 regex="^mysql://([^:]+):([^@]+)@([^:]+):([^/]+)/(.*)$"
 [[ $DATABASE_URL =~ $regex ]]
-DATABASE_HOST=${BASH_REMATCH[3]}:${BASH_REMATCH[4]}
+#DATABASE_HOST=${BASH_REMATCH[3]}:${BASH_REMATCH[4]}
 DATABASE_NAME=${BASH_REMATCH[5]}
 DATABASE_USER=${BASH_REMATCH[1]}
 DATABASE_PASSWORD=${BASH_REMATCH[2]}
 
-filename=$SCRIPT_PATH/../var/dump.sql.gz
+filename=$PROJECT_PATH/var/dump.sql.gz
 
-mysqldump -u$DATABASE_USER -p$DATABASE_PASSWORD $DATABASE_NAME | gzip -c > $filename
+mysqldump -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" "$DATABASE_NAME" | gzip -c > "$filename"
