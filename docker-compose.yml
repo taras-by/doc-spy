@@ -19,6 +19,7 @@ services:
   db:
     container_name: ds.mysql
     image: mysql
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-authentication-plugin=mysql_native_password']
     volumes:
       - ./docker/mysql/.db:/var/lib/mysql
     volumes_from:
