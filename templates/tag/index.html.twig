@@ -10,4 +10,8 @@
 
     {{ pagination_render(maxPages, page, 'tag_index', {'id': tag.id}) }}
 
+    <hr>
+
+    {{ tags_render(tag.id) }}
+
 {% endblock %}
