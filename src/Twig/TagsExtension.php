@@ -44,6 +44,7 @@ class TagsExtension extends \Twig_Extension
 
     /**
      * @param \Twig_Environment $twig
+     * @param int $currentTagId
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
