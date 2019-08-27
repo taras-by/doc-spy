@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Tag;
+use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;

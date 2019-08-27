@@ -19,7 +19,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% for tag in tags %}
-                        <a class="dropdown-item" href="{{ path('tag_index', {'id': tag.id}) }}">{{ tag.name }}</a>
+                        <a class="dropdown-item{{ tagId == tag.id ? ' active' }}" href="{{ path('tag_index', {'id': tag.id}) }}">{{ tag.name }}</a>
                     {% endfor %}
                 </div>
             </li>

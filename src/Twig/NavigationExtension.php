@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Tag;
+use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -44,12 +45,13 @@ class NavigationExtension extends \Twig_Extension
 
     /**
      * @param \Twig_Environment $twig
+     * @param int|null $tagId
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function navbarRender(\Twig_Environment $twig)
+    public function navbarRender(\Twig_Environment $twig, ?int $tagId)
     {
         /** @var TagRepository $tagsRepository */
         $tagsRepository = $this->entityManager->getRepository(Tag::class);
@@ -58,6 +60,7 @@ class NavigationExtension extends \Twig_Extension
         $phrase = $this->requestStack->getCurrentRequest()->get('q');
         return $twig->render('parts/navbar.html.twig', [
             'tags' => $tags,
+            'tagId' => $tagId,
             'phrase' => $phrase,
             'user' => $this->getUser(),
         ]);
