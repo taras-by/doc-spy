@@ -66,7 +66,7 @@ class ParserHandler
 
         /** @var Item $item */
         foreach ($parser->getItems() as $item) {
-            if (!$this->getItemRepository()->findBy(['link' => $item->getLink()])) {
+            if (!$this->getItemRepository()->findBy(['uid' => $item->getUid()])) {
                 $this->entityManager->getManager()->persist($item);
                 $persistedItems[] = $item;
                 ++$this->savedCount;

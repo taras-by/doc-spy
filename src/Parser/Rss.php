@@ -30,6 +30,7 @@ class Rss extends AbstractParser implements ParserInterface
                 ->setTitle($feedItem->getTitle())
 //                    ->setDescription($feedItem->getDescription())
                 ->setlink($feedItem->getlink())
+                ->setUid($feedItem->getlink())
                 ->setPublishedAt($feedItem->getLastModified())
                 ->setSource($this->source);
             $this->items->add($item);

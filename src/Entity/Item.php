@@ -26,6 +26,13 @@ class Item
     /**
      * @var string
      *
+     * @ORM\Column(name="uid", type="string", length=255, nullable=true)
+     */
+    private $uid;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
@@ -104,6 +111,28 @@ class Item
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Set uid
+     *
+     * @return Item
+     */
+    public function setUid(string $uid): self
+    {
+        $this->uid = $uid;
+
+        return $this;
+    }
+
+    /**
+     * Get uid
+     *
+     * @return string
+     */
+    public function getUid(): string
+    {
+        return $this->uid;
     }
 
     /**
