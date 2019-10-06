@@ -16,25 +16,8 @@ class BaseReader
         $this->cacheService = $cacheService;
     }
 
-    /**
-     * @param int $pageNumber
-     * @return SimpleReader
-     */
-    public function setPageNumber(int $pageNumber): ReaderInterface
+    protected function getKeyByUrl(string $url)
     {
-        $this->cacheService->setPageNumber($pageNumber);
-
-        return $this;
-    }
-
-    /**
-     * @param int $sourceId
-     * @return SimpleReader
-     */
-    public function setSourceId(int $sourceId): ReaderInterface
-    {
-        $this->cacheService->setSourceId($sourceId);
-
-        return $this;
+        return urlencode($url);
     }
 }

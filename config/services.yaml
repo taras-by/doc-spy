@@ -45,7 +45,7 @@ services:
     reader_cache_service:
         class: App\Service\ReaderCacheService
         arguments:
-            - '%kernel.cache_dir%'
+            - '%kernel.cache_dir%/pages'
             - '%env(resolve:PARSER_CASH_IS_ENABLED)%'
 
     # Readers
@@ -60,6 +60,7 @@ services:
     simple_reader:
         class: App\Reader\SimpleReader
         arguments: ['@reader_cache_service']
+        public: true
 
     # Parsers
     rss_parser:
@@ -69,7 +70,6 @@ services:
 
     events_dev_by_parser:
         class: App\Parser\EventsDevBy
-        arguments: ['@simple_reader']
         public: true
 
     hh_ru_parser:

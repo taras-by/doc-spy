@@ -21,7 +21,9 @@ class FacebookReader  extends BaseReader implements ReaderInterface
 
     public function getContent(string $url): string
     {
-        if ($cachedContent = $this->cacheService->getContent() and $this->cacheService->isEnabled()) {
+        $key = $this->getKeyByUrl($url);
+
+        if ($cachedContent = $this->cacheService->getContent($key) and $this->cacheService->isEnabled()) {
             return $cachedContent;
         }
 
@@ -52,7 +54,7 @@ class FacebookReader  extends BaseReader implements ReaderInterface
         $context = stream_context_create($options);
         $content = file_get_contents($apiUrl, false, $context);
 
-        $this->cacheService->putContent($content);
+        $this->cacheService->putContent($key, $content);
         return $content;
     }
 }

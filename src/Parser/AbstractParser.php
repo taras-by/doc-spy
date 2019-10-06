@@ -2,6 +2,7 @@
 
 namespace App\Parser;
 
+use App\Reader\ReaderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Source;
 
@@ -14,6 +15,11 @@ abstract class AbstractParser implements ParserInterface
      * @var Source
      */
     protected $source;
+
+    /**
+     * @var ReaderInterface
+     */
+    protected $reader;
 
     /**
      * @var ArrayCollection
@@ -63,6 +69,18 @@ abstract class AbstractParser implements ParserInterface
         return $this->source;
     }
 
+    public function setReader(ReaderInterface $reader): ParserInterface
+    {
+        $this->reader = $reader;
+
+        return $this;
+    }
+
+    public function getReader(): ?ReaderInterface
+    {
+        return $this->reader;
+    }
+
     public function getItems(): ArrayCollection
     {
         return $this->items;
@@ -85,11 +103,11 @@ abstract class AbstractParser implements ParserInterface
 
     protected function getDomDocument(string $path): \DOMDocument
     {
-        $content = file_get_contents($path);
+        $content = $this->getReader()->getContent($path);
         return $this->getDomDocumentFromContent($content);
     }
 
-    protected function getDomDocumentFromContent(string $content): \DOMDocument
+    private function getDomDocumentFromContent(string $content): \DOMDocument
     {
         $document = new \DOMDocument();
 
