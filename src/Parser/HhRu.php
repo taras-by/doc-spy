@@ -26,6 +26,7 @@ class HhRu extends AbstractParser implements ParserInterface
             $item = (new Item())
                 ->setTitle($title)
                 ->setlink($link)
+                ->setUid($link)
                 ->setPublishedAt(new \DateTime())
                 ->setSource($this->source);
             $this->items->add($item);

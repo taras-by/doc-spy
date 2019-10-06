@@ -62,6 +62,7 @@ class FacebookCom extends AbstractParser implements ParserInterface
                 ->setTitle($title)
 //                    ->setDescription($description)
                 ->setlink($link)
+                ->setUid($link)
                 ->setPublishedAt(new \DateTime())
                 ->setStartDate($startDate)
                 ->setEndDate($endDate)
