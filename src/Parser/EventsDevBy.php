@@ -3,29 +3,18 @@
 namespace App\Parser;
 
 use App\Entity\Item;
-use App\Reader\ReaderInterface;
 
 class EventsDevBy extends AbstractParser implements ParserInterface
 {
     const NUMBER_PAGES = 3;
 
     /**
-     * @var ReaderInterface $reader
-     */
-    private $reader;
-
-    public function __construct(ReaderInterface $reader)
-    {
-        $this->reader = $reader;
-    }
-
-    /**
      * @throws \Exception
      */
     protected function parse(): void
     {
-        foreach ($this->getUrls() as $number => $url) {
-            $this->parsePage($url, $number);
+        foreach ($this->getUrls() as $url) {
+            $this->parsePage($url);
         }
     }
 
@@ -33,23 +22,18 @@ class EventsDevBy extends AbstractParser implements ParserInterface
     {
         $urls = [];
         for ($i = 1; $i <= self::NUMBER_PAGES; $i++) {
-            $urls[] = $this->source->getUrl() . "/?page=" . $i;
+            $urls[] = $this->source->getUrl() . "?page=" . $i;
         }
         return $urls;
     }
 
     /**
      * @param string $url
-     * @param int $number
      * @throws \Exception
      */
-    private function parsePage(string $url, int $number): void
+    private function parsePage(string $url): void
     {
-        $content = $this->reader
-            ->setSourceId($this->source->getId())
-            ->setPageNumber($number)
-            ->getContent($url);
-        $document = $this->getDomDocumentFromContent($content);
+        $document = $this->getDomDocument($url);
 
         $finder = new \DomXPath($document);
         $itemNodes = $finder->query("//*[contains(@class, 'list-item-events')]/div[@class='item']");

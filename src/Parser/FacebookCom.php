@@ -9,11 +9,6 @@ class FacebookCom extends AbstractParser implements ParserInterface
 {
     const DATE_FORMAT = '%s %s %s:%s, -3 hours';
 
-    /**
-     * @var ReaderInterface $reader
-     */
-    private $reader;
-
     public function __construct(ReaderInterface $reader)
     {
         $this->reader = $reader;
@@ -24,10 +19,7 @@ class FacebookCom extends AbstractParser implements ParserInterface
      */
     protected function parse(): void
     {
-        $content = $this->reader
-            ->setSourceId($this->source->getId())
-            ->getContent($this->source->getUrl());
-        $document = $this->getDomDocumentFromContent($content);
+        $document = $this->getDomDocument($this->source->getUrl());
 
         $finder = new \DomXPath($document);
         $itemNodes = $finder->query("//div[contains(@class, '_5lqg _4-u2  _4-u8')]");

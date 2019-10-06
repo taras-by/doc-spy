@@ -3,6 +3,7 @@
 namespace App\Parser;
 
 use App\Entity\Source;
+use App\Reader\ReaderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 interface ParserInterface
@@ -12,6 +13,10 @@ interface ParserInterface
     public function setSource(Source $source): ParserInterface;
 
     public function getSource(): Source;
+
+    public function setReader(ReaderInterface $reader): ParserInterface;
+
+    public function getReader(): ?ReaderInterface;
 
     public function getItems(): ArrayCollection;
 
