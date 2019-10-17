@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export DOCKER_IP=$(ip -4 addr show docker0 | grep -Po 'inet \K[\d.]+')
+echo "$DOCKER_IP"
 docker-compose up -d
 
 echo "Run application: http://localhost:834"

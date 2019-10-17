@@ -7,6 +7,10 @@ services:
     build: docker/php
     volumes:
       - .:/var/www
+    ports:
+      - 9000
+    environment:
+      - DOCKER_IP=${DOCKER_IP}
 
   nginx:
     container_name: ds.nginx

@@ -62,8 +62,6 @@ class ParserHandler
         $source = $parser->getSource();
         $persistedItems = [];
 
-        $parser->run();
-
         /** @var Item $item */
         foreach ($parser->getItems() as $item) {
             if (!$this->getItemRepository()->findBy(['uid' => $item->getUid()])) {
