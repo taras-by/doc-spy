@@ -18,6 +18,6 @@ class BaseReader
 
     protected function getKeyByUrl(string $url)
     {
-        return urlencode($url);
+        return sprintf('%s-%s', parse_url($url, PHP_URL_HOST), md5($url));
     }
 }
