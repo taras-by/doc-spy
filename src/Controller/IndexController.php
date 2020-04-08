@@ -17,7 +17,7 @@ class IndexController extends AbstractController
      */
     public function indexAction($page = 1)
     {
-        $items = $this->getItemRepository()->findAllPaginated($page, Item::LIMIT);
+        $items = $this->getItemRepository()->findMainPaginated($page, Item::LIMIT);
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 

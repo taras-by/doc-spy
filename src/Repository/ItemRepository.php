@@ -35,13 +35,13 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
             ->getResult();
     }
 
-    public function findAllPaginated(int $page, int $limit): Paginator
+    public function findMainPaginated(int $page, int $limit): Paginator
     {
         $query = $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->where('s.visibility = :visibility')
-            ->setParameter('visibility', Source::VISIBILITY_PUBLIC)
+            ->setParameter('visibility', Source::VISIBILITY_MAIN)
             ->orderBy('i.publishedAt', 'DESC')
             ->getQuery();
 
@@ -138,7 +138,7 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
     {
         $exprForPrivate = null;
         $exprForProtected = null;
-        $exprForPublic = $qb->expr()->eq('s.visibility', ':public');
+        $exprForPublic = $qb->expr()->in('s.visibility', ':public');
 
         if ($user) {
             $exprForPrivate = $qb->expr()->andX(
@@ -152,6 +152,9 @@ class ItemRepository extends \Doctrine\ORM\EntityRepository
         }
 
         $qb->andWhere($qb->expr()->orX($exprForPublic, $exprForProtected, $exprForPrivate))
-            ->setParameter('public', Source::VISIBILITY_PUBLIC);
+            ->setParameter('public', [
+                Source::VISIBILITY_MAIN,
+                Source::VISIBILITY_PUBLIC,
+            ]);
     }
 }
