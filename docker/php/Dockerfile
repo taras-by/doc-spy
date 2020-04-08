@@ -11,7 +11,6 @@ RUN apt-get update \
 		wget \
 		curl \
 		git \
-		mysql-client \
 		moreutils \
 		dnsutils \
 		zlib1g-dev \

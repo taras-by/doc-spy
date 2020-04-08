@@ -17,6 +17,7 @@ class Source
 {
     use CreatorTrait;
 
+    const VISIBILITY_MAIN = 'main';
     const VISIBILITY_PUBLIC = 'public';
     const VISIBILITY_PROTECTED = 'protected';
     const VISIBILITY_PRIVATE = 'private';
