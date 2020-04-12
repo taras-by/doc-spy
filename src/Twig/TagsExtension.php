@@ -4,22 +4,19 @@ namespace App\Twig;
 
 use App\Entity\Tag;
 use App\Repository\TagRepository;
+use App\Traits\EntityManagerTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class TagsExtension extends \Twig_Extension
 {
+    use EntityManagerTrait;
+
     /**
      * @var ContainerInterface
      */
     private $container;
-
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
 
     /**
      * @var RequestStack

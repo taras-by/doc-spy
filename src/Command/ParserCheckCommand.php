@@ -38,6 +38,6 @@ class ParserCheckCommand extends AbstractParserCheckCommand
 
     private function getSourceRepository(): SourceRepository
     {
-        return $this->entityManager->getRepository(Source::class);
+        return $this->getEntityManager()->getRepository(Source::class);
     }
 }

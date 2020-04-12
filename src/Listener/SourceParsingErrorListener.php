@@ -6,10 +6,13 @@ use App\Entity\User;
 use App\Event\SourceParsingErrorEvent;
 use App\Repository\UserRepository;
 use App\Service\NotificationService;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SourceParsingErrorListener
 {
+    use EntityManagerTrait;
+
     private const NOTIFY_COUNTS = [5, 10];
 
     /**
@@ -17,12 +20,7 @@ class SourceParsingErrorListener
      */
     private $notificationService;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    public function __construct(NotificationService $notificationService, RegistryInterface $entityManager)
+    public function __construct(NotificationService $notificationService, EntityManagerInterface $entityManager)
     {
         $this->notificationService = $notificationService;
         $this->entityManager = $entityManager;

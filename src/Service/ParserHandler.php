@@ -7,15 +7,13 @@ use App\Event\SourceItemsAddedEvent;
 use App\Event\SourceParsingErrorEvent;
 use App\Repository\ItemRepository;
 use App\Parser\ParserInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ParserHandler
 {
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
+    use EntityManagerTrait;
 
     /**
      * @var EventDispatcherInterface
@@ -41,11 +39,11 @@ class ParserHandler
 
     /**
      * ParserHandler constructor.
-     * @param RegistryInterface $entityManager
+     * @param EntityManagerInterface $entityManager
      * @param EventDispatcherInterface $dispatcher
      * @throws \Exception
      */
-    public function __construct(RegistryInterface $entityManager, EventDispatcherInterface $dispatcher)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $dispatcher)
     {
         $this->entityManager = $entityManager;
         $this->dispatcher = $dispatcher;
@@ -65,7 +63,7 @@ class ParserHandler
         /** @var Item $item */
         foreach ($parser->getItems() as $item) {
             if (!$this->getItemRepository()->findBy(['uid' => $item->getUid()])) {
-                $this->entityManager->getManager()->persist($item);
+                $this->getEntityManager()->persist($item);
                 $persistedItems[] = $item;
                 ++$this->savedCount;
             }
@@ -89,7 +87,7 @@ class ParserHandler
         $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());
         $source->setScheduleAt($nextUpdateTime);
 
-        $this->entityManager->getManager()->flush();
+        $this->getEntityManager()->flush();
         $this->allCount = $parser->getCount();
     }
 

@@ -4,7 +4,8 @@ namespace App\Command;
 
 use App\Entity\Item;
 use App\Repository\ItemRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,16 +13,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ClearCommand extends Command
 {
+    use EntityManagerTrait;
+
     const DAYS_TO_LIVE = 90;
 
     protected static $defaultName = 'clean';
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    public function __construct(RegistryInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         parent::__construct();

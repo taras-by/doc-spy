@@ -3,11 +3,14 @@
 namespace App\Service;
 
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService
 {
+    use EntityManagerTrait;
+
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -18,16 +21,11 @@ class UserService
      */
     private $notificationService;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
 
     public function __construct(
         UserPasswordEncoderInterface $passwordEncoder,
         NotificationService $notificationService,
-        RegistryInterface $entityManager
+        EntityManagerInterface $entityManager
     )
     {
         $this->passwordEncoder = $passwordEncoder;
@@ -37,8 +35,6 @@ class UserService
 
     /**
      * @param User $user
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      */
     public function resetPassword(User $user)
@@ -46,7 +42,7 @@ class UserService
         $password = $this->generatePassword();
         $encoded = $this->passwordEncoder->encodePassword($user, $password);
         $user->setPassword($encoded);
-        $em = $this->entityManager->getEntityManager();
+        $em = $this->getEntityManager();
         $em->persist($user);
         $em->flush();
 

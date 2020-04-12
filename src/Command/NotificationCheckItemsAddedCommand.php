@@ -5,7 +5,8 @@ namespace App\Command;
 use App\Entity\Item;
 use App\Entity\Source;
 use App\Event\SourceItemsAddedEvent;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,17 +14,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class NotificationCheckItemsAddedCommand extends Command
 {
+    use EntityManagerTrait;
+
     /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    public function __construct(EventDispatcherInterface $dispatcher, RegistryInterface $entityManager)
+    public function __construct(EventDispatcherInterface $dispatcher, EntityManagerInterface $entityManager)
     {
         $this->dispatcher = $dispatcher;
         $this->entityManager = $entityManager;

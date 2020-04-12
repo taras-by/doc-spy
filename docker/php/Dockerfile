@@ -2,6 +2,7 @@ FROM php:7.2-fpm
 
 WORKDIR /var/www
 ENV COMPOSER_HOME /var/www/docker/php/.composer
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 RUN apt-get update \
 	&& apt-get install -y \

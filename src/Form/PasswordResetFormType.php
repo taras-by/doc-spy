@@ -3,7 +3,8 @@
 namespace App\Form;
 
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -14,17 +15,14 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class PasswordResetFormType extends AbstractType
 {
+    use EntityManagerTrait;
+
     /**
      * @var ContainerInterface
      */
     private $container;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    public function __construct(ContainerInterface $container, RegistryInterface $entityManager)
+    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager)
     {
         $this->container = $container;
         $this->entityManager = $entityManager;

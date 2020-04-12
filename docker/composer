@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
 ./docker/app composer $*
+#./docker/app env COMPOSER_MEMORY_LIMIT=-1 composer $*

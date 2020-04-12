@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityRepository;
 
 class TagRepository extends EntityRepository
 {
-
     public function findFavorites(): array
     {
         return $this->createQueryBuilder('t')

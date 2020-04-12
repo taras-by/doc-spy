@@ -10,7 +10,6 @@ namespace App\Repository;
  */
 class SourceRepository extends \Doctrine\ORM\EntityRepository
 {
-
     /**
      * @var int|null $results
      * @return array
