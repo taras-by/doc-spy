@@ -6,7 +6,8 @@ use App\Entity\Source;
 use App\Repository\SourceRepository;
 use App\Service\ParserHandler;
 use App\Service\ParserManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ParserRunCommand extends Command
 {
+    use EntityManagerTrait;
+
     /**
      * @var ParserManager
      */
@@ -23,11 +26,6 @@ class ParserRunCommand extends Command
      * @var ParserHandler
      */
     private $parserHandler;
-
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
 
     /**
      * Current time with rounding to minutes
@@ -40,10 +38,10 @@ class ParserRunCommand extends Command
      * ParserRunCommand constructor.
      * @param ParserManager $parserManager
      * @param ParserHandler $parserHandler
-     * @param RegistryInterface $entityManager
+     * @param EntityManagerInterface $entityManager
      * @throws \Exception
      */
-    public function __construct(ParserManager $parserManager, ParserHandler $parserHandler, RegistryInterface $entityManager)
+    public function __construct(ParserManager $parserManager, ParserHandler $parserHandler, EntityManagerInterface $entityManager)
     {
         $this->parserManager = $parserManager;
         $this->parserHandler = $parserHandler;

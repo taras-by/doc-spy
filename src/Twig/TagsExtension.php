@@ -2,41 +2,28 @@
 
 namespace App\Twig;
 
-use App\Entity\Tag;
 use App\Repository\TagRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class TagsExtension extends \Twig_Extension
+class TagsExtension extends AbstractExtension
 {
     /**
-     * @var ContainerInterface
+     * @var TagRepository
      */
-    private $container;
+    private $tagRepository;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, RequestStack $requestStack)
+    public function __construct(TagRepository $tagRepository)
     {
-        $this->container = $container;
-        $this->entityManager = $entityManager;
-        $this->requestStack = $requestStack;
+        $this->tagRepository = $tagRepository;
     }
 
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('tags_render', [$this, 'tagsRender'], [
+            new TwigFunction('tags_render', [$this, 'tagsRender'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ])
@@ -44,18 +31,14 @@ class TagsExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param int $currentTagId
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Error
      */
-    public function tagsRender(\Twig_Environment $twig, int $currentTagId = null)
+    public function tagsRender(Environment $twig, int $currentTagId = null)
     {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->entityManager->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
+        $tags = $this->tagRepository->findFavorites();
 
         return $twig->render('parts/tags.html.twig', [
             'tags' => $tags,

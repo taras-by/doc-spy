@@ -5,23 +5,21 @@ namespace App\Command;
 use App\Entity\Item;
 use App\Service\ParserManager;
 use App\Parser\ParserInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 abstract class AbstractParserCheckCommand extends Command
 {
+    use EntityManagerTrait;
+
     /**
      * @var \App\Service\ParserManager
      */
     protected $parserManager;
 
-    /**
-     * @var RegistryInterface
-     */
-    protected $entityManager;
-
-    public function __construct(ParserManager $parserManager, RegistryInterface $entityManager)
+    public function __construct(ParserManager $parserManager, EntityManagerInterface $entityManager)
     {
         $this->parserManager = $parserManager;
         $this->entityManager = $entityManager;

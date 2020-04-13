@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\LoginFormType;
 use App\Form\PasswordResetFormType;
+use App\Repository\UserRepository;
 use App\Service\UserService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -16,7 +19,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login")
      * @param AuthenticationUtils $authenticationUtils
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
@@ -36,10 +39,11 @@ class SecurityController extends AbstractController
      * @Route("/reset-password", name="reset_password")
      * @param Request $request
      * @param UserService $userService
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
+     * @param UserRepository $userRepository
+     * @return Response
+     * @throws Exception
      */
-    public function resetPassword(Request $request, UserService $userService)
+    public function resetPassword(Request $request, UserService $userService, UserRepository $userRepository)
     {
         $form = $this->createForm(PasswordResetFormType::class);
         $form->handleRequest($request);
@@ -47,7 +51,8 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $email = $form->getData()->getEmail();
-            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
+            /** @var User $user */
+            $user = $userRepository->findOneBy(['email' => $email]);
 
             $userService->resetPassword($user);
             $this->addFlash('success', 'Password sent to email!');
@@ -65,10 +70,10 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/logout", name="logout")
-     * @throws \Exception
+     * @throws Exception
      */
     public function logout()
     {
-        throw new \Exception('will be intercepted before getting here.');
+        throw new Exception('will be intercepted before getting here.');
     }
 }

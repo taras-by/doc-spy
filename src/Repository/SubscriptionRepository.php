@@ -3,20 +3,29 @@
 namespace App\Repository;
 
 use App\Entity\Subscription;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @method Subscription|null find($id, $lockMode = null, $lockVersion = null)
- * @method Subscription|null findOneBy(array $criteria, array $orderBy = null)
- * @method Subscription[]    findAll()
- * @method Subscription[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class SubscriptionRepository extends ServiceEntityRepository
+class SubscriptionRepository  extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Subscription::class);
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('s.id', 'desc')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

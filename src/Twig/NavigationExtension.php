@@ -2,14 +2,15 @@
 
 namespace App\Twig;
 
-use App\Entity\Tag;
 use App\Repository\TagRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class NavigationExtension extends \Twig_Extension
+class NavigationExtension extends AbstractExtension
 {
     /**
      * @var ContainerInterface
@@ -17,26 +18,26 @@ class NavigationExtension extends \Twig_Extension
     private $container;
 
     /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    /**
      * @var RequestStack
      */
     private $requestStack;
 
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, RequestStack $requestStack)
+    /**
+     * @var TagRepository
+     */
+    private $tagRepository;
+
+    public function __construct(ContainerInterface $container, TagRepository $tagRepository, RequestStack $requestStack)
     {
         $this->container = $container;
-        $this->entityManager = $entityManager;
+        $this->tagRepository = $tagRepository;
         $this->requestStack = $requestStack;
     }
 
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('navbar_render', [$this, 'navbarRender'], [
+            new TwigFunction('navbar_render', [$this, 'navbarRender'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ])
@@ -44,18 +45,14 @@ class NavigationExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param int|null $tagId
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Error
      */
-    public function navbarRender(\Twig_Environment $twig, ?int $tagId)
+    public function navbarRender(Environment $twig, ?int $tagId)
     {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->entityManager->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
+        $tags = $this->tagRepository->findFavorites();
 
         $phrase = $this->requestStack->getCurrentRequest()->get('q');
         return $twig->render('parts/navbar.html.twig', [
@@ -69,12 +66,12 @@ class NavigationExtension extends \Twig_Extension
     private function getUser()
     {
         if (null === $token = $this->container->get('security.token_storage')->getToken()) {
-            return;
+            return null;
         }
 
         if (!\is_object($user = $token->getUser())) {
             // e.g. anonymous authentication
-            return;
+            return null;
         }
 
         return $user;

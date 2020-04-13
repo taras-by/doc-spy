@@ -15,7 +15,7 @@ yarn-error.log
 
 ###> symfony/phpunit-bridge ###
 .phpunit
-/phpunit.xml
+#/phpunit.xml
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/web-server-bundle ###

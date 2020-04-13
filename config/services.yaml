@@ -28,6 +28,11 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    # Voters
+    App\Security\SourceVoter:
+        tags: ['security.voter']
+
+    # Listeners
     App\Listener\SourceItemsAddedListener:
         tags:
         - { name: kernel.event_listener, event: source.items.added }
@@ -36,6 +41,7 @@ services:
         tags:
         - { name: kernel.event_listener, event: source.parsing_error }
 
+    # Services
     App\Service\NotificationService:
         arguments:
             - '@swiftmailer.mailer.default'

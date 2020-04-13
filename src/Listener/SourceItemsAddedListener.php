@@ -8,21 +8,19 @@ use App\Event\SourceItemsAddedEvent;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use App\Service\NotificationService;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Traits\EntityManagerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SourceItemsAddedListener
 {
+    use EntityManagerTrait;
+
     /**
      * @var NotificationService
      */
     private $notificationService;
 
-    /**
-     * @var RegistryInterface
-     */
-    private $entityManager;
-
-    public function __construct(NotificationService $notificationService, RegistryInterface $entityManager)
+    public function __construct(NotificationService $notificationService, EntityManagerInterface $entityManager)
     {
         $this->notificationService = $notificationService;
         $this->entityManager = $entityManager;

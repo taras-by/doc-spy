@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Repository\ItemRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -10,13 +12,13 @@ class EventController extends AbstractController
 {
     /**
      * @Route("/events/{page}", name="event_index", requirements={"page"="\d+"})
+     * @param ItemRepository $itemRepository
      * @param int $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function indexAction($page = 1)
+    public function indexAction(ItemRepository $itemRepository, $page = 1)
     {
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findEventsPaginated($page, Item::LIMIT, $this->getUser());
+        $items = $itemRepository->findEventsPaginated($page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 

@@ -447,4 +447,23 @@ class Source
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isVisibleToEveryone()
+    {
+        return in_array($this->getVisibility(), [
+            self::VISIBILITY_MAIN,
+            self::VISIBILITY_PUBLIC,
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->getVisibility() == self::VISIBILITY_PRIVATE;
+    }
 }

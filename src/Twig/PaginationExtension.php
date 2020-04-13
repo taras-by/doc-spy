@@ -2,14 +2,19 @@
 
 namespace App\Twig;
 
-class PaginationExtension extends \Twig_Extension
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
+class PaginationExtension extends AbstractExtension
 {
     const MORE_PAGES = 2;
 
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('pagination_render', [$this, 'render'], [
+            new TwigFunction('pagination_render', [$this, 'render'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ])
@@ -17,17 +22,15 @@ class PaginationExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $environment
+     * @param Environment $environment
      * @param int $maxPages
      * @param int $thisPage
      * @param string $route
      * @param array $query
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Error
      */
-    public function render(\Twig_Environment $environment, int $maxPages, int $thisPage, string $route, array $query = [])
+    public function render(Environment $environment, int $maxPages, int $thisPage, string $route, array $query = [])
     {
         if ($thisPage > self::MORE_PAGES) {
             $start = $thisPage - self::MORE_PAGES;
