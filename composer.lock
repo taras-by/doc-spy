@@ -68,17 +68,17 @@
         },
         {
             "name": "debril/rss-atom-bundle",
-            "version": "v4.2.1",
+            "version": "v4.3.0",
             "target-dir": "Debril/RssAtomBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexdebril/rss-atom-bundle.git",
-                "reference": "87b93273eb7e995547060ac17d9a1b21061013e3"
+                "reference": "5c0ef9b1f6a9ca058904c2adadb94cd306df9278"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexdebril/rss-atom-bundle/zipball/87b93273eb7e995547060ac17d9a1b21061013e3",
-                "reference": "87b93273eb7e995547060ac17d9a1b21061013e3",
+                "url": "https://api.github.com/repos/alexdebril/rss-atom-bundle/zipball/5c0ef9b1f6a9ca058904c2adadb94cd306df9278",
+                "reference": "5c0ef9b1f6a9ca058904c2adadb94cd306df9278",
                 "shasum": ""
             },
             "require": {
@@ -86,7 +86,6 @@
                 "php": ">=7.1",
                 "symfony/config": "~3.4|~4.0",
                 "symfony/dependency-injection": "~3.4|~4.0",
-                "symfony/framework-bundle": "~3.4|~4.0",
                 "symfony/http-foundation": "~3.4|~4.0",
                 "symfony/http-kernel": "~3.4|~4.0"
             },
@@ -121,7 +120,7 @@
                 "jsonfeed",
                 "rss"
             ],
-            "time": "2018-10-05T15:03:31+00:00"
+            "time": "2019-08-09T13:22:15+00:00"
         },
         {
             "name": "doctrine/annotations",
