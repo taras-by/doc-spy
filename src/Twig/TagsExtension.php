@@ -2,14 +2,13 @@
 
 namespace App\Twig;
 
-use App\Entity\Tag;
 use App\Repository\TagRepository;
-use App\Traits\EntityManagerTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class TagsExtension extends \Twig_Extension
+class TagsExtension extends AbstractExtension
 {
     /**
      * @var TagRepository
@@ -24,7 +23,7 @@ class TagsExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('tags_render', [$this, 'tagsRender'], [
+            new TwigFunction('tags_render', [$this, 'tagsRender'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ])
@@ -32,14 +31,12 @@ class TagsExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param int $currentTagId
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Error
      */
-    public function tagsRender(\Twig_Environment $twig, int $currentTagId = null)
+    public function tagsRender(Environment $twig, int $currentTagId = null)
     {
         $tags = $this->tagRepository->findFavorites();
 

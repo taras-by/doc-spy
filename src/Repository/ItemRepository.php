@@ -6,9 +6,9 @@ use App\Entity\Item;
 use App\Entity\Source;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * ItemRepository
@@ -22,7 +22,7 @@ class ItemRepository extends ServiceEntityRepository
 
     const EVENT_LIFETIME = 2;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Item::class);
     }

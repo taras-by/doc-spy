@@ -2,14 +2,15 @@
 
 namespace App\Twig;
 
-use App\Entity\Tag;
 use App\Repository\TagRepository;
-use App\Traits\EntityManagerTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class NavigationExtension extends \Twig_Extension
+class NavigationExtension extends AbstractExtension
 {
     /**
      * @var ContainerInterface
@@ -36,7 +37,7 @@ class NavigationExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('navbar_render', [$this, 'navbarRender'], [
+            new TwigFunction('navbar_render', [$this, 'navbarRender'], [
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ])
@@ -44,14 +45,12 @@ class NavigationExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param int|null $tagId
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws Error
      */
-    public function navbarRender(\Twig_Environment $twig, ?int $tagId)
+    public function navbarRender(Environment $twig, ?int $tagId)
     {
         $tags = $this->tagRepository->findFavorites();
 
