@@ -3,23 +3,25 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Repository\ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
     /**
      * @Route("/search/{page}", name="search", requirements={"page"="\d+"})
+     * @param ItemRepository $itemRepository
      * @param Request $request
      * @param int $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function indexAction(Request $request, $page = 1)
+    public function indexAction(ItemRepository $itemRepository, Request $request, $page = 1)
     {
         $phrase = $request->get('q');
 
-        $itemRepository = $this->getDoctrine()->getRepository(Item::class);
         $items = $itemRepository->findPaginatedByPhrase($phrase, $page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);

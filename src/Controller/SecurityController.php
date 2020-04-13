@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\LoginFormType;
 use App\Form\PasswordResetFormType;
+use App\Repository\UserRepository;
 use App\Service\UserService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,10 +39,11 @@ class SecurityController extends AbstractController
      * @Route("/reset-password", name="reset_password")
      * @param Request $request
      * @param UserService $userService
+     * @param UserRepository $userRepository
      * @return Response
      * @throws Exception
      */
-    public function resetPassword(Request $request, UserService $userService)
+    public function resetPassword(Request $request, UserService $userService, UserRepository $userRepository)
     {
         $form = $this->createForm(PasswordResetFormType::class);
         $form->handleRequest($request);
@@ -49,7 +51,8 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $email = $form->getData()->getEmail();
-            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
+            /** @var User $user */
+            $user = $userRepository->findOneBy(['email' => $email]);
 
             $userService->resetPassword($user);
             $this->addFlash('success', 'Password sent to email!');

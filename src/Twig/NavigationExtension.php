@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class NavigationExtension extends \Twig_Extension
 {
-    use EntityManagerTrait;
-
     /**
      * @var ContainerInterface
      */
@@ -23,10 +21,15 @@ class NavigationExtension extends \Twig_Extension
      */
     private $requestStack;
 
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, RequestStack $requestStack)
+    /**
+     * @var TagRepository
+     */
+    private $tagRepository;
+
+    public function __construct(ContainerInterface $container, TagRepository $tagRepository, RequestStack $requestStack)
     {
         $this->container = $container;
-        $this->entityManager = $entityManager;
+        $this->tagRepository = $tagRepository;
         $this->requestStack = $requestStack;
     }
 
@@ -50,9 +53,7 @@ class NavigationExtension extends \Twig_Extension
      */
     public function navbarRender(\Twig_Environment $twig, ?int $tagId)
     {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->entityManager->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
+        $tags = $this->tagRepository->findFavorites();
 
         $phrase = $this->requestStack->getCurrentRequest()->get('q');
         return $twig->render('parts/navbar.html.twig', [
@@ -66,12 +67,12 @@ class NavigationExtension extends \Twig_Extension
     private function getUser()
     {
         if (null === $token = $this->container->get('security.token_storage')->getToken()) {
-            return;
+            return null;
         }
 
         if (!\is_object($user = $token->getUser())) {
             // e.g. anonymous authentication
-            return;
+            return null;
         }
 
         return $user;

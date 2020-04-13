@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\Source;
+use App\Repository\ItemRepository;
+use App\Repository\SourceRepository;
+use App\Security\SourceVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,21 +16,16 @@ class SourceController extends AbstractController
 {
     /**
      * @Route("/source/{id}/{page}", name="source_index", requirements={"page"="\d+"})
-     * @param $id
+     * @param ItemRepository $itemRepository
+     * @param Source $source
      * @param int $page
      * @return Response
      */
-    public function showAction($id, $page = 1)
+    public function showAction(ItemRepository $itemRepository, Source $source, $page = 1)
     {
-        $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
-        $source = $sourceRepository->find($id);
+        $this->denyAccessUnlessGranted(SourceVoter::VIEW, $source);
 
-        if ($source->isVisible($this->getUser()) == false) {
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        }
-
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findPaginatedBySourceId($id, $page, Item::LIMIT);
+        $items = $itemRepository->findPaginatedBySourceId($source->getId(), $page, Item::LIMIT);
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 
@@ -42,11 +40,11 @@ class SourceController extends AbstractController
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/sources", name="sources_list")
+     * @param SourceRepository $sourceRepository
      * @return Response
      */
-    public function listAction()
+    public function listAction(SourceRepository $sourceRepository)
     {
-        $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
         $sources = $sourceRepository->findAll();
 
         return $this->render('source/list.html.twig', [

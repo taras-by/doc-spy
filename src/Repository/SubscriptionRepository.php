@@ -2,10 +2,31 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use App\Entity\Subscription;
+use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class SubscriptionRepository extends EntityRepository
+class SubscriptionRepository  extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Subscription::class);
+    }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('s.id', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Subscription[] Returns an array of Subscription objects

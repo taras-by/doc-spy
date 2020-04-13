@@ -2,14 +2,13 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\ProjectTestCase;
 
-class TagControllerTest extends WebTestCase
+class TagControllerTest extends ProjectTestCase
 {
     public function testShowAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/tag/1');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/tag/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

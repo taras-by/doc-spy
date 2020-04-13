@@ -11,23 +11,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class TagsExtension extends \Twig_Extension
 {
-    use EntityManagerTrait;
-
     /**
-     * @var ContainerInterface
+     * @var TagRepository
      */
-    private $container;
+    private $tagRepository;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    public function __construct(ContainerInterface $container, EntityManagerInterface $entityManager, RequestStack $requestStack)
+    public function __construct(TagRepository $tagRepository)
     {
-        $this->container = $container;
-        $this->entityManager = $entityManager;
-        $this->requestStack = $requestStack;
+        $this->tagRepository = $tagRepository;
     }
 
     public function getFunctions()
@@ -50,9 +41,7 @@ class TagsExtension extends \Twig_Extension
      */
     public function tagsRender(\Twig_Environment $twig, int $currentTagId = null)
     {
-        /** @var TagRepository $tagsRepository */
-        $tagsRepository = $this->entityManager->getRepository(Tag::class);
-        $tags = $tagsRepository->findFavorites();
+        $tags = $this->tagRepository->findFavorites();
 
         return $twig->render('parts/tags.html.twig', [
             'tags' => $tags,

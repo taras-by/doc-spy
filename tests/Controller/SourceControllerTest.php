@@ -2,25 +2,44 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\ProjectTestCase;
 
-class SourceControllerTest extends WebTestCase
+class SourceControllerTest extends ProjectTestCase
 {
     public function testListAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/sources');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->logIn();
+        $this->client->request('GET', '/sources');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/sources');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testShowAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/source/1');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/5');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/12');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-        $client = static::createClient();
-        $client->request('GET', '/source/12');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->logIn();
+        $this->client->request('GET', '/source/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/5');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/12');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/source/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/5');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/12');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\ProjectTestCase;
 
-class EventControllerTest extends WebTestCase
+class EventControllerTest extends ProjectTestCase
 {
     public function testIndexAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/events');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/events');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

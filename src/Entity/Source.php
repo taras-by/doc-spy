@@ -449,22 +449,21 @@ class Source
     }
 
     /**
-     * @param User|null $user
      * @return bool
      */
-    public function isVisible(?User $user): bool
+    public function isVisibleToEveryone()
     {
-        if (in_array($this->getVisibility(), [self::VISIBILITY_MAIN, self::VISIBILITY_PUBLIC])) {
-            return true;
-        }
+        return in_array($this->getVisibility(), [
+            self::VISIBILITY_MAIN,
+            self::VISIBILITY_PUBLIC,
+        ]);
+    }
 
-        if (
-            $this->getVisibility() == self::VISIBILITY_PRIVATE &&
-            $this->getCreatedBy() && $user && $this->getCreatedBy()->getId() == $user->getId()
-        ) {
-            return true;
-        }
-
-        return false;
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->getVisibility() == self::VISIBILITY_PRIVATE;
     }
 }

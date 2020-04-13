@@ -2,21 +2,23 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\ProjectTestCase;
 
-class IndexControllerTest extends WebTestCase
+class IndexControllerTest extends ProjectTestCase
 {
     public function testIndexAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     public function testFeedAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/feed');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/feed');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('GET', '/feed');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

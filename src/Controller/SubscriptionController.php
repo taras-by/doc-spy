@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Subscription;
+use App\Repository\SubscriptionRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SubscriptionController extends AbstractController
 {
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted({"ROLE_ADMIN", "ROLE_USER"})
      * @Route("/subscriptions", name="subscriptions")
+     * @param SubscriptionRepository $subscriptionRepository
+     * @return Response
      */
-    public function index()
+    public function index(SubscriptionRepository $subscriptionRepository)
     {
-        $subscriptionRepository = $this->getDoctrine()->getRepository(Subscription::class);
-        $subscriptions = $subscriptionRepository->findAll();
+        $subscriptions = $subscriptionRepository->findByUser($this->getUser());
 
         return $this->render('subscription/index.html.twig', [
             'subscriptions' => $subscriptions,

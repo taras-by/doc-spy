@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\Tag;
+use App\Repository\ItemRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -11,17 +13,14 @@ class TagController extends AbstractController
 {
     /**
      * @Route("/tag/{id}/{page}", name="tag_index", requirements={"page"="\d+"})
-     * @param $id
+     * @param ItemRepository $itemRepository
+     * @param Tag $tag
      * @param int $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function showAction($id, $page = 1)
+    public function showAction(ItemRepository $itemRepository, Tag $tag, $page = 1)
     {
-        $itemsRepository = $this->getDoctrine()->getRepository(Item::class);
-        $items = $itemsRepository->findPaginatedByTagId($id, $page, Item::LIMIT, $this->getUser());
-
-        $tagRepository = $this->getDoctrine()->getRepository(Tag::class);
-        $tag = $tagRepository->find($id);
+        $items = $itemRepository->findPaginatedByTagId($tag->getId(), $page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);
 
