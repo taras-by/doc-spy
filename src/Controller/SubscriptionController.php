@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Subscription;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SubscriptionController extends AbstractController
 {
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/subscriptions", name="subscriptions")
      */
     public function index()

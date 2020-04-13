@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Entity\Source;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SourceController extends AbstractController
@@ -14,17 +15,14 @@ class SourceController extends AbstractController
      * @Route("/source/{id}/{page}", name="source_index", requirements={"page"="\d+"})
      * @param $id
      * @param int $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showAction($id, $page = 1)
     {
         $sourceRepository = $this->getDoctrine()->getRepository(Source::class);
         $source = $sourceRepository->find($id);
 
-        if (
-            (!$this->getUser() && $source->getVisibility() != Source::VISIBILITY_PUBLIC) ||
-            ($this->getUser() && $source->getVisibility() == Source::VISIBILITY_PRIVATE && $source->getCreatedBy() != $this->getUser())
-        ) {
+        if ($source->isVisible($this->getUser()) == false) {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         }
 
@@ -44,7 +42,7 @@ class SourceController extends AbstractController
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/sources", name="sources_list")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction()
     {

@@ -447,4 +447,24 @@ class Source
 
         return $this;
     }
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
+    public function isVisible(?User $user): bool
+    {
+        if (in_array($this->getVisibility(), [self::VISIBILITY_MAIN, self::VISIBILITY_PUBLIC])) {
+            return true;
+        }
+
+        if (
+            $this->getVisibility() == self::VISIBILITY_PRIVATE &&
+            $this->getCreatedBy() && $user && $this->getCreatedBy()->getId() == $user->getId()
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
