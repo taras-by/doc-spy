@@ -2,22 +2,22 @@
 
 namespace App\Command;
 
-use App\Entity\Item;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ItemRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ReadCommand extends Command
 {
     /**
-     * @var EntityManagerInterface
+     * @var ItemRepository
      */
-    private $entityManager;
+    private $itemRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ItemRepository $itemRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->itemRepository = $itemRepository;
         parent::__construct();
     }
 
@@ -25,15 +25,16 @@ class ReadCommand extends Command
     {
         $this
             ->setName('read')
-            ->setDescription('Read last items');
+            ->setDescription('Read last items')
+            ->addOption('results', 'r', InputOption::VALUE_OPTIONAL, 'Number of items displayed', 20);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $items = $this->entityManager->getRepository(Item::class)->findLast();
+        $results = $input->getOption('results');
+        $items = $this->itemRepository->findLast($results);
 
         foreach ($items as $item) {
-            /** @var Item $item */
             $output->writeln("\n" . $item->getPublishedAt()->format('d.m.Y'));
             $output->writeln($item->getTitle());
             $output->writeln('<info>' . trim(strip_tags($item->getDescription())) . '</info>');

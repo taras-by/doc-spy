@@ -2,28 +2,33 @@
 
 namespace App\Command;
 
-use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Service\NotificationService;
-use App\Traits\EntityManagerTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class NotificationCheckCommand extends Command
 {
-    use EntityManagerTrait;
-
     /**
      * @var NotificationService
      */
     private $notificationService;
 
-    public function __construct(NotificationService $notificationService, EntityManagerInterface $entityManager)
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * NotificationCheckCommand constructor.
+     * @param NotificationService $notificationService
+     * @param UserRepository $userRepository
+     */
+    public function __construct(NotificationService $notificationService, UserRepository $userRepository)
     {
         $this->notificationService = $notificationService;
-        $this->entityManager = $entityManager;
-
+        $this->userRepository = $userRepository;
         parent::__construct();
     }
 
@@ -36,7 +41,7 @@ class NotificationCheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $users = $this->entityManager->getRepository(User::class)->findAdmins();
+        $users = $this->userRepository->findAdmins();
         foreach ($users as $user) {
             $this->notificationService->send($user, 'Check Notification Service', 'mail/check.html.twig', ['date' => new \DateTime]);
             $output->writeln(sprintf('Message sent to %s<%s>', $user->getName(), $user->getEmail()));

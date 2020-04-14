@@ -28,16 +28,16 @@ class ItemRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $results
      * @return Item[]
      */
-    public function findLast(): array
+    public function findLast($results): array
     {
         return $this->createQueryBuilder('i')
-            //->select(['i.title', 'i.link'])
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->orderBy('i.publishedAt', 'DESC')
-            ->setMaxResults(60)
+            ->setMaxResults($results)
             ->getQuery()
             ->getResult();
     }

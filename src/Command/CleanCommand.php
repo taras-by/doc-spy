@@ -11,23 +11,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ClearCommand extends Command
+class CleanCommand extends Command
 {
-    use EntityManagerTrait;
-
     const DAYS_TO_LIVE = 90;
-
+    
     protected static $defaultName = 'clean';
+    protected static $description = 'Command to clean the database';
 
-    public function __construct(EntityManagerInterface $entityManager)
+    /**
+     * @var ItemRepository
+     */
+    private $itemRepository;
+
+    public function __construct(ItemRepository $itemRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->itemRepository = $itemRepository;
         parent::__construct();
-    }
-
-    protected function configure()
-    {
-        $this->setDescription('Command to clean the database');
     }
 
     /**
@@ -38,13 +37,8 @@ class ClearCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $result = $this->getItemRepository()
+        $result = $this->itemRepository
             ->deleteOlderThenDate(new \DateTime(sprintf('now -%s days', self::DAYS_TO_LIVE)));
         $io->success(sprintf('%s old Items were deleted', $result));
-    }
-
-    private function getItemRepository(): ItemRepository
-    {
-        return $this->entityManager->getRepository(Item::class);
     }
 }
