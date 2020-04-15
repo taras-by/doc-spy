@@ -141,7 +141,7 @@
         "version": "v6.0.2"
     },
     "symfony/asset": {
-        "version": "v4.0.9"
+        "version": "v5.0.7"
     },
     "symfony/browser-kit": {
         "version": "v4.4.7"
@@ -331,6 +331,15 @@
             "version": "3.3",
             "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
         }
+    },
+    "symfony/security-core": {
+        "version": "v5.0.7"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.0.7"
+    },
+    "symfony/security-guard": {
+        "version": "v5.0.7"
     },
     "symfony/security-http": {
         "version": "v4.2.1"
