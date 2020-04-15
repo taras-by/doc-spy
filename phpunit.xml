@@ -13,6 +13,8 @@
         <env name="APP_SECRET" value="48d748ae82cfdef8f2204002bbbe7905"/>
         <env name="DATABASE_URL" value="mysql://root:root@db:3306/symfony"/>
         <env name="MAIL_FROM" value="send@mail.com"/>
+        <env name="PARSER_CASH_IS_ENABLED" value="true"/>
+        <env name="_SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
     </php>
 
     <testsuites>

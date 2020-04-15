@@ -4,7 +4,7 @@ namespace App\Event;
 
 use App\Entity\Item;
 use App\Entity\Source;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class SourceItemsAddedEvent extends Event
 {

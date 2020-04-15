@@ -16,12 +16,12 @@ class ParserCheckCommand extends AbstractParserCheckCommand
         $this
             ->setName('parser:check')
             ->setDescription('Check parser for source')
-            ->addArgument('source_id', InputArgument::REQUIRED, 'Id of Source');
+            ->addArgument('id', InputArgument::REQUIRED, 'Id of Source');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sourceId = $input->getArgument('source_id');
+        $sourceId = $input->getArgument('id');
 
         /** @var Source $source */
         $source = $this->getSourceRepository()->find($sourceId);
@@ -34,6 +34,8 @@ class ParserCheckCommand extends AbstractParserCheckCommand
             $this->writeItem($item, $output);
         }
         $this->writeSummary($parser, $output);
+
+        return 0;
     }
 
     private function getSourceRepository(): SourceRepository

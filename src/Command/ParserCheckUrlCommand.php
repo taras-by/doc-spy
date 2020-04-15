@@ -17,15 +17,9 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
         $this
             ->setName('parser:check:url')
             ->setDescription('Check parser for url')
-            ->addArgument('parserService', InputArgument::REQUIRED, 'Parser service')
+            ->addArgument('parser_service', InputArgument::REQUIRED, 'Parser service')
             ->addArgument('url', InputArgument::REQUIRED, 'Url')
-            ->addOption(
-                'create',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Should I yell while greeting?',
-                false
-            );
+            ->addOption('create', null, InputOption::VALUE_OPTIONAL, 'Should I yell while greeting?', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -33,7 +27,7 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
         $create = ($input->getOption('create') !== false);
 
         $url = $input->getArgument('url');
-        $parserService = $input->getArgument('parserService');
+        $parserService = $input->getArgument('parser_service');
 
         $source = $this->createNewSource($parserService, $url);
         $parser = $this->parserManager->getParser($source);
@@ -51,6 +45,8 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
             $this->getEntityManager()->flush();
             $output->writeln(sprintf('The resource with id = %s was successfully created!', $source->getId()));
         }
+
+        return 0;
     }
 
     protected function createNewSource(string $parserService, string $url): Source

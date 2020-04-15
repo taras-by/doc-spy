@@ -9,7 +9,7 @@ use App\Repository\ItemRepository;
 use App\Parser\ParserInterface;
 use App\Traits\EntityManagerTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ParserHandler
 {
@@ -72,7 +72,7 @@ class ParserHandler
         if ($parser->hasErrors()) {
             $source->upErrorCount();
             $event = (new SourceParsingErrorEvent($source))->setMessage($parser->getErrorMessage());
-            $this->dispatcher->dispatch(SourceParsingErrorEvent::NAME, $event);
+            $this->dispatcher->dispatch($event, SourceParsingErrorEvent::NAME);
         } else {
             $source->setErrorCount(0);
             $source->setUpdatedAt(new \DateTime());
@@ -81,7 +81,7 @@ class ParserHandler
         if (count($persistedItems) && !$parser->hasErrors()) {
             $event = (new SourceItemsAddedEvent($source))
                 ->setItems($persistedItems);
-            $this->dispatcher->dispatch(SourceItemsAddedEvent::NAME, $event);
+            $this->dispatcher->dispatch($event, SourceItemsAddedEvent::NAME);
         }
 
         $nextUpdateTime = $this->getNextUpdateTime($source->getUpdateInterval(), $source->getErrorCount());

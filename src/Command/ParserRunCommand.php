@@ -6,17 +6,15 @@ use App\Entity\Source;
 use App\Repository\SourceRepository;
 use App\Service\ParserHandler;
 use App\Service\ParserManager;
-use App\Traits\EntityManagerTrait;
-use Doctrine\ORM\EntityManagerInterface;
+use DateTime;
+use Exception;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ParserRunCommand extends Command
 {
-    use EntityManagerTrait;
-
     /**
      * @var ParserManager
      */
@@ -30,24 +28,31 @@ class ParserRunCommand extends Command
     /**
      * Current time with rounding to minutes
      *
-     * @var \DateTime
+     * @var DateTime
      */
     private $now;
 
     /**
-     * ParserRunCommand constructor.
+     * @var SourceRepository
+     */
+    private $sourceRepository;
+
+    /**
      * @param ParserManager $parserManager
      * @param ParserHandler $parserHandler
-     * @param EntityManagerInterface $entityManager
-     * @throws \Exception
+     * @param SourceRepository $sourceRepository
+     * @throws Exception
      */
-    public function __construct(ParserManager $parserManager, ParserHandler $parserHandler, EntityManagerInterface $entityManager)
+    public function __construct(
+        ParserManager $parserManager,
+        ParserHandler $parserHandler,
+        SourceRepository $sourceRepository
+    )
     {
         $this->parserManager = $parserManager;
         $this->parserHandler = $parserHandler;
-        $this->entityManager = $entityManager;
-        $this->now = new \DateTime(date('H:i'));
-
+        $this->now = new DateTime(date('H:i'));
+        $this->sourceRepository = $sourceRepository;
         parent::__construct();
     }
 
@@ -56,20 +61,32 @@ class ParserRunCommand extends Command
         $this
             ->setName('parser:run')
             ->setDescription('Parse document')
-            ->addArgument('results', InputArgument::OPTIONAL, 'Count of Sources for parsing');
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Count of Sources for parsing')
+            ->addOption('id', 'i', InputOption::VALUE_OPTIONAL, 'Source ID')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Force group update');
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
-     * @throws \Exception
+     * @return int
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $results = $input->getArgument('results');
-        $sources = $this->getSourceRepository()->findForUpdate($results);
+        $output->writeln('[start] ' . (new DateTime())->format('Y-m-d H:i:s'));
+        $limit = $input->getOption('limit');
+        $id = $input->getOption('id');
+        $force = $input->getOption('force');
+
         $parserHandler = $this->parserHandler;
+        $sourceRepository = $this->sourceRepository;
+
+        if ($id) {
+            $sources = $sourceRepository->findBy(['id' => $id]);
+        } else {
+            $sources = $sourceRepository->findForUpdate($limit, $force);
+        }
 
         /** @var Source $source */
         foreach ($sources as $source) {
@@ -85,10 +102,8 @@ class ParserRunCommand extends Command
                 $output->writeln($parser->getErrorMessage());
             }
         }
-    }
+        $output->writeln('[done] ' . (new DateTime())->format('Y-m-d H:i:s'));
 
-    private function getSourceRepository(): SourceRepository
-    {
-        return $this->entityManager->getRepository(Source::class);
+        return 0;
     }
 }

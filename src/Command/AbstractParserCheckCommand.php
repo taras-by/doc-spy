@@ -15,7 +15,7 @@ abstract class AbstractParserCheckCommand extends Command
     use EntityManagerTrait;
 
     /**
-     * @var \App\Service\ParserManager
+     * @var ParserManager
      */
     protected $parserManager;
 
