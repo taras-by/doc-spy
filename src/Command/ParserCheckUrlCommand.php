@@ -45,6 +45,8 @@ class ParserCheckUrlCommand extends AbstractParserCheckCommand
             $this->getEntityManager()->flush();
             $output->writeln(sprintf('The resource with id = %s was successfully created!', $source->getId()));
         }
+
+        return 0;
     }
 
     protected function createNewSource(string $parserService, string $url): Source

@@ -2,10 +2,8 @@
 
 namespace App\Command;
 
-use App\Entity\Item;
 use App\Repository\ItemRepository;
-use App\Traits\EntityManagerTrait;
-use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +30,8 @@ class CleanCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @throws \Exception
+     * @return int
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -40,5 +39,6 @@ class CleanCommand extends Command
         $result = $this->itemRepository
             ->deleteOlderThenDate(new \DateTime(sprintf('now -%s days', self::DAYS_TO_LIVE)));
         $io->success(sprintf('%s old Items were deleted', $result));
+        return 0;
     }
 }

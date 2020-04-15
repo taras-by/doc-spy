@@ -50,5 +50,7 @@ class NotificationCheckCommand extends Command
         if (count($users) == 0) {
             $output->writeln('Admin users not found!');
         }
+
+        return 0;
     }
 }

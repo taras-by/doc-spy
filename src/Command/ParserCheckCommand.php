@@ -34,6 +34,8 @@ class ParserCheckCommand extends AbstractParserCheckCommand
             $this->writeItem($item, $output);
         }
         $this->writeSummary($parser, $output);
+
+        return 0;
     }
 
     private function getSourceRepository(): SourceRepository

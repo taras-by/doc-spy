@@ -41,5 +41,7 @@ class ReadCommand extends Command
             $output->writeln($item->getLink());
             $output->writeln('----------');
         }
+
+        return 0;
     }
 }

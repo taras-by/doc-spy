@@ -48,7 +48,7 @@
         "symfony/var-dumper": "^4.4"
     },
     "conflict": {
-        "symfony/symfony": "*"
+        "symfony/symfony": "^4.4"
     },
     "scripts": {
         "auto-scripts": {
