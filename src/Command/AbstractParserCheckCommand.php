@@ -30,7 +30,7 @@ abstract class AbstractParserCheckCommand extends Command
     {
         $formatter = $this->getHelper('formatter');
         $output->writeln('Title: ' . $item->getTitle());
-        $output->writeln('Description: ' . $formatter->truncate($item->getDescription(), 50));
+        $output->writeln('Description: ' . $formatter->truncate($item->getDescription() ?? '-', 50));
         $output->writeln('Link: ' . $item->getLink());
         $output->writeln('Start date: ' . ($item->getStartDate() ? $item->getStartDate()->format(DATE_ATOM) : 'null'));
         $output->writeln('End date: ' . ($item->getEndDate() ? $item->getEndDate()->format(DATE_ATOM) : 'null'));
