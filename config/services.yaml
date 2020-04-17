@@ -52,7 +52,7 @@ services:
         class: App\Service\ReaderCacheService
         arguments:
             - '%kernel.cache_dir%/pages'
-            - '%env(resolve:PARSER_CASH_IS_ENABLED)%'
+            - '%env(bool:PARSER_CASH_IS_ENABLED)%'
 
     # Readers
     facebook_reader:

@@ -10,10 +10,10 @@ class ReaderCacheService
 
     private $isEnabled;
 
-    public function __construct(string $cacheDir, string $isEnabled)
+    public function __construct(string $cacheDir, bool $isEnabled)
     {
         $this->cacheDir = $cacheDir;
-        $this->isEnabled = $isEnabled == 'true' ? true : false;
+        $this->isEnabled = $isEnabled;
 
         $filesystem = new Filesystem();
         if(!$filesystem->exists($this->cacheDir)){

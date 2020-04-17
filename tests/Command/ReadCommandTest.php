@@ -16,7 +16,7 @@ class ReadCommandTest extends KernelTestCase
 
         $command = $application->find('read');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([], ['results' => 3]);
+        $commandTester->execute(['--results' => 3]);
 
         $output = $commandTester->getDisplay();
         $this->assertContains("----------\n", $output);

@@ -15,7 +15,7 @@ class ParserRunCommandTest extends KernelTestCase
 
         $command = $application->find('parser:run');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([], ['id' => 20]);
+        $commandTester->execute(['--id' => 20]);
 
         $output = $commandTester->getDisplay();
         $this->assertContains('[done]', $output);

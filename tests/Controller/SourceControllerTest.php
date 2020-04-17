@@ -17,7 +17,7 @@ class SourceControllerTest extends ProjectTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testShowAction()
+    public function testItems()
     {
         $this->client->request('GET', '/source/1');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -40,6 +40,62 @@ class SourceControllerTest extends ProjectTestCase
         $this->client->request('GET', '/source/5');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/12');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testClean()
+    {
+        $this->client->request('DELETE', '/source/5/clean');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('DELETE', '/source/5/clean');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('DELETE', '/source/5/clean');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testDelete()
+    {
+        $this->client->request('DELETE', '/source/20');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('DELETE', '/source/20');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('DELETE', '/source/20');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testUpdate()
+    {
+        $this->client->request('POST', '/source/20/update');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('POST', '/source/20/update');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('POST', '/source/20/update');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testCheck()
+    {
+        $this->client->request('GET', '/source/20/check');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('GET', '/source/20/check');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/source/20/check');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

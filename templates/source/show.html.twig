@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Source{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Source</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary" id="checkSource" data-action="{{ path('source_check', {'id': source.id}) }}">Check</button>
+                    <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="updateForm">Update</button>
+                    <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="cleanForm">Clean</button>
+                    <a class="btn btn-outline-primary" href="{{ path('source_edit', {'id': source.id}) }}">Edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
+                </div>
+            </div>
+        </div>
+        {{ include('parts/flash.html.twig') }}
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ source.id }}</td>
+            </tr>
+            <tr>
+                <th>Visibility</th>
+                <td>{{ source.visibility }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ source.name }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ source.url }}</td>
+            </tr>
+            <tr>
+                <th>Parser</th>
+                <td>{{ source.parser }}</td>
+            </tr>
+            <tr>
+                <th>Icon</th>
+                <td>{{ source.icon }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s T') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ScheduleAt</th>
+                <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s T') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ErrorCount</th>
+                <td>{{ source.errorCount }}</td>
+            </tr>
+            <tr>
+                <th>UpdateInterval</th>
+                <td>{{ source.updateInterval }}</td>
+            </tr>
+            <tr>
+                <th>itemsCount</th>
+                <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
+            </tr>
+            </tbody>
+        </table>
+         {{ include('source/_clean_form.html.twig') }}
+         {{ include('source/_update_form.html.twig') }}
+         {{ include('source/_check_form.html.twig') }}
+         {{ include('source/_check_modal.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(function () {
+            $('#checkSource').click(function () {
+                let $button = $(this);
+                let action = $(this).data('action');
+                $button.prop('disabled', true);
+                $.ajax({
+                    url: action,
+                    dataType: "json"
+                }).done(function (data) {
+                    $('#checkModal .modal-body').html(data.contents);
+                    $('#checkModal').modal();
+                    $button.prop('disabled', false);
+                });
+            });
+        });
+    </script>
+
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}
+
