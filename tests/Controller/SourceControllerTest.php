@@ -98,4 +98,18 @@ class SourceControllerTest extends ProjectTestCase
         $this->client->request('GET', '/source/20/check');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
+
+    public function testShow()
+    {
+        $this->client->request('GET', '/source/20/show');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('GET', '/source/20/show');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/source/20/show');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
 }

@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-primary" id="checkSource" data-action="{{ path('source_check', {'id': source.id}) }}">Check</button>
+                    <a class="btn btn-outline-primary modal-link" href="{{ path('source_check', {'id': source.id}) }}">Check</a>
                     <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="updateForm">Update</button>
                     <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="cleanForm">Clean</button>
                     <a class="btn btn-outline-primary" href="{{ path('source_edit', {'id': source.id}) }}">Edit</a>
@@ -69,31 +69,11 @@
         </table>
          {{ include('source/_clean_form.html.twig') }}
          {{ include('source/_update_form.html.twig') }}
-         {{ include('source/_check_form.html.twig') }}
-         {{ include('source/_check_modal.html.twig') }}
+         {{ include('parts/modal.html.twig') }}
     </div>
 {% endblock %}
 
 {% block javascripts %}
-
-    <script>
-        $(function () {
-            $('#checkSource').click(function () {
-                let $button = $(this);
-                let action = $(this).data('action');
-                $button.prop('disabled', true);
-                $.ajax({
-                    url: action,
-                    dataType: "json"
-                }).done(function (data) {
-                    $('#checkModal .modal-body').html(data.contents);
-                    $('#checkModal').modal();
-                    $button.prop('disabled', false);
-                });
-            });
-        });
-    </script>
-
     <script src="{{ asset('js/js.js') }}"></script>
 {% endblock %}
 

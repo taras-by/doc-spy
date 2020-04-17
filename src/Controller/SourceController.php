@@ -193,25 +193,34 @@ class SourceController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/source/{id}/check", name="source_check", methods={"GET"})
      * @param ParserManager $parserManager
+     * @param Request $request
      * @param Source $source
      * @return Response
      */
-    public function check(ParserManager $parserManager, Source $source): Response
+    public function check(ParserManager $parserManager, Request $request, Source $source): Response
     {
-        $response = new Response();
-
         $parser = $parserManager->getParser($source);
         $parser->run();
         $items = $parser->getItems();
 
-        $contents = $this->renderView('source/_check_items.html.twig', [
+        $body = $this->renderView('source/_check_items.html.twig', [
             'items' => $items,
             'count' => $parser->getCount(),
+            'errorMessage' => $parser->getErrorMessage(),
+            'hasErrors' => $parser->hasErrors(),
         ]);
+        $title = sprintf('Check source "%s"', $source->getName());
 
-        return $response->setContent(json_encode([
-            'contents' => $contents,
-        ]));
+        if ($request->isXmlHttpRequest()) {
+            return new Response(json_encode([
+                'body' => $body,
+                'title' => $title,
+            ]));
+        }
+        return $this->render('source/check.html.twig', [
+            'body' => $body,
+            'title' => $title,
+        ]);
     }
 
     /**
