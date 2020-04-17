@@ -1,5 +1,0 @@
-<form method="post" id="checkForm" action="{{ path('source_check', {'id': source.id}) }}">
-    <input type="hidden" name="_method" value="GET">
-    <input type="hidden" name="_token" value="{{ csrf_token('check' ~ source.id) }}">
-    <button type="submit" class="d-none"></button>
-</form>

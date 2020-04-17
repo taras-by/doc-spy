@@ -1,2 +1,15 @@
-{% include 'parts/items.html.twig' %}
-<div class="text-center">count: <span class="badge badge-pill badge-info">{{ count }}</span></div>
+{% if hasErrors %}
+
+    <div class="alert alert-danger">
+        Parser error
+    </div>
+    <pre>{{ errorMessage }}</pre>
+
+{% else %}
+
+    {% include 'parts/items.html.twig' %}
+    <div class="text-center">
+        count: <span class="badge badge-pill badge-info">{{ count }}</span>
+    </div>
+
+{% endif %}

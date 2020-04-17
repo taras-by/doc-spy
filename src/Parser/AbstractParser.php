@@ -5,6 +5,7 @@ namespace App\Parser;
 use App\Reader\ReaderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Source;
+use Throwable;
 
 abstract class AbstractParser implements ParserInterface
 {
@@ -47,7 +48,7 @@ abstract class AbstractParser implements ParserInterface
             if ($this->count == 0) {
                 $this->errorMessage = self::ERROR_ITEMS_NOT_FOUND;
             }
-        } catch (\Exception $exception) {
+        } catch (Throwable $exception) {
             $this->items = new ArrayCollection();
             $this->errorMessage = $exception->getMessage() . PHP_EOL . $exception->getTraceAsString();
         }
