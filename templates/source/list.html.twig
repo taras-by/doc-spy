@@ -5,8 +5,19 @@
 {% block body %}
 
     <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Sources</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-primary" href="{{ path('source_new') }}">Create new</a>
+                </div>
+            </div>
+        </div>
+        {{ include('parts/flash.html.twig') }}
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-md">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -17,19 +28,21 @@
                         <th>Schedule at</th>
                         <th>Update interval</th>
                         <th>Error count</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for source in sources %}
                     <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
                         <td>{{ source.id }}</td>
-                        <td><a href="{{ path('source_index', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
+                        <td><a href="{{ path('source_items', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
                         <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
                         <td{% if source.createdBy %} title="{{ source.createdBy.name }}"{% endif %}>{{ source.visibility }}</td>
                         <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
                         <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
                         <td class="text-right">{{ source.updateInterval }}</td>
                         <td class="text-right">{{ source.errorCount }}</td>
+                        <td><a href="{{ path('source_show', {'id' : source.id} ) }}">show</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

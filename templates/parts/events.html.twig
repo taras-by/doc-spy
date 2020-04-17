@@ -9,7 +9,7 @@
         </div>
         <div class="col-md-10 item-title">
             {% if item.source.icon %}
-                <a href="{{ path('source_index', {'id' : item.source.id} ) }}">
+                <a href="{{ path('source_items', {'id' : item.source.id} ) }}">
                     <img src="{{ item.source.icon }}" width="16" height="16" />
                 </a>
             {% endif %}

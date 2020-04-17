@@ -54,7 +54,7 @@ class Item
     /**
      * Many Items have One Source.
      * @ORM\ManyToOne(targetEntity="App\Entity\Source", inversedBy="items")
-     * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="source_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $source;
 

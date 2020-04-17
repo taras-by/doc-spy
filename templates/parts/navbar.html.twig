@@ -43,7 +43,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Administrator:</h6>
-                            <a class="dropdown-item" href="{{ path('sources_list') }}">Sources</a>
+                            <a class="dropdown-item" href="{{ path('source_list') }}">Sources</a>
                         {% endif %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>

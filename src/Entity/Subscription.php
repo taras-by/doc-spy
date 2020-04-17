@@ -18,7 +18,7 @@ class Subscription
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Source", inversedBy="subscriptions")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $source;
 

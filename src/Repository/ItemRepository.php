@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
 
 /**
  * ItemRepository
@@ -102,13 +103,31 @@ class ItemRepository extends ServiceEntityRepository
         return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
-    public function findPaginatedBySourceId(int $id, int $page, int $limit): Paginator
+    public function getQueryBuilderBySourceId(int $id): QueryBuilder
     {
-        $query = $this->createQueryBuilder('i')
+        return $this->createQueryBuilder('i')
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->where('s.id = :source_id')
-            ->setParameter('source_id', $id)
+            ->setParameter('source_id', $id);
+    }
+
+    /**
+     * @param int $id
+     * @return int
+     * @throws Exception
+     */
+    public function getCountBySourceId(int $id): int
+    {
+        return $this->getQueryBuilderBySourceId($id)
+            ->select('count(i.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findPaginatedBySourceId(int $id, int $page, int $limit): Paginator
+    {
+        $query = $this->getQueryBuilderBySourceId($id)
             ->orderBy('i.publishedAt', 'DESC')
             ->getQuery();
 
@@ -137,6 +156,16 @@ class ItemRepository extends ServiceEntityRepository
             ->delete()
             ->where('i.publishedAt < :date')
             ->setParameter('date', $date)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function deleteBySource(Source $source): int
+    {
+        return $this->createQueryBuilder('i')
+            ->delete()
+            ->where('i.source = :source')
+            ->setParameter('source', $source)
             ->getQuery()
             ->execute();
     }

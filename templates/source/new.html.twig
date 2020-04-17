@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Source{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Create new Source</h1>
+            </div>
+            <div class="col-md-6 text-right">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary">Check</button>
+                    <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="sourceForm">Save</button>
+                    <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
+                </div>
+            </div>
+        </div>
+        {{ include('source/_form.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}
