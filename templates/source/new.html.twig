@@ -7,12 +7,13 @@
         {% embed "parts/header.html.twig" %}
             {% block title %}Create new Source{% endblock %}
             {% block buttons %}
-                <button type="button" class="btn btn-outline-primary btn-submit disabled" id="checkForm">Check</button>
+                <button type="button" class="btn btn-outline-primary btn-submit" id="checkForm" data-action="{{ path('source_form_check') }}">Check</button>
                 <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="sourceForm">Save</button>
                 <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
             {% endblock %}
         {% endembed %}
         {{ include('source/_form.html.twig') }}
+        {{ include('parts/modal.html.twig') }}
     </div>
 {% endblock %}
 

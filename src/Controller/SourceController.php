@@ -199,6 +199,33 @@ class SourceController extends AbstractController
      */
     public function check(ParserManager $parserManager, Request $request, Source $source): Response
     {
+        return $this->processCheck($parserManager, $request, $source);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/source/form/check", name="source_form_check", methods={"POST"})
+     * @param ParserManager $parserManager
+     * @param Request $request
+     * @return Response
+     */
+    public function checkForm(ParserManager $parserManager, Request $request): Response
+    {
+        $source = (new Source())
+            ->setParser($request->get('source')['parser'] ?? null)
+            ->setUrl($request->get('source')['url'] ?? null);
+
+        return $this->processCheck($parserManager, $request, $source);
+    }
+
+    /**
+     * @param ParserManager $parserManager
+     * @param Request $request
+     * @param Source $source
+     * @return Response
+     */
+    private function processCheck(ParserManager $parserManager, Request $request, Source $source): Response
+    {
         $parser = $parserManager->getParser($source);
         $parser->run();
         $items = $parser->getItems();
