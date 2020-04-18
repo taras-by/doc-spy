@@ -199,44 +199,8 @@ class SourceController extends AbstractController
      */
     public function check(ParserManager $parserManager, Request $request, Source $source): Response
     {
-        return $this->processCheck($parserManager, $request, $source);
-    }
-
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     * @Route("/source/form/check", name="source_form_check", methods={"POST"})
-     * @param ParserManager $parserManager
-     * @param Request $request
-     * @return Response
-     */
-    public function checkForm(ParserManager $parserManager, Request $request): Response
-    {
-        $source = (new Source())
-            ->setParser($request->get('source')['parser'] ?? null)
-            ->setUrl($request->get('source')['url'] ?? null);
-
-        return $this->processCheck($parserManager, $request, $source);
-    }
-
-    /**
-     * @param ParserManager $parserManager
-     * @param Request $request
-     * @param Source $source
-     * @return Response
-     */
-    private function processCheck(ParserManager $parserManager, Request $request, Source $source): Response
-    {
-        $parser = $parserManager->getParser($source);
-        $parser->run();
-        $items = $parser->getItems();
-
-        $body = $this->renderView('source/_check_items.html.twig', [
-            'items' => $items,
-            'count' => $parser->getCount(),
-            'errorMessage' => $parser->getErrorMessage(),
-            'hasErrors' => $parser->hasErrors(),
-        ]);
         $title = sprintf('Check source "%s"', $source->getName());
+        $body = $this->processParserCheck($parserManager, $source);
 
         if ($request->isXmlHttpRequest()) {
             return new Response(json_encode([
@@ -247,6 +211,58 @@ class SourceController extends AbstractController
         return $this->render('source/check.html.twig', [
             'body' => $body,
             'title' => $title,
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/source/form/check", name="source_form_check", methods={"POST"})
+     * @param ParserManager $parserManager
+     * @param Request $request
+     * @return Response
+     */
+    public function formCheck(ParserManager $parserManager, Request $request): Response
+    {
+        $source = (new Source())
+            ->setParser($request->get('source')['parser'] ?? null)
+            ->setUrl($request->get('source')['url'] ?? null);
+
+        $title = sprintf('Check source "%s"', $source->getName());
+        $body = $this->processParserCheck($parserManager, $source);
+
+        return new Response(json_encode([
+            'body' => $body,
+            'title' => $title,
+        ]));
+    }
+
+    /**
+     * @param ParserManager $parserManager
+     * @param Source $source
+     * @return string
+     */
+    protected function processParserCheck(ParserManager $parserManager, Source $source)
+    {
+        try {
+            $parser = $parserManager->getParser($source);
+            $parser->run();
+        } catch (Exception $e) {
+            return $this->renderView('source/_check_error.html.twig', [
+                'message' => $e->getMessage(),
+                'log' => (string)$e,
+            ]);
+        }
+
+        if ($parser->hasErrors()) {
+            return $this->renderView('source/_check_error.html.twig', [
+                'message' => 'Parser error',
+                'log' => $parser->getErrorMessage(),
+            ]);
+        }
+
+        return $this->renderView('source/_check_items.html.twig', [
+            'items' => $parser->getItems(),
+            'count' => $parser->getCount(),
         ]);
     }
 }
