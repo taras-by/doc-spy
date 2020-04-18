@@ -50,7 +50,7 @@ abstract class AbstractParser implements ParserInterface
             }
         } catch (Throwable $exception) {
             $this->items = new ArrayCollection();
-            $this->errorMessage = $exception->getMessage() . PHP_EOL . $exception->getTraceAsString();
+            $this->errorMessage = (string)$exception;
         }
 
         return $this;
