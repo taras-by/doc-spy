@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col-md-6 order-md-2 text-right">
+        <div class="btn-group" role="group">
+            {% block buttons %}{% endblock %}
+        </div>
+    </div>
+    <div class="col-md-6 order-md-1">
+        <h1>{% block title %}{% endblock %}</h1>
+    </div>
+</div>
+{{ include('parts/flash.html.twig') }}

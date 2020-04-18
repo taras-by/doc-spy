@@ -222,16 +222,4 @@ class SourceController extends AbstractController
             'title' => $title,
         ]);
     }
-
-    /**
-     * @param $tokenId
-     * @param Request $request
-     * @throws Exception
-     */
-    private function checkCsrfToken($tokenId, Request $request)
-    {
-        if ($this->isCsrfTokenValid($tokenId, $request->request->get('_token'))) {
-            throw new \Exception('CSRF Token error');
-        }
-    }
 }
