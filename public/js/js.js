@@ -9,11 +9,9 @@ $(function () {
         e.preventDefault();
         let $button = $(this);
         let $modal = $('#simpleModal');
-        let $spinner = $('#spinner');
         let url = $(this).attr('href');
-        $button.prop('disabled', true);
         $button.addClass('disabled');
-        $spinner.removeClass('invisible')
+        spinnerStart();
         $.ajax({
             url: url,
             dataType: "json"
@@ -25,8 +23,40 @@ $(function () {
             alert('Request failed: ' + errorThrown);
         }).always(function () {
             $button.removeClass('disabled');
-            $spinner.addClass('invisible')
+            spinnerStop();
         });
     });
 
+    $('#checkForm').click(function (e) {
+        e.preventDefault();
+        let $button = $(this);
+        let $modal = $('#simpleModal');
+        let action = $(this).data('action');
+        let $sourceForm = $('#sourceForm');
+        $button.addClass('disabled');
+        spinnerStart();
+        $.ajax({
+            url: action,
+            type: 'post',
+            data: $sourceForm.serialize(),
+            dataType: "json",
+        }).done(function (data) {
+            $modal.find('.modal-body').html(data.body);
+            $modal.find('.modal-title').html(data.title);
+            $modal.modal();
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Request failed: ' + errorThrown);
+        }).always(function () {
+            $button.removeClass('disabled');
+            spinnerStop();
+        });
+    });
+
+    function spinnerStart() {
+        $('#spinner').removeClass('invisible');
+    }
+
+    function spinnerStop() {
+        $('#spinner').addClass('invisible');
+    }
 });
