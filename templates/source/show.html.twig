@@ -4,21 +4,16 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h1>Source</h1>
-            </div>
-            <div class="col-md-6 text-right">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-outline-primary modal-link" href="{{ path('source_check', {'id': source.id}) }}">Check</a>
-                    <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="updateForm">Update</button>
-                    <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="cleanForm">Clean</button>
-                    <a class="btn btn-outline-primary" href="{{ path('source_edit', {'id': source.id}) }}">Edit</a>
-                    <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
-                </div>
-            </div>
-        </div>
-        {{ include('parts/flash.html.twig') }}
+        {% embed "parts/header.html.twig" %}
+            {% block title %}Source{% endblock %}
+            {% block buttons %}
+                <a class="btn btn-outline-primary modal-link" href="{{ path('source_check', {'id': source.id}) }}">Check</a>
+                <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="updateForm">Update</button>
+                <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="cleanForm">Clean</button>
+                <a class="btn btn-outline-primary" href="{{ path('source_edit', {'id': source.id}) }}">Edit</a>
+                <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
+            {% endblock %}
+        {% endembed %}
         <table class="table">
             <tbody>
             <tr>

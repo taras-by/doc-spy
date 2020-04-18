@@ -5,17 +5,12 @@
 {% block body %}
 
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h1>Sources</h1>
-            </div>
-            <div class="col-md-6 text-right">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-outline-primary" href="{{ path('source_new') }}">Create new</a>
-                </div>
-            </div>
-        </div>
-        {{ include('parts/flash.html.twig') }}
+        {% embed "parts/header.html.twig" %}
+            {% block title %}Sources{% endblock %}
+            {% block buttons %}
+                <a class="btn btn-outline-primary" href="{{ path('source_new') }}">Create new</a>
+            {% endblock %}
+        {% endembed %}
         <div class="table-responsive">
             <table class="table table-striped table-hover table-md">
                 <thead>
