@@ -227,7 +227,7 @@ class SourceController extends AbstractController
             ->setParser($request->get('source')['parser'] ?? null)
             ->setUrl($request->get('source')['url'] ?? null);
 
-        $title = sprintf('Check source "%s"', $source->getName());
+        $title = sprintf('Check source');
         $body = $this->processParserCheck($parserManager, $source);
 
         return new Response(json_encode([

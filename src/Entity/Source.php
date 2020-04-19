@@ -22,6 +22,20 @@ class Source
     const VISIBILITY_PROTECTED = 'protected';
     const VISIBILITY_PRIVATE = 'private';
 
+    const VISIBILITY_LABELS = [
+        self::VISIBILITY_MAIN => 'Main',
+        self::VISIBILITY_PUBLIC => 'Public',
+        self::VISIBILITY_PROTECTED => 'Protected',
+        self::VISIBILITY_PRIVATE => 'Private',
+    ];
+
+    const VISIBILITY_LABEL_CLASSES = [
+        self::VISIBILITY_MAIN => 'info',
+        self::VISIBILITY_PUBLIC => 'info',
+        self::VISIBILITY_PROTECTED => 'secondary',
+        self::VISIBILITY_PRIVATE => 'secondary',
+    ];
+
     /**
      * @var int
      *
@@ -465,5 +479,21 @@ class Source
     public function isPrivate()
     {
         return $this->getVisibility() == self::VISIBILITY_PRIVATE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisibilityLabel(): string
+    {
+        return self::VISIBILITY_LABELS[$this->visibility];
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisibilityLabelClass(): string
+    {
+        return self::VISIBILITY_LABEL_CLASSES[$this->visibility];
     }
 }
