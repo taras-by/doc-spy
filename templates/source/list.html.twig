@@ -18,6 +18,7 @@
                         <th>#</th>
                         <th></th>
                         <th>Name</th>
+                        <th>Parser</th>
                         <th>Visibility</th>
                         <th>Error count</th>
                         <th>Updated at</th>
@@ -30,6 +31,7 @@
                         <td>{{ source.id }}</td>
                         <td><a href="{{ path('source_items', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
                         <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
+                        <td>{{ get_parser_label(source.parser) }}</td>
                         <td{% if source.createdBy %} title="{{ source.createdBy.name }}"{% endif %}>
                             <span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span>
                         </td>

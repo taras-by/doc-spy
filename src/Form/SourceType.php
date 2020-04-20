@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Source;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\ParsersParameters;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -13,13 +13,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SourceType extends AbstractType
 {
     /**
-     * @var ParameterBagInterface
+     * @var ParsersParameters
      */
-    private $parameterBag;
+    private $parameters;
 
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(ParsersParameters $parameters)
     {
-        $this->parameterBag = $parameterBag;
+        $this->parameters = $parameters;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -28,7 +28,7 @@ class SourceType extends AbstractType
             ->add('name')
             ->add('url')
             ->add('parser', ChoiceType::class, [
-                'choices' => $this->getParserChoices(),
+                'choices' => $this->parameters->getParserChoices(),
             ])
             ->add('icon', UrlType::class)
             ->add('visibility', ChoiceType::class, [
@@ -49,25 +49,5 @@ class SourceType extends AbstractType
             'data_class' => Source::class,
             'attr' => ['id' => 'sourceForm'],
         ]);
-    }
-
-    /**
-     * @return array
-     */
-    private function getParsers(): array
-    {
-        $parsers = $this->parameterBag->get('parsers');
-        if ($this->parameterBag->has('custom_parsers')) {
-            $parsers = $parsers + $this->parameterBag->get('custom_parsers');
-        }
-        return $parsers;
-    }
-
-    /**
-     * @return array
-     */
-    private function getParserChoices(): array
-    {
-        return array_flip($this->getParsers());
     }
 }
