@@ -3,6 +3,13 @@
 parameters:
     locale: 'en'
     mail_from: '%env(MAIL_FROM)%'
+    parsers:
+        rss_parser: 'RSS'
+        events_dev_by_parser: 'events.dev.by'
+        hh_ru_parser: 'hh.ru'
+        holiday_by_parser: 'holiday.by'
+        relax_by_parser: 'relax.by'
+        facebook_com_parser: 'facebook.com'
 
 services:
     # default configuration for services in *this* file
