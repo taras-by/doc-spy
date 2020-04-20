@@ -6,9 +6,11 @@ use App\Entity\Source;
 use App\Service\ParsersParameters;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class SourceType extends AbstractType
 {
@@ -26,7 +28,7 @@ class SourceType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('url')
+            ->add('url', UrlType::class)
             ->add('parser', ChoiceType::class, [
                 'choices' => $this->parameters->getParserChoices(),
             ])
@@ -35,9 +37,6 @@ class SourceType extends AbstractType
                 'choices' => Source::getChoices(),
             ])
             ->add('updateInterval')
-//            ->add('updatedAt')
-//            ->add('errorCount')
-//            ->add('scheduleAt')
 //            ->add('tags')
 //            ->add('createdBy')
         ;
