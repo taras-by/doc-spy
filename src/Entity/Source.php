@@ -6,6 +6,7 @@ use App\Traits\CreatorTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Source
@@ -48,6 +49,7 @@ class Source
     /**
      * @var string
      *
+     * @Assert\Length( min = 4, max = 255, )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -55,6 +57,7 @@ class Source
     /**
      * @var string
      *
+     * @Assert\Url()
      * @ORM\Column(name="url", type="string", length=2048)
      */
     private $url;
@@ -69,6 +72,7 @@ class Source
     /**
      * @var string
      *
+     * @Assert\Url()
      * @ORM\Column(name="icon", type="string", length=255)
      */
     private $icon;
@@ -118,6 +122,7 @@ class Source
      *
      * @var integer
      *
+     * @Assert\Positive
      * @ORM\Column(name="update_interval", type="integer", options={"default":60})
      */
     private $updateInterval = 60;

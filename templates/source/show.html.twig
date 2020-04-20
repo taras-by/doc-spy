@@ -17,7 +17,7 @@
         <table class="table table-striped table-hover table-md">
             <tbody>
             <tr>
-                <th>Id</th>
+                <th class="w-25">Id</th>
                 <td>{{ source.id }}</td>
             <tr>
                 <th>Icon</th>
@@ -41,27 +41,27 @@
                 <td>{{ get_parser_label(source.parser) }}</td>
             </tr>
             <tr>
-                <th>Updated At</th>
+                <th>Updated</th>
                 <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-' }}</td>
             </tr>
             <tr>
-                <th>Schedule At</th>
+                <th>Schedule</th>
                 <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
             </tr>
             <tr>
-                <th>Error Count</th>
+                <th>Errors</th>
                 <td>{{ source.errorCount }}</td>
             </tr>
             <tr>
-                <th>Update Interval</th>
+                <th class="text-nowrap">Up Interval</th>
                 <td>{{ source.updateInterval }}</td>
             </tr>
             <tr>
-                <th>Items count</th>
+                <th class="text-nowrap">Items count</th>
                 <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
             </tr>
             <tr>
-                <th>Created by</th>
+                <th class="text-nowrap">Created by</th>
                 <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
             </tr>
             </tbody>

@@ -20,8 +20,8 @@
                         <th>Name</th>
                         <th>Parser</th>
                         <th>Visibility</th>
-                        <th>Error count</th>
-                        <th>Updated at</th>
+                        <th>Errors</th>
+                        <th>Updated</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -36,7 +36,7 @@
                             <span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span>
                         </td>
                         <td class="text-right">{{ source.errorCount }}</td>
-                        <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
+                        <td class="text-nowrap">{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
                         <td><a href="{{ path('source_show', {'id' : source.id} ) }}">show</a></td>
                     </tr>
                 {% endfor %}
