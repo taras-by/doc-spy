@@ -135,6 +135,8 @@ class Source
         $this->items = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->icon = '/favicon.ico';
+        $this->visibility = self::VISIBILITY_PUBLIC;
     }
 
     /**
@@ -495,5 +497,10 @@ class Source
     public function getVisibilityLabelClass(): string
     {
         return self::VISIBILITY_LABEL_CLASSES[$this->visibility];
+    }
+
+    public static function getChoices(): array
+    {
+        return array_flip(self::VISIBILITY_LABELS);
     }
 }

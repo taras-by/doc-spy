@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Entity\Source;
+use App\Entity\User;
 use App\Form\SourceType;
 use App\Repository\ItemRepository;
 use App\Repository\SourceRepository;
@@ -15,7 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SourceController extends AbstractController
@@ -71,11 +71,14 @@ class SourceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var  User $user */
+            $user = $this->getUser();
+            $source->setCreatedBy($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($source);
             $entityManager->flush();
 
-            return $this->redirectToRoute('source_list');
+            return $this->redirectToRoute('source_show', ['id' => $source->getId()]);
         }
 
         return $this->render('source/new.html.twig', [
@@ -225,7 +228,8 @@ class SourceController extends AbstractController
     {
         $source = (new Source())
             ->setParser($request->get('source')['parser'] ?? null)
-            ->setUrl($request->get('source')['url'] ?? null);
+            ->setUrl($request->get('source')['url'] ?? null)
+            ->setIcon($request->get('source')['icon'] ?? null);
 
         $title = sprintf('Check source');
         $body = $this->processParserCheck($parserManager, $source);
