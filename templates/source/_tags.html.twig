@@ -1,0 +1,3 @@
+{% for tag in source.tags %}
+    <a class="badge badge-light" href="{{ path('tag_index', {'id': tag.id}) }}">{{ tag.name }}</a>
+{% endfor %}
