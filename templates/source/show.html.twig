@@ -64,6 +64,10 @@
                 <th class="text-nowrap">Created by</th>
                 <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
             </tr>
+            <tr>
+                <th class="text-nowrap">Tags</th>
+                <td>{{ include('source/_tags.html.twig') }}</td>
+            </tr>
             </tbody>
         </table>
          {{ include('source/_clean_form.html.twig') }}

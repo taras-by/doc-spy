@@ -3,14 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Source;
+use App\Entity\Tag;
+use App\Entity\User;
 use App\Service\ParsersParameters;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
 
 class SourceType extends AbstractType
 {
@@ -37,9 +38,16 @@ class SourceType extends AbstractType
                 'choices' => Source::getChoices(),
             ])
             ->add('updateInterval')
-//            ->add('tags')
-//            ->add('createdBy')
-        ;
+            ->add('createdBy', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'name',
+            ])
+            ->add('tags', EntityType::class, [
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+//                'expanded' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
