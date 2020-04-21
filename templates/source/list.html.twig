@@ -31,7 +31,7 @@
                     <tr{% if source.errorCount >= 5 %} class="bg-danger"{% endif %}>
                         <td>{{ source.id }}</td>
                         <td><a href="{{ path('source_items', {'id' : source.id} ) }}"><img src="{{ source.icon }}" width="16" height="16" /></a></td>
-                        <td><a href="{{ source.url }}" target="_blank">{{ source.name }}</a></td>
+                        <td><a href="{{ path('source_show', {'id' : source.id} ) }}">{{ source.name }}</a></td>
                         <td>{{ get_parser_label(source.parser) }}</td>
                         <td{% if source.createdBy %} title="{{ source.createdBy.name }}"{% endif %}>
                             <span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span>

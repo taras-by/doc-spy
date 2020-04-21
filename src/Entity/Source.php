@@ -140,7 +140,6 @@ class Source
         $this->items = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
-        $this->icon = '/favicon.ico';
         $this->visibility = self::VISIBILITY_PUBLIC;
     }
 

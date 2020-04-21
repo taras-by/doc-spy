@@ -14,65 +14,67 @@
                 <a class="btn btn-outline-primary" href="{{ path('source_list') }}">Back</a>
             {% endblock %}
         {% endembed %}
-        <table class="table table-striped table-hover table-md">
-            <tbody>
-            <tr>
-                <th class="w-25">Id</th>
-                <td>{{ source.id }}</td>
-            <tr>
-                <th>Icon</th>
-                <td><img src="{{ source.icon }}"/></td>
-            </tr>
-            </tr>
-            <tr>
-                <th>Visibility</th>
-                <td><span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span></td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ source.name }}</td>
-            </tr>
-            <tr>
-                <th>Url</th>
-                <td><a href="{{ source.url }}" target="_blank">{{ source.url[:100] }}{{ source.url|length > 100 ? '...' }}</a></td>
-            </tr>
-            <tr>
-                <th>Parser</th>
-                <td>{{ get_parser_label(source.parser) }}</td>
-            </tr>
-            <tr>
-                <th>Updated</th>
-                <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-' }}</td>
-            </tr>
-            <tr>
-                <th>Schedule</th>
-                <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
-            </tr>
-            <tr>
-                <th>Errors</th>
-                <td>{{ source.errorCount }}</td>
-            </tr>
-            <tr>
-                <th class="text-nowrap">Up Interval</th>
-                <td>{{ source.updateInterval }}</td>
-            </tr>
-            <tr>
-                <th class="text-nowrap">Items count</th>
-                <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
-            </tr>
-            <tr>
-                <th class="text-nowrap">Created by</th>
-                <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
-            </tr>
-            <tr>
-                <th class="text-nowrap">Tags</th>
-                <td>{{ include('source/_tags.html.twig') }}</td>
-            </tr>
-            </tbody>
-        </table>
-         {{ include('source/_clean_form.html.twig') }}
-         {{ include('source/_update_form.html.twig') }}
-         {{ include('parts/modal.html.twig') }}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-md">
+                <tbody>
+                    <tr>
+                        <th class="w-25">Id</th>
+                        <td>{{ source.id }}</td>
+                    <tr>
+                        <th>Icon</th>
+                        <td><img src="{{ source.icon }}"/></td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <th>Visibility</th>
+                        <td><span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ source.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td class="text-break"><a href="{{ source.url }}" target="_blank">{{ source.url[:100] }}{{ source.url|length > 100 ? '...' }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Parser</th>
+                        <td>{{ get_parser_label(source.parser) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Updated</th>
+                        <td>{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Schedule</th>
+                        <td>{{ source.scheduleAt ? source.scheduleAt|date('Y-m-d H:i:s') : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Errors</th>
+                        <td>{{ source.errorCount }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Up Interval</th>
+                        <td>{{ source.updateInterval }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Items count</th>
+                        <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Created by</th>
+                        <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Tags</th>
+                        <td>{{ include('source/_tags.html.twig') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+             {{ include('source/_clean_form.html.twig') }}
+             {{ include('source/_update_form.html.twig') }}
+             {{ include('parts/modal.html.twig') }}
+        </div>
     </div>
 {% endblock %}
 
