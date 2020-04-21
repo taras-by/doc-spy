@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SourceController extends AbstractController
@@ -61,12 +62,14 @@ class SourceController extends AbstractController
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/source/new", name="source_new", methods={"GET","POST"})
+     * @param UrlHelper $urlHelper
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
+    public function new(UrlHelper $urlHelper, Request $request): Response
     {
-        $source = new Source();
+        $source = (new Source())
+            ->setIcon($urlHelper->getAbsoluteUrl('/favicon.ico'));
         $form = $this->createForm(SourceType::class, $source);
         $form->handleRequest($request);
 
