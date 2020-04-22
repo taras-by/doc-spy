@@ -229,17 +229,28 @@ class SourceController extends AbstractController
      */
     public function formCheck(ParserManager $parserManager, Request $request): Response
     {
-        $source = (new Source())
-            ->setParser($request->get('source')['parser'] ?? null)
-            ->setUrl($request->get('source')['url'] ?? null)
-            ->setIcon($request->get('source')['icon'] ?? null);
+        $source = new Source();
+        $form = $this->createForm(SourceType::class, $source);
+        $form->handleRequest($request);
 
-        $title = sprintf('Check source');
-        $body = $this->processParserCheck($parserManager, $source);
+        if ($form->isValid()) {
+
+            $title = sprintf('Check source');
+            $body = $this->processParserCheck($parserManager, $source);
+
+            return new Response(json_encode([
+                'body' => $body,
+                'title' => $title,
+            ]));
+        }
+
+        $errors = [];
+        foreach ($form->getErrors(true) as $error) {
+            $errors[$error->getOrigin()->getName()] = $error->getMessage();
+        }
 
         return new Response(json_encode([
-            'body' => $body,
-            'title' => $title,
+            'errors' => $errors,
         ]));
     }
 
