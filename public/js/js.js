@@ -2,7 +2,7 @@ $(function () {
 
     $('.btn-submit').click(function () {
         // html5 required and jQuery submit
-        $('#' + $(this).data('form_id') + ' [type="submit"]:button').trigger('click');
+        $('#' + $(this).data('form_id') + ' button[type="submit"]').trigger('click');
     });
 
     $('.modal-link').click(function (e) {
@@ -27,6 +27,16 @@ $(function () {
         });
     });
 
+    $('#sourceForm input[name="source[url]"]').change(function (e) {
+        let url = $(this).val();
+        try {
+            let hostname = (new URL(url)).hostname;
+            $('#sourceForm input[name="source[name]"]').val(hostname);
+        } catch (_) {
+            //
+        }
+    });
+
     $('#checkForm').click(function (e) {
         e.preventDefault();
         let $button = $(this);
@@ -34,6 +44,8 @@ $(function () {
         let action = $(this).data('action');
         let $sourceForm = $('#sourceForm');
         $button.addClass('disabled');
+        $sourceForm.find('.is-invalid').removeClass('is-invalid');
+        $sourceForm.find('.d-block').remove();
         spinnerStart();
         $.ajax({
             url: action,
@@ -41,9 +53,15 @@ $(function () {
             data: $sourceForm.serialize(),
             dataType: "json",
         }).done(function (data) {
-            $modal.find('.modal-body').html(data.body);
-            $modal.find('.modal-title').html(data.title);
-            $modal.modal();
+            if (data.errors) {
+                for (let [key, value] of Object.entries(data.errors)) {
+                    $('#source_' + key).addClass('is-invalid');
+                }
+            } else {
+                $modal.find('.modal-body').html(data.body);
+                $modal.find('.modal-title').html(data.title);
+                $modal.modal();
+            }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Request failed: ' + errorThrown);
         }).always(function () {

@@ -50,6 +50,7 @@ class Source
      * @var string
      *
      * @Assert\Length( min = 4, max = 255, )
+     * @Assert\NotNull()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -58,6 +59,8 @@ class Source
      * @var string
      *
      * @Assert\Url()
+     * @Assert\Length( min = 12, max = 2048, )
+     * @Assert\NotNull()
      * @ORM\Column(name="url", type="string", length=2048)
      */
     private $url;
@@ -65,7 +68,7 @@ class Source
     /**
      * @var string
      *
-     * @ORM\Column(name="parser", type="string", length=255, options={"default" : "rss"})
+     * @ORM\Column(name="parser", type="string", length=255)
      */
     private $parser;
 
