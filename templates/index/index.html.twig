@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Feed{% endblock %}
+{% block title %}Main{% endblock %}
 
 {% block body %}
 
     <div class="container">
+        {% embed "parts/items_header.html.twig" %}
+            {% block title %}Main{% endblock %}
+        {% endembed %}
         {% include 'parts/items.html.twig' %}
     </div>
 

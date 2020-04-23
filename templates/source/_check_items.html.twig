@@ -1,21 +1,58 @@
-{% for item in items %}
-    <div class="row item">
-        <div class="col-md-2">
-            {% if (date is not defined) or (date is defined and item.publishedAt|date() != date|date()) %}
-                <div class="item-date">
-                    {{ item.publishedAt|date() }}
-                </div>
+<ul class="list-inline">
+    <li class="list-inline-item">Total: <span class="badge badge-pill badge-info">{{ totalCount }}</span></li>
+    {% if descriptionCount %}
+        <li class="list-inline-item">with description: <span
+                    class="badge badge-pill badge-info">{{ descriptionCount }}</span></li>
+    {% endif %}
+    {% if startDateCount %}
+        <li class="list-inline-item">with start date: <span
+                    class="badge badge-pill badge-info">{{ startDateCount }}</span></li>
+    {% endif %}
+    {% if endDateCount %}
+        <li class="list-inline-item">with end date: <span class="badge badge-pill badge-info">{{ endDateCount }}</span>
+        </li>
+    {% endif %}
+</ul>
+<div class="table-responsive mb-n2">
+    <table class="table mb-0">
+        <thead>
+        <tr>
+            {% if items|first.source.icon %}
+                <th></th>
             {% endif %}
-        </div>
-        <div class="col-md-10 item-title">
-            {% if item.source.icon %}
-                <img src="{{ item.source.icon }}" width="16" height="16" />
+            <th>Title, link{% if descriptionCount %}, description{% endif %}</th>
+            <th>Date</th>
+            {% if startDateCount %}
+                <th>Start date</th>
             {% endif %}
-            <a  class="item-link" href="{{ item.link }}" target="_blank">{% include 'parts/event_time.html.twig' %}{{ item.title }}</a>
-        </div>
-    </div>
-    {% set date = item.publishedAt %}
-{% endfor %}
-<div class="text-center">
-    count: <span class="badge badge-pill badge-info">{{ count }}</span>
+            {% if endDateCount %}
+                <th>End date</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                {% if item.source.icon %}
+                    <td>
+                        <img src="{{ item.source.icon }}" width="16" height="16"/>
+                    </td>
+                {% endif %}
+                <td>
+                    <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+                    {% if item.description %}
+                        <div><small>{{ item.description }}</small></div>
+                    {% endif %}
+                </td>
+                <td>{{ item.publishedAt|date() }}</td>
+                {% if item.startDate %}
+                    <td>{{ item.startDate|date() }}</td>
+                {% endif %}
+                {% if item.endDate %}
+                    <td>{{ item.endDate|date() }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>

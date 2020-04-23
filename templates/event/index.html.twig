@@ -5,6 +5,9 @@
 {% block body %}
 
     <div class="container">
+        {% embed "parts/items_header.html.twig" %}
+            {% block title %}Events{% endblock %}
+        {% endembed %}
         {% include 'parts/events.html.twig' %}
     </div>
 
