@@ -26,7 +26,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="uid", type="string", length=512, nullable=true)
+     * @ORM\Column(name="uid", type="string", length=1024, nullable=true)
      */
     private $uid;
 
@@ -47,7 +47,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="link", type="string", length=512, nullable=true)
+     * @ORM\Column(name="link", type="string", length=1024, nullable=true)
      */
     private $link;
 
