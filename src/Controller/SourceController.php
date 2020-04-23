@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Entity\Source;
 use App\Entity\User;
 use App\Form\SourceType;
+use App\Helper\ParserStatistics;
 use App\Repository\ItemRepository;
 use App\Repository\SourceRepository;
 use App\Security\SourceVoter;
@@ -235,7 +236,7 @@ class SourceController extends AbstractController
 
         if ($form->isValid()) {
 
-            $title = sprintf('Check source');
+            $title = sprintf('Check source "%s"', $source->getName());
             $body = $this->processParserCheck($parserManager, $source);
 
             return new Response(json_encode([
@@ -278,9 +279,14 @@ class SourceController extends AbstractController
             ]);
         }
 
+        $statistics = ParserStatistics::calculate($parser);
+
         return $this->renderView('source/_check_items.html.twig', [
             'items' => $parser->getItems(),
-            'count' => $parser->getCount(),
+            'totalCount' => $statistics->getTotalCount(),
+            'descriptionCount' => $statistics->getDescriptionCount(),
+            'startDateCount' => $statistics->getStartDateCount(),
+            'endDateCount' => $statistics->getEndDateCount(),
         ]);
     }
 }
