@@ -159,7 +159,7 @@ class ItemRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('i')
             ->select('i.id')
             ->join('i.source', 's')
-            ->where("i.publishedAt < DATE_SUB(CURRENT_DATE(), s.itemsDaysToLive, 'day')")
+            ->where("i.publishedAt < DATE_SUB(CURRENT_DATE(), (s.itemsDaysToLive - 1), 'day')")
             ->getQuery()->getArrayResult();
 
         $ids = array_column($result, "id");
