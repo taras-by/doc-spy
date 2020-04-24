@@ -127,7 +127,7 @@ class Source
      *
      * @var integer
      *
-     * @Assert\Positive
+     * @Assert\PositiveOrZero
      * @ORM\Column(name="update_interval", type="integer", options={"default":60})
      */
     private $updateInterval = 60;
@@ -137,7 +137,7 @@ class Source
      *
      * @var integer
      *
-     * @Assert\Positive
+     * @Assert\PositiveOrZero
      * @ORM\Column(name="items_days_to_live", type="integer", options={"default":90})
      */
     private $itemsDaysToLive = 90;
