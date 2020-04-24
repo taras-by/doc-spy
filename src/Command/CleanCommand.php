@@ -11,8 +11,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CleanCommand extends Command
 {
-    const DAYS_TO_LIVE = 90;
-    
     protected static $defaultName = 'clean';
     protected static $description = 'Command to clean the database';
 
@@ -36,8 +34,7 @@ class CleanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $result = $this->itemRepository
-            ->deleteOlderThenDate(new \DateTime(sprintf('now -%s days', self::DAYS_TO_LIVE)));
+        $result = $this->itemRepository->deleteOld();
         $io->success(sprintf('%s old Items were deleted', $result));
         return 0;
     }

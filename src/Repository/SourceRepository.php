@@ -22,11 +22,12 @@ class SourceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->orderBy('s.id')
+            ->where('s.isEnabled = true')
             ->setMaxResults($results);
 
         if (!$force) {
             $qb
-                ->where('s.scheduleAt <= :now')
+                ->andWhere('s.scheduleAt <= :now')
                 ->setParameter('now', new \DateTime())
                 ->orWhere('s.scheduleAt is null')
                 ->orderBy('s.scheduleAt');

@@ -24,14 +24,13 @@
                         <th>Icon</th>
                         <td><img src="{{ source.icon }}"/></td>
                     </tr>
-                    </tr>
-                    <tr>
-                        <th>Visibility</th>
-                        <td><span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span></td>
-                    </tr>
                     <tr>
                         <th>Name</th>
                         <td>{{ source.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Enable status</th>
+                        <td><span class="badge badge-{{ source.enableLabelClass }}">{{ source.enableLabel }}</span></td>
                     </tr>
                     <tr>
                         <th>Url</th>
@@ -40,6 +39,30 @@
                     <tr>
                         <th>Parser</th>
                         <td>{{ get_parser_label(source.parser) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Visibility</th>
+                        <td><span class="badge badge-{{ source.visibilityLabelClass }}">{{ source.visibilityLabel }}</span></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Up Interval</th>
+                        <td>{{ source.updateInterval }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Items TTL (days)</th>
+                        <td>{{ source.itemsDaysToLive }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Created by</th>
+                        <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Tags</th>
+                        <td>{{ include('source/_tags.html.twig') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Items count</th>
+                        <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
                     </tr>
                     <tr>
                         <th>Updated</th>
@@ -52,22 +75,6 @@
                     <tr>
                         <th>Errors</th>
                         <td>{{ source.errorCount }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap">Up Interval</th>
-                        <td>{{ source.updateInterval }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap">Items count</th>
-                        <td><a href="{{ path('source_items', {'id' : source.id} ) }}">{{ itemsCount }}</a></td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap">Created by</th>
-                        <td>{{ source.createdBy ? source.createdBy.name : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap">Tags</th>
-                        <td>{{ include('source/_tags.html.twig') }}</td>
                     </tr>
                 </tbody>
             </table>

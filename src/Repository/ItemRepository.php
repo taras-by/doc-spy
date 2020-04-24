@@ -49,6 +49,7 @@ class ItemRepository extends ServiceEntityRepository
             ->leftJoin('i.source', 's')
             ->addSelect('s')
             ->where('s.visibility = :visibility')
+            ->andWhere('s.isEnabled = true')
             ->setParameter('visibility', Source::VISIBILITY_MAIN)
             ->orderBy('i.publishedAt', 'DESC')
             ->getQuery();
@@ -65,6 +66,7 @@ class ItemRepository extends ServiceEntityRepository
             ->leftJoin('i.source', 's')
             ->leftJoin('s.subscriptions', 'sb')
             ->where('sb.user = :user')
+            ->andWhere('s.isEnabled = true')
             ->andWhere('sb.expireAt IS NULL OR sb.expireAt > :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->setParameter('user', $user)
@@ -81,6 +83,7 @@ class ItemRepository extends ServiceEntityRepository
             ->leftJoin('s.tags', 't')
             ->addSelect('s')
             ->where('t.id = :tag_id')
+            ->andWhere('s.isEnabled = true')
             ->setParameter('tag_id', $id)
             ->orderBy('i.publishedAt', 'DESC');
         $this->applyVisibilityCriteria($qb, $user);
@@ -95,7 +98,8 @@ class ItemRepository extends ServiceEntityRepository
             ->leftJoin('s.tags', 't')
             ->addSelect('s')
             ->where('i.startDate IS NOT NULL')
-            ->where('i.startDate > :date')
+            ->andWhere('i.startDate > :date')
+            ->andWhere('s.isEnabled = true')
             ->setParameter('date', new \DateTime(sprintf('-%s days', self::EVENT_LIFETIME)))
             ->orderBy('i.startDate', 'ASC');
         $this->applyVisibilityCriteria($qb, $user);
@@ -150,12 +154,20 @@ class ItemRepository extends ServiceEntityRepository
         return $this->paginate($qb->getQuery(), $page, $limit);
     }
 
-    public function deleteOlderThenDate(\DateTime $date): int
+    public function deleteOld(): int
     {
+        $result = $this->createQueryBuilder('i')
+            ->select('i.id')
+            ->join('i.source', 's')
+            ->where("i.publishedAt < DATE_SUB(CURRENT_DATE(), s.itemsDaysToLive, 'day')")
+            ->getQuery()->getArrayResult();
+
+        $ids = array_column($result, "id");
+
         return $this->createQueryBuilder('i')
             ->delete()
-            ->where('i.publishedAt < :date')
-            ->setParameter('date', $date)
+            ->where("i.id IN(:ids)")
+            ->setParameter('ids', $ids)
             ->getQuery()
             ->execute();
     }

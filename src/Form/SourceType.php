@@ -30,14 +30,18 @@ class SourceType extends AbstractType
         $builder
             ->add('name')
             ->add('url', UrlType::class)
+            ->add('isEnabled', ChoiceType::class, [
+                'choices' => Source::getEnableChoices(),
+            ])
             ->add('parser', ChoiceType::class, [
                 'choices' => $this->parameters->getParserChoices(),
             ])
             ->add('icon', UrlType::class)
             ->add('visibility', ChoiceType::class, [
-                'choices' => Source::getChoices(),
+                'choices' => Source::getVisibilityChoices(),
             ])
             ->add('updateInterval')
+            ->add('itemsDaysToLive')
             ->add('createdBy', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'name',
