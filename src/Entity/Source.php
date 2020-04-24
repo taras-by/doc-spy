@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Traits\CreatorTrait;
+use App\Traits\EnableStatusTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Source
 {
     use CreatorTrait;
+    use EnableStatusTrait;
 
     const VISIBILITY_MAIN = 'main';
     const VISIBILITY_PUBLIC = 'public';
@@ -129,6 +131,16 @@ class Source
      * @ORM\Column(name="update_interval", type="integer", options={"default":60})
      */
     private $updateInterval = 60;
+
+    /**
+     * Items TTL in days
+     *
+     * @var integer
+     *
+     * @Assert\Positive
+     * @ORM\Column(name="items_days_to_live", type="integer", options={"default":90})
+     */
+    private $itemsDaysToLive = 90;
 
     /**
      * @ORM\OneToMany(targetEntity="Subscription", mappedBy="source")
@@ -319,7 +331,7 @@ class Source
     /**
      * Get items
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getItems(): Collection
     {
@@ -353,7 +365,7 @@ class Source
     /**
      * Get tags
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getTags(): Collection
     {
@@ -441,6 +453,25 @@ class Source
     }
 
     /**
+     * @return int
+     */
+    public function getItemsDaysToLive(): int
+    {
+        return $this->itemsDaysToLive;
+    }
+
+    /**
+     * @param int $itemsDaysToLive
+     * @return Source
+     */
+    public function setItemsDaysToLive(int $itemsDaysToLive)
+    {
+        $this->itemsDaysToLive = $itemsDaysToLive;
+
+        return $this;
+    }
+
+    /**
      * @return Collection|Subscription[]
      */
     public function getSubscriptions(): Collection
@@ -506,7 +537,7 @@ class Source
         return self::VISIBILITY_LABEL_CLASSES[$this->visibility];
     }
 
-    public static function getChoices(): array
+    public static function getVisibilityChoices(): array
     {
         return array_flip(self::VISIBILITY_LABELS);
     }

@@ -48,19 +48,19 @@ class SourceVoter extends Voter
 
     private function canView(Source $source, $user)
     {
-        if ($source->isVisibleToEveryone()) {
-            return true;
-        }
-
         if ($user instanceof User) {
             if ($user->isAdmin()) {
                 return true;
             }
 
             $owner = $source->getCreatedBy();
-            if ($source->isPrivate() && $owner && $owner === $user) {
+            if ($source->isPrivate() && $owner && $owner === $user && $source->isEnabled()) {
                 return true;
             }
+        }
+
+        if ($source->isVisibleToEveryone() && $source->isEnabled()) {
+            return true;
         }
 
         return false;

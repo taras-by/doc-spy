@@ -21,6 +21,8 @@ class SourceControllerTest extends ProjectTestCase
     {
         $this->client->request('GET', '/source/1');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/4');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/5');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/12');
@@ -29,6 +31,8 @@ class SourceControllerTest extends ProjectTestCase
         $this->logIn();
         $this->client->request('GET', '/source/1');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/4');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/5');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/12');
@@ -36,6 +40,8 @@ class SourceControllerTest extends ProjectTestCase
 
         $this->logInAsAdmin();
         $this->client->request('GET', '/source/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/source/4');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/5');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
