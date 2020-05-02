@@ -41,7 +41,7 @@
                         <td>{{ include('source/_tags.html.twig') }}</td>
                         <td class="text-right">{{ source.errorCount }}</td>
                         <td class="text-nowrap">{{ source.updatedAt ? source.updatedAt|date('Y-m-d H:i:s') : '-'}}</td>
-                        <td><a href="{{ path('source_show', {'id' : source.id} ) }}">show</a></td>
+                        <td><a href="{{ path('source_edit', {'id' : source.id} ) }}">edit</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Tag{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% embed "parts/header.html.twig" %}
+            {% block title %}Edit Tag{% endblock %}
+            {% block buttons %}
+                <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="deleteForm">Delete</button>
+                <button type="button" class="btn btn-outline-primary btn-submit" data-form_id="tagForm">Save</button>
+                <a class="btn btn-outline-primary" href="{{ path('tag_show', {'id': tag.id}) }}">Back</a>
+            {% endblock %}
+        {% endembed %}
+        {{ include('tag/_form.html.twig') }}
+        {{ include('tag/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}

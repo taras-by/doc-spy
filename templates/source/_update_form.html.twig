@@ -1,5 +1,5 @@
 <form method="post" id="updateForm" action="{{ path('source_update', {'id': source.id}) }}">
     <input type="hidden" name="_method" value="POST">
     <input type="hidden" name="_token" value="{{ csrf_token('update' ~ source.id) }}">
-    <button type="submit" class="d-none"></button>
+    <button type="submit" class="d-none">Update</button>
 </form>

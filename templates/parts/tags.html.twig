@@ -1,5 +1,5 @@
 <div class="container text-center mt-4 mb-3">
     {% for tag in tags %}
-        <a class="btn btn-outline-secondary mb-1{{ tag.id == currentTagId ? ' active' }}" href="{{ path('tag_index', {'id': tag.id}) }}">{{ tag.name }}</a>
+        <a class="btn btn-outline-secondary mb-1{{ tag.id == currentTagId ? ' active' }}" href="{{ path('tag_items', {'id': tag.id}) }}">{{ tag.name }}</a>
     {% endfor %}
 </div>

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% embed "parts/header.html.twig" %}
+            {% block title %}Tags{% endblock %}
+            {% block buttons %}
+                <a class="btn btn-outline-primary" href="{{ path('tag_new') }}">Create new</a>
+            {% endblock %}
+        {% endembed %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-md">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Favorite</th>
+                    <th>Order</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tag in tags %}
+                    <tr>
+                        <td><a href="{{ path('source_items', {'id': tag.id}) }}">{{ tag.id }}</a></td>
+                        <td><a href="{{ path('tag_show', {'id': tag.id}) }}">{{ tag.name }}</a></td>
+                        <td><span class="badge badge-{{ tag.enableLabelClass }}">{{ tag.enableLabel }}</span></td>
+                        <td><span class="badge badge-{{ tag.favoriteLabelClass }}">{{ tag.favoriteLabel }}</span></td>
+                        <td>{{ tag.order }}</td>
+                        <td>
+                            <a href="{{ path('tag_edit', {'id': tag.id}) }}">edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
