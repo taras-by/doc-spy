@@ -25,7 +25,7 @@
                 <tbody>
                 {% for tag in tags %}
                     <tr>
-                        <td><a href="{{ path('source_items', {'id': tag.id}) }}">{{ tag.id }}</a></td>
+                        <td><a href="{{ path('tag_items', {'id': tag.id}) }}">{{ tag.id }}</a></td>
                         <td><a href="{{ path('tag_show', {'id': tag.id}) }}">{{ tag.name }}</a></td>
                         <td><span class="badge badge-{{ tag.enableLabelClass }}">{{ tag.enableLabel }}</span></td>
                         <td><span class="badge badge-{{ tag.favoriteLabelClass }}">{{ tag.favoriteLabel }}</span></td>
