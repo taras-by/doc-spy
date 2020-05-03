@@ -6,8 +6,11 @@ use App\Tests\ProjectTestCase;
 
 class SourceControllerTest extends ProjectTestCase
 {
-    public function testListAction()
+    public function testList()
     {
+        $this->client->request('GET', '/sources');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
         $this->logIn();
         $this->client->request('GET', '/sources');
         $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
@@ -46,6 +49,47 @@ class SourceControllerTest extends ProjectTestCase
         $this->client->request('GET', '/source/5');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/source/12');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testNew()
+    {
+        $this->client->request('GET', '/source/new');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/source/new');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('GET', '/source/new');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/source/new');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/source/new');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $this->client->request('POST', '/source/new');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testEdit()
+    {
+        $this->client->request('GET', '/source/1/edit');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/source/1/edit');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->logIn();
+        $this->client->request('GET', '/source/1/edit');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/source/1/edit');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+
+        $this->logInAsAdmin();
+        $this->client->request('GET', '/source/1/edit');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->client->request('POST', '/source/1/edit');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 

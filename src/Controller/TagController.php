@@ -7,6 +7,8 @@ use App\Entity\Tag;
 use App\Form\TagType;
 use App\Repository\ItemRepository;
 use App\Repository\TagRepository;
+use App\Security\TagVoter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +25,8 @@ class TagController extends AbstractController
      */
     public function items(ItemRepository $itemRepository, Tag $tag, $page = 1)
     {
+        $this->denyAccessUnlessGranted(TagVoter::VIEW, $tag);
+
         $items = $itemRepository->findPaginatedByTagId($tag->getId(), $page, Item::LIMIT, $this->getUser());
 
         $maxPages = ceil($items->count() / Item::LIMIT);
@@ -36,11 +40,12 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tags", name="tag_list", methods={"GET"})
      * @param TagRepository $tagRepository
      * @return Response
      */
-    public function index(TagRepository $tagRepository): Response
+    public function list(TagRepository $tagRepository): Response
     {
         return $this->render('tag/list.html.twig', [
             'tags' => $tagRepository->findAll(),
@@ -48,6 +53,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tag/new", name="tag_new", methods={"GET","POST"})
      * @param Request $request
      * @return Response
@@ -63,7 +69,8 @@ class TagController extends AbstractController
             $entityManager->persist($tag);
             $entityManager->flush();
 
-            return $this->redirectToRoute('tag_list');
+            $this->addFlash('success', sprintf('Tag added'));
+            return $this->redirectToRoute('tag_show', ['id' => $tag->getId()]);
         }
 
         return $this->render('tag/new.html.twig', [
@@ -73,6 +80,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tag/{id}/show", name="tag_show", methods={"GET"})
      * @param Tag $tag
      * @return Response
@@ -85,6 +93,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tag/{id}/edit", name="tag_edit", methods={"GET","POST"})
      * @param Request $request
      * @param Tag $tag
@@ -98,7 +107,8 @@ class TagController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tag_list');
+            $this->addFlash('success', sprintf('Tag saved'));
+            return $this->redirectToRoute('tag_show', ['id' => $tag->getId()]);
         }
 
         return $this->render('tag/edit.html.twig', [
@@ -108,6 +118,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tag/{id}", name="tag_delete", methods={"DELETE"})
      * @param Request $request
      * @param Tag $tag
@@ -119,6 +130,8 @@ class TagController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($tag);
             $entityManager->flush();
+
+            $this->addFlash('success', sprintf('Tag "%s" deleted', $tag->getName()));
         }
 
         return $this->redirectToRoute('tag_list');

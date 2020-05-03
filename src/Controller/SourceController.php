@@ -82,6 +82,7 @@ class SourceController extends AbstractController
             $entityManager->persist($source);
             $entityManager->flush();
 
+            $this->addFlash('success', sprintf('Source added'));
             return $this->redirectToRoute('source_show', ['id' => $source->getId()]);
         }
 
@@ -144,6 +145,7 @@ class SourceController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($source);
             $entityManager->flush();
+
             $this->addFlash('success', sprintf('Source "%s" deleted', $source->getName()));
         }
 
