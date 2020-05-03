@@ -1,5 +1,5 @@
 <form method="post" id="cleanForm" action="{{ path('source_clean', {'id': source.id}) }}" onsubmit="return confirm('Are you sure you want to delete all Source items?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('clean' ~ source.id) }}">
-    <button type="submit" class="d-none"></button>
+    <button type="submit" class="d-none">Clean</button>
 </form>

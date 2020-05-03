@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use App\Traits\EnableFlagTrait;
+use App\Traits\FavoriteFlagTrait;
+use App\Traits\OrderTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="tag")
@@ -11,6 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag
 {
+    use EnableFlagTrait;
+    use FavoriteFlagTrait;
+    use OrderTrait;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -24,13 +32,6 @@ class Tag
     private $name;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="favorite", type="boolean")
-     */
-    private $favorite;
-
-    /**
      * Many Tags have Many Sources
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Source", mappedBy="tags")
@@ -42,6 +43,7 @@ class Tag
     public function __construct()
     {
         $this->sources = new ArrayCollection();
+        $this->order = 99;
     }
 
     /**
@@ -76,30 +78,6 @@ class Tag
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set favorite
-     *
-     * @param boolean $favorite
-     *
-     * @return Tag
-     */
-    public function setFavorite($favorite)
-    {
-        $this->favorite = $favorite;
-
-        return $this;
-    }
-
-    /**
-     * Get favorite
-     *
-     * @return boolean
-     */
-    public function getFavorite()
-    {
-        return $this->favorite;
     }
 
     /**

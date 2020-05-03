@@ -5,9 +5,8 @@ namespace App\Traits;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait EnableStatusTrait
+trait EnableFlagTrait
 {
-
     /**
      * @Assert\NotNull()
      * @ORM\Column(name="is_enabled", type="boolean", options={"default":false})

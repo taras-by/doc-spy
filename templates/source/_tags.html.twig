@@ -1,3 +1,5 @@
 {% for tag in source.tags %}
-    <a class="badge badge-light" href="{{ path('tag_index', {'id': tag.id}) }}">{{ tag.name }}</a>
+    <a class="badge badge-light" href="{{ path('tag_items', {'id': tag.id}) }}">{{ tag.name }}</a>
+{% else %}
+    -
 {% endfor %}

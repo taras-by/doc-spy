@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tag{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% embed "parts/header.html.twig" %}
+            {% block title %}Tag{% endblock %}
+            {% block buttons %}
+                <a class="btn btn-outline-primary" href="{{ path('tag_edit', {'id': tag.id}) }}">Edit</a>
+                <a class="btn btn-outline-primary" href="{{ path('tag_list') }}">Back</a>
+            {% endblock %}
+        {% endembed %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-md">
+                <tbody>
+                    <tr>
+                        <th class="w-25">Id</th>
+                        <td>{{ tag.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ tag.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Enable status</th>
+                        <td><span class="badge badge-{{ tag.enableLabelClass }}">{{ tag.enableLabel }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Favorite</th>
+                        <td><span class="badge badge-{{ tag.favoriteLabelClass }}">{{ tag.favoriteLabel }}</span></td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap">Sources</th>
+                        <td>{{ include('tag/_sources.html.twig') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

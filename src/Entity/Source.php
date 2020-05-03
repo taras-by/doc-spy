@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Traits\CreatorTrait;
-use App\Traits\EnableStatusTrait;
+use App\Traits\EnableFlagTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Source
 {
     use CreatorTrait;
-    use EnableStatusTrait;
+    use EnableFlagTrait;
 
     const VISIBILITY_MAIN = 'main';
     const VISIBILITY_PUBLIC = 'public';

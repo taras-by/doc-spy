@@ -1,0 +1,5 @@
+{% for source in tag.sources %}
+    <a class="badge badge-light" href="{{ path('source_items', {'id': source.id}) }}">{{ source.name }}</a>
+{% else %}
+    -
+{% endfor %}

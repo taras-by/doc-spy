@@ -15,8 +15,10 @@ class TagRepository extends ServiceEntityRepository
     public function findFavorites(): array
     {
         return $this->createQueryBuilder('t')
-            ->where('t.favorite = :favorite')
-            ->setParameter('favorite', true)
+            ->where('t.isFavorite = true')
+            ->andWhere('t.isEnabled = true')
+            ->orderBy('t.order')
+            ->addOrderBy('t.name')
             ->getQuery()
             ->getArrayResult();
     }
