@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Source;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Repository\TagRepository;
 use App\Service\ParsersParameters;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -48,6 +49,9 @@ class SourceType extends AbstractType
             ])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
+                'query_builder' => function (TagRepository $tagRepository) {
+                    return $tagRepository->getOrderedQueryBuilder();
+                },
                 'choice_label' => 'name',
                 'multiple' => true,
                 'required' => false,

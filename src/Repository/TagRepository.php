@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TagRepository extends ServiceEntityRepository
@@ -12,14 +13,20 @@ class TagRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Tag::class);
     }
+
     public function findFavorites(): array
     {
-        return $this->createQueryBuilder('t')
+        return $this->getOrderedQueryBuilder()
             ->where('t.isFavorite = true')
             ->andWhere('t.isEnabled = true')
-            ->orderBy('t.order')
-            ->addOrderBy('t.name')
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function getOrderedQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.order')
+            ->addOrderBy('t.name');
     }
 }
